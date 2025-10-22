@@ -12,23 +12,23 @@ Most endpoints require authentication using Stack Auth tokens.
 
 ### Getting Token
 
-```javascript
+\`\`\`javascript
 import { useStackApp } from '@stack-auth/next'
 
 const { user } = useStackApp()
 const token = await user?.getAuthToken()
-```
+\`\`\`
 
 ### Using Token
 
-```javascript
+\`\`\`javascript
 fetch('/api/posts', {
   headers: {
     'Authorization': `Bearer ${token}`,
     'Content-Type': 'application/json'
   }
 })
-```
+\`\`\`
 
 ## Endpoints
 
@@ -36,9 +36,9 @@ fetch('/api/posts', {
 
 #### Get All Posts
 
-```http
+\`\`\`http
 GET /api/posts
-```
+\`\`\`
 
 **Query Parameters**:
 - `page` (number): Page number (default: 1)
@@ -48,7 +48,7 @@ GET /api/posts
 - `author` (string): Filter by author username
 
 **Response**:
-```json
+\`\`\`json
 {
   "posts": [
     {
@@ -72,18 +72,18 @@ GET /api/posts
     "pages": 5
   }
 }
-```
+\`\`\`
 
 #### Create Post
 
-```http
+\`\`\`http
 POST /api/posts
-```
+\`\`\`
 
 **Auth Required**: Yes
 
 **Request Body**:
-```json
+\`\`\`json
 {
   "title": "Post Title",
   "slug": "post-title",
@@ -97,33 +97,33 @@ POST /api/posts
   "metaDescription": "SEO Description",
   "keywords": ["keyword1", "keyword2"]
 }
-```
+\`\`\`
 
 **Response**:
-```json
+\`\`\`json
 {
   "post": { ... }
 }
-```
+\`\`\`
 
 #### Get Single Post
 
-```http
+\`\`\`http
 GET /api/posts/[slug]
-```
+\`\`\`
 
 **Response**:
-```json
+\`\`\`json
 {
   "post": { ... }
 }
-```
+\`\`\`
 
 #### Update Post
 
-```http
+\`\`\`http
 PUT /api/posts/[id]
-```
+\`\`\`
 
 **Auth Required**: Yes (must be author or admin)
 
@@ -131,9 +131,9 @@ PUT /api/posts/[id]
 
 #### Delete Post
 
-```http
+\`\`\`http
 DELETE /api/posts/[id]
-```
+\`\`\`
 
 **Auth Required**: Yes (must be author or admin)
 
@@ -141,12 +141,12 @@ DELETE /api/posts/[id]
 
 #### Get Comments
 
-```http
+\`\`\`http
 GET /api/posts/[postId]/comments
-```
+\`\`\`
 
 **Response**:
-```json
+\`\`\`json
 {
   "comments": [
     {
@@ -158,39 +158,39 @@ GET /api/posts/[postId]/comments
     }
   ]
 }
-```
+\`\`\`
 
 #### Create Comment
 
-```http
+\`\`\`http
 POST /api/posts/[postId]/comments
-```
+\`\`\`
 
 **Auth Required**: Yes
 
 **Request Body**:
-```json
+\`\`\`json
 {
   "content": "Great post!",
   "parentId": "..." // optional, for replies
 }
-```
+\`\`\`
 
 ### Likes
 
 #### Like Post
 
-```http
+\`\`\`http
 POST /api/posts/[postId]/like
-```
+\`\`\`
 
 **Auth Required**: Yes
 
 #### Unlike Post
 
-```http
+\`\`\`http
 DELETE /api/posts/[postId]/like
-```
+\`\`\`
 
 **Auth Required**: Yes
 
@@ -198,17 +198,17 @@ DELETE /api/posts/[postId]/like
 
 #### Bookmark Post
 
-```http
+\`\`\`http
 POST /api/posts/[postId]/bookmark
-```
+\`\`\`
 
 **Auth Required**: Yes
 
 #### Remove Bookmark
 
-```http
+\`\`\`http
 DELETE /api/posts/[postId]/bookmark
-```
+\`\`\`
 
 **Auth Required**: Yes
 
@@ -216,40 +216,40 @@ DELETE /api/posts/[postId]/bookmark
 
 #### Subscribe
 
-```http
+\`\`\`http
 POST /api/newsletter/subscribe
-```
+\`\`\`
 
 **Request Body**:
-```json
+\`\`\`json
 {
   "email": "user@example.com"
 }
-```
+\`\`\`
 
 #### Unsubscribe
 
-```http
+\`\`\`http
 POST /api/newsletter/unsubscribe
-```
+\`\`\`
 
 **Request Body**:
-```json
+\`\`\`json
 {
   "email": "user@example.com"
 }
-```
+\`\`\`
 
 ### Users
 
 #### Get User Profile
 
-```http
+\`\`\`http
 GET /api/users/[username]
-```
+\`\`\`
 
 **Response**:
-```json
+\`\`\`json
 {
   "user": {
     "id": "...",
@@ -261,21 +261,21 @@ GET /api/users/[username]
     "followerCount": 100
   }
 }
-```
+\`\`\`
 
 #### Follow User
 
-```http
+\`\`\`http
 POST /api/users/[userId]/follow
-```
+\`\`\`
 
 **Auth Required**: Yes
 
 #### Unfollow User
 
-```http
+\`\`\`http
 DELETE /api/users/[userId]/follow
-```
+\`\`\`
 
 **Auth Required**: Yes
 
@@ -283,12 +283,12 @@ DELETE /api/users/[userId]/follow
 
 #### Get All Categories
 
-```http
+\`\`\`http
 GET /api/categories
-```
+\`\`\`
 
 **Response**:
-```json
+\`\`\`json
 {
   "categories": [
     {
@@ -299,18 +299,18 @@ GET /api/categories
     }
   ]
 }
-```
+\`\`\`
 
 ### Tags
 
 #### Get All Tags
 
-```http
+\`\`\`http
 GET /api/tags
-```
+\`\`\`
 
 **Response**:
-```json
+\`\`\`json
 {
   "tags": [
     {
@@ -321,40 +321,40 @@ GET /api/tags
     }
   ]
 }
-```
+\`\`\`
 
 ### Search
 
 #### Search Content
 
-```http
+\`\`\`http
 GET /api/search?q=query
-```
+\`\`\`
 
 **Query Parameters**:
 - `q` (string): Search query
 - `type` (string): `posts`, `users`, or `all`
 
 **Response**:
-```json
+\`\`\`json
 {
   "results": {
     "posts": [ ... ],
     "users": [ ... ]
   }
 }
-```
+\`\`\`
 
 ## Error Handling
 
 ### Error Response Format
 
-```json
+\`\`\`json
 {
   "error": "Error message",
   "code": "ERROR_CODE"
 }
-```
+\`\`\`
 
 ### Status Codes
 
@@ -392,7 +392,7 @@ Receive real-time updates for events.
 
 ### Payload Example
 
-```json
+\`\`\`json
 {
   "event": "post.published",
   "timestamp": "2025-01-01T00:00:00Z",
@@ -400,19 +400,19 @@ Receive real-time updates for events.
     "post": { ... }
   }
 }
-```
+\`\`\`
 
 ## SDK
 
 ### JavaScript/TypeScript
 
 Install:
-```bash
+\`\`\`bash
 npm install @noobblog/sdk
-```
+\`\`\`
 
 Usage:
-```javascript
+\`\`\`javascript
 import { NoobBlog } from '@noobblog/sdk'
 
 const client = new NoobBlog({
@@ -420,7 +420,7 @@ const client = new NoobBlog({
 })
 
 const posts = await client.posts.list()
-```
+\`\`\`
 
 ## Support
 

@@ -59,4 +59,3 @@ echo "✅ Fixed $fixed documentation files"
 echo ""
 echo "🔒 Your real credentials are safe in .env.local (gitignored)"
 echo "📝 All documentation now uses placeholder values"
-
