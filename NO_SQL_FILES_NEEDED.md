@@ -86,7 +86,7 @@ model Post {
 **Your Database:**
 ```bash
 # From your .env.local
-DATABASE_URL="postgresql://neondb_owner:npg_fKoj69ErPxXi@ep-shiny-math-ahr6vjv4-pooler.c-3.us-east-1.aws.neon.tech/neondb?sslmode=require"
+DATABASE_URL="postgresql://user:password@host.region.aws.neon.tech/dbname?sslmode=require"
 ```
 
 **This connects to:**

@@ -143,7 +143,7 @@ Neon is a **serverless PostgreSQL** database provider:
 
 From your `.env.local`:
 ```bash
-DATABASE_URL="postgresql://neondb_owner:npg_fKoj69ErPxXi@ep-shiny-math-ahr6vjv4-pooler.c-3.us-east-1.aws.neon.tech/neondb?sslmode=require"
+DATABASE_URL="postgresql://user:password@host.region.aws.neon.tech/dbname?sslmode=require"
 ```
 
 **What this means:**
@@ -258,7 +258,7 @@ Host: ep-shiny-math-ahr6vjv4.c-3.us-east-1.aws.neon.tech
 Port: 5432
 Database: neondb
 User: neondb_owner
-Password: npg_fKoj69ErPxXi
+Password: your_database_password
 SSL: Required
 ```
 

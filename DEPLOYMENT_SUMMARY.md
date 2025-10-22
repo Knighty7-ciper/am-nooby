@@ -163,10 +163,10 @@ git push origin main
 
 **3. Add Environment Variables:**
 ```env
-DATABASE_URL=postgresql://neondb_owner:npg_fKoj69ErPxXi@ep-shiny-math-ahr6vjv4-pooler.c-3.us-east-1.aws.neon.tech/neondb?sslmode=require
-NEXT_PUBLIC_STACK_PROJECT_ID=b9d83c23-8940-4835-8323-a13649ca0e56
-NEXT_PUBLIC_STACK_PUBLISHABLE_CLIENT_KEY=pck_q4f2q777frjx8f9vdzgvcdt2nz0v15pbqavcykk811gj8
-STACK_SECRET_SERVER_KEY=ssk_b2f0mysbrtcr73rq86aye7ebgkw6tf9gq6xdyb97tq4x8
+DATABASE_URL=postgresql://user:password@host.region.aws.neon.tech/dbname?sslmode=require
+NEXT_PUBLIC_STACK_PROJECT_ID=your-stack-project-id
+NEXT_PUBLIC_STACK_PUBLISHABLE_CLIENT_KEY=pck_your_publishable_key_here
+STACK_SECRET_SERVER_KEY=ssk_your_secret_key_here
 NEXT_PUBLIC_APP_URL=https://your-domain.vercel.app
 NEXT_PUBLIC_SITE_URL=https://your-domain.vercel.app
 ```
