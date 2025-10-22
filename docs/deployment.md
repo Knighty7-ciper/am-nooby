@@ -40,15 +40,17 @@ git push -u origin main
 Add the following environment variables:
 
 \`\`\`env
-DATABASE_URL=postgresql://user:password@host.region.aws.neon.tech/dbname?sslmode=require
+NEON_DATABASE_URL=postgresql://user:password@host.region.aws.neon.tech/dbname?sslmode=require
 
 NEXT_PUBLIC_STACK_PROJECT_ID=your-stack-project-id
-NEXT_PUBLIC_STACK_PUBLISHABLE_CLIENT_KEY=pck_your_publishable_key_here
+STACK_PUBLISHABLE_CLIENT_KEY=pck_your_publishable_key_here
 STACK_SECRET_SERVER_KEY=ssk_your_secret_key_here
 
 NEXT_PUBLIC_APP_URL=https://noobblog.vercel.app
 NEXT_PUBLIC_ADMIN_URL=https://noobblog-admin.vercel.app
 \`\`\`
+
+<!-- Removed NEXT_PUBLIC_ prefix from STACK_PUBLISHABLE_CLIENT_KEY for security - it's now fetched server-side via API -->
 
 ### 2.3 Deploy
 
@@ -78,11 +80,13 @@ Click "Deploy" and wait for the build to complete.
 DATABASE_URL=postgresql://user:password@host.region.aws.neon.tech/dbname?sslmode=require
 
 NEXT_PUBLIC_STACK_PROJECT_ID=your-stack-project-id
-NEXT_PUBLIC_STACK_PUBLISHABLE_CLIENT_KEY=pck_your_publishable_key_here
+STACK_PUBLISHABLE_CLIENT_KEY=pck_your_publishable_key_here
 STACK_SECRET_SERVER_KEY=ssk_your_secret_key_here
 
 NEXT_PUBLIC_APP_URL=https://noobblog-admin.vercel.app
 \`\`\`
+
+<!-- Removed NEXT_PUBLIC_ prefix from STACK_PUBLISHABLE_CLIENT_KEY for security -->
 
 ### 3.3 Deploy
 
