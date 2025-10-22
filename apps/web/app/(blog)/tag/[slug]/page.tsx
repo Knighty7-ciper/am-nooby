@@ -27,7 +27,6 @@ export default async function TagPage({ params }: PageProps) {
       posts: {
         include: {
           post: {
-            where: { status: 'PUBLISHED' },
             include: {
               author: true,
               category: true,
@@ -43,7 +42,9 @@ export default async function TagPage({ params }: PageProps) {
 
   if (!tag) notFound()
 
-  const posts = tag.posts.map(pt => pt.post).filter(Boolean)
+  const posts = tag.posts
+    .map(pt => pt.post)
+    .filter(post => post && post.status === 'PUBLISHED')
 
   return (
     <div className="container max-w-6xl py-8">
