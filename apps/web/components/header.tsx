@@ -121,7 +121,7 @@ export function Header() {
               {/* User menu */}
               <div className="relative group">
                 <Avatar className="cursor-pointer">
-                  <AvatarImage src="https://github.com/shadcn.png" />
+                  <AvatarImage src="/images/design-mode/shadcn.png" />
                   <AvatarFallback>JD</AvatarFallback>
                 </Avatar>
                 
