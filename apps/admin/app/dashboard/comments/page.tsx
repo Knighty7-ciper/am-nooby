@@ -28,7 +28,7 @@ export default async function AdminCommentsPage() {
 
   const comments = await prisma.comment.findMany({
     include: {
-      author: true,
+      user: true,
       post: true,
     },
     orderBy: { createdAt: 'desc' },
@@ -64,8 +64,8 @@ export default async function AdminCommentsPage() {
                 <TableRow key={comment.id}>
                   <TableCell>
                     <div>
-                      <div className="font-medium">{comment.author.name}</div>
-                      <div className="text-sm text-muted-foreground">@{comment.author.username}</div>
+                      <div className="font-medium">{comment.user.name}</div>
+                      <div className="text-sm text-muted-foreground">@{comment.user.username}</div>
                     </div>
                   </TableCell>
                   <TableCell>

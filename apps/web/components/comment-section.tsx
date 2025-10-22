@@ -11,7 +11,7 @@ interface Comment {
   id: string
   content: string
   createdAt: Date
-  author: {
+  user: {
     id: string
     name: string
     username: string
@@ -49,19 +49,19 @@ export function CommentItem({ comment, onReply, onDelete, currentUserId }: Comme
     <div className="space-y-4">
       <div className="flex gap-4">
         <Avatar className="h-10 w-10">
-          <img src={comment.author.avatar || '/default-avatar.png'} alt={comment.author.name} />
+          <img src={comment.user.avatar || '/default-avatar.png'} alt={comment.user.name || comment.user.username} />
         </Avatar>
         
         <div className="flex-1 space-y-2">
           <div className="flex items-center justify-between">
             <div>
-              <span className="font-semibold">{comment.author.name}</span>
-              <span className="text-sm text-muted-foreground ml-2">@{comment.author.username}</span>
+              <span className="font-semibold">{comment.user.name}</span>
+              <span className="text-sm text-muted-foreground ml-2">@{comment.user.username}</span>
               <span className="text-sm text-muted-foreground ml-2">
                 {formatDistanceToNow(new Date(comment.createdAt), { addSuffix: true })}
               </span>
             </div>
-            {currentUserId === comment.author.id && (
+            {currentUserId === comment.user.id && (
               <Button variant="ghost" size="sm" onClick={() => onDelete(comment.id)}>
                 <MoreVertical className="h-4 w-4" />
               </Button>

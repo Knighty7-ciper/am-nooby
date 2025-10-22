@@ -47,9 +47,9 @@ export default async function PostPage({ params }: PageProps) {
       parentId: null,
     },
     include: {
-      author: true,
+      user: true,
       replies: {
-        include: { author: true },
+        include: { user: true },
         orderBy: { createdAt: 'asc' },
       },
     },
