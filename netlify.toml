@@ -1,9 +1,9 @@
 [build]
-  # Build command
-  command = "pnpm run build"
+  # Build command - run from root but build the web app
+  command = "cd apps/web && pnpm run build"
   
-  # Output directory
-  publish = ".next"
+  # Output directory - where Next.js outputs the built files
+  publish = "apps/web/.next"
 
 [build.environment]
   # Use pnpm
