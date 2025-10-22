@@ -76,7 +76,7 @@ export default async function PostPage({ params }: PageProps) {
         <div className="flex items-center justify-between flex-wrap gap-4">
           <Link href={`/@${post.author.username}`} className="flex items-center gap-3">
             <Avatar className="h-12 w-12">
-              <img src={post.author.avatar || '/default-avatar.png'} alt={post.author.name} />
+              <img src={post.author.avatar || '/default-avatar.png'} alt={post.author.name || post.author.username} />
             </Avatar>
             <div>
               <div className="font-semibold">{post.author.name}</div>
@@ -147,7 +147,7 @@ export default async function PostPage({ params }: PageProps) {
       <div className="mb-12 p-6 bg-muted rounded-lg">
         <div className="flex items-start gap-4">
           <Avatar className="h-16 w-16">
-            <img src={post.author.avatar || '/default-avatar.png'} alt={post.author.name} />
+            <img src={post.author.avatar || '/default-avatar.png'} alt={post.author.name || post.author.username} />
           </Avatar>
           <div className="flex-1">
             <h3 className="text-xl font-bold mb-1">Written by {post.author.name}</h3>

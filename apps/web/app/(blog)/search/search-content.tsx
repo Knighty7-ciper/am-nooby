@@ -101,7 +101,7 @@ export function SearchContent() {
                     <Card className="p-4 hover:bg-muted/50 transition">
                       <div className="flex items-center gap-4">
                         <Avatar className="h-12 w-12">
-                          <img src={user.avatar || '/default-avatar.png'} alt={user.name} />
+                          <img src={user.avatar || '/default-avatar.png'} alt={user.name || user.username} />
                         </Avatar>
                         <div>
                           <h3 className="font-semibold">{user.name}</h3>
