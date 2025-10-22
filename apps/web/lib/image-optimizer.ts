@@ -108,7 +108,8 @@ export async function handleImageOptimization(request: NextRequest) {
     });
     
     // Return optimized image
-    return new NextResponse(optimized, {
+    // Convert Buffer to Uint8Array for NextResponse compatibility
+    return new NextResponse(new Uint8Array(optimized), {
       headers: {
         'Content-Type': `image/${format || 'webp'}`,
         'Cache-Control': 'public, max-age=31536000, immutable',
