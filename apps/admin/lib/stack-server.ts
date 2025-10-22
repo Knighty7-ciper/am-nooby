@@ -1,4 +1,9 @@
 import 'server-only'
-import { stackServerApp } from '@stack-auth/next/server-app'
+import { StackServerApp } from '@stackframe/stack'
 
-export { stackServerApp }
+export const stackServerApp = new StackServerApp({
+  tokenStore: 'nextjs-cookie',
+  urls: {
+    home: process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3001',
+  },
+})

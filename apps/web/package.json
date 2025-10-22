@@ -20,7 +20,7 @@
     "@radix-ui/react-slot": "^1.0.2",
     "@radix-ui/react-tabs": "^1.0.4",
     "@radix-ui/react-toast": "^1.1.5",
-    "@stack-auth/next": "^5.0.0",
+    "@stackframe/stack": "^2.6.5",
     "@tiptap/extension-code-block-lowlight": "^2.1.13",
     "@tiptap/extension-image": "^2.1.13",
     "@tiptap/extension-link": "^2.1.13",

@@ -1,6 +1,6 @@
 'use client'
 
-import { StackProvider as Provider, StackTheme } from '@stack-auth/next'
+import { StackProvider as Provider, StackTheme } from '@stackframe/stack'
 
 export function StackProvider({ children }: { children: React.ReactNode }) {
   return (
