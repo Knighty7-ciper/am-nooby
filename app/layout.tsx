@@ -8,7 +8,6 @@ import { StackProvider } from '@/components/stack-provider'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://noobblog.netlify.app'),
   title: 'NoobBlog - Professional Blogging Platform',
   description: 'Write, share, and grow your audience with NoobBlog - a modern blogging platform built for creators.',
   keywords: ['blog', 'writing', 'content', 'publishing', 'creators'],
