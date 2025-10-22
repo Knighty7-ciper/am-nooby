@@ -1,13 +1,17 @@
 'use client'
 
-import { StackProvider as Provider, StackTheme } from '@stackframe/stack'
+import { StackProvider as Provider, StackTheme, StackClientApp } from '@stackframe/stack'
+
+const stackClientApp = new StackClientApp({
+  tokenStore: 'nextjs-cookie',
+  urls: {
+    home: process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000',
+  },
+})
 
 export function StackProvider({ children }: { children: React.ReactNode }) {
   return (
-    <Provider
-      projectId={process.env.NEXT_PUBLIC_STACK_PROJECT_ID!}
-      publishableClientKey={process.env.NEXT_PUBLIC_STACK_PUBLISHABLE_CLIENT_KEY!}
-    >
+    <Provider app={stackClientApp}>
       <StackTheme>
         {children}
       </StackTheme>
