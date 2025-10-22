@@ -33,20 +33,20 @@ Be respectful, inclusive, and considerate in all interactions.
 1. **Fork the repository**
 
 2. **Clone your fork**
-   \`\`\`bash
+   ```bash
    git clone https://github.com/YOUR_USERNAME/noobblog.git
    cd noobblog
-   \`\`\`
+   ```
 
 3. **Create a branch**
-   \`\`\`bash
+   ```bash
    git checkout -b feature/your-feature-name
-   \`\`\`
+   ```
 
 4. **Install dependencies**
-   \`\`\`bash
+   ```bash
    pnpm install
-   \`\`\`
+   ```
 
 5. **Make your changes**
    - Follow code style
@@ -54,16 +54,16 @@ Be respectful, inclusive, and considerate in all interactions.
    - Update documentation
 
 6. **Test your changes**
-   \`\`\`bash
+   ```bash
    pnpm lint
    pnpm build
-   \`\`\`
+   ```
 
 7. **Commit your changes**
-   \`\`\`bash
+   ```bash
    git add .
    git commit -m "feat: add amazing feature"
-   \`\`\`
+   ```
 
    Use conventional commits:
    - `feat:` New feature
@@ -75,9 +75,9 @@ Be respectful, inclusive, and considerate in all interactions.
    - `chore:` Maintenance
 
 8. **Push to your fork**
-   \`\`\`bash
+   ```bash
    git push origin feature/your-feature-name
-   \`\`\`
+   ```
 
 9. **Create Pull Request**
    - Go to the original repository
@@ -96,7 +96,7 @@ Be respectful, inclusive, and considerate in all interactions.
 
 ### Quick Start
 
-\`\`\`bash
+```bash
 # Clone repo
 git clone https://github.com/Knighty7-ciper/noobblog.git
 cd noobblog
@@ -108,11 +108,11 @@ setup.bat   # Windows
 # Start development
 pnpm dev:web    # Main site on :3000
 pnpm dev:admin  # Admin on :3001
-\`\`\`
+```
 
 ## Project Structure
 
-\`\`\`
+```
 noobblog/
 ├── apps/
 │   ├── web/        # Main blog application
@@ -121,7 +121,7 @@ noobblog/
 │   ├── database/   # Prisma schema and client
 │   └── ui/         # Shared UI components
 └── docs/          # Documentation
-\`\`\`
+```
 
 ## Coding Standards
 
@@ -158,7 +158,7 @@ noobblog/
 
 ### Writing Tests
 
-\`\`\`typescript
+```typescript
 import { render, screen } from '@testing-library/react'
 import { Button } from './button'
 
@@ -168,15 +168,15 @@ describe('Button', () => {
     expect(screen.getByText('Click me')).toBeInTheDocument()
   })
 })
-\`\`\`
+```
 
 ### Running Tests
 
-\`\`\`bash
+```bash
 pnpm test
 pnpm test:watch
 pnpm test:coverage
-\`\`\`
+```
 
 ## Database Changes
 
@@ -184,10 +184,10 @@ pnpm test:coverage
 
 1. Edit `packages/database/prisma/schema.prisma`
 2. Run migration:
-   \`\`\`bash
+   ```bash
    cd packages/database
    pnpm db:push
-   \`\`\`
+   ```
 3. Update seed if needed
 4. Document changes
 

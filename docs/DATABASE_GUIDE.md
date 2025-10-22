@@ -13,7 +13,7 @@
 
 ## 🔗 **How It All Connects**
 
-\`\`\`
+```
 ┌─────────────────────────────────────────────────┐
 │  1. schema.prisma                               │
 │     Define models in TypeScript-like syntax     │
@@ -30,7 +30,7 @@
 │  5. Your App (Next.js)                          │
 │     Use type-safe queries without SQL           │
 └─────────────────────────────────────────────────┘
-\`\`\`
+```
 
 ---
 
@@ -38,17 +38,17 @@
 
 ### **Method 1: Use the Setup Script**
 
-\`\`\`bash
+```bash
 # Linux/Mac
 bash setup-database.sh
 
 # Windows
 setup-database.bat
-\`\`\`
+```
 
 ### **Method 2: Manual Setup**
 
-\`\`\`bash
+```bash
 # 1. Install dependencies
 pnpm install
 
@@ -58,7 +58,7 @@ pnpm db:generate
 
 # 3. Create tables in Neon
 pnpm db:push
-\`\`\`
+```
 
 **That's it!** Your database is ready.
 
@@ -69,16 +69,16 @@ pnpm db:push
 ### **When you run `pnpm db:push`:**
 
 1. **Prisma reads your schema:**
-   \`\`\`prisma
+   ```prisma
    model User {
      id       String @id @default(cuid())
      email    String @unique
      username String @unique
    }
-   \`\`\`
+   ```
 
 2. **Generates SQL automatically:**
-   \`\`\`sql
+   ```sql
    CREATE TABLE "User" (
      "id" TEXT PRIMARY KEY,
      "email" TEXT UNIQUE NOT NULL,
@@ -87,7 +87,7 @@ pnpm db:push
    
    CREATE INDEX "User_email_idx" ON "User"("email");
    CREATE INDEX "User_username_idx" ON "User"("username");
-   \`\`\`
+   ```
 
 3. **Executes on Neon database:**
    - Connects to your Neon PostgreSQL instance
@@ -142,9 +142,9 @@ Neon is a **serverless PostgreSQL** database provider:
 ### **Your Neon Database:**
 
 From your `.env.local`:
-\`\`\`bash
+```bash
 DATABASE_URL="postgresql://user:password@host.region.aws.neon.tech/dbname?sslmode=require"
-\`\`\`
+```
 
 **What this means:**
 - `neondb_owner` - Your database user
@@ -165,17 +165,17 @@ DATABASE_URL="postgresql://user:password@host.region.aws.neon.tech/dbname?sslmod
 ### **No SQL Queries Needed!**
 
 **Old way (SQL):**
-\`\`\`typescript
+```typescript
 // ❌ DON'T do this
 const result = await db.query(`
   SELECT * FROM posts 
   WHERE status = 'PUBLISHED' 
   ORDER BY created_at DESC
 `);
-\`\`\`
+```
 
 **New way (Prisma):**
-\`\`\`typescript
+```typescript
 // ✅ DO this instead
 import { prisma } from '@noobblog/database';
 
@@ -184,10 +184,10 @@ const posts = await prisma.post.findMany({
   orderBy: { createdAt: 'desc' },
   include: { author: true },
 });
-\`\`\`
+```
 
 ### **Or Use Query Helpers:**
-\`\`\`typescript
+```typescript
 import { getPublishedPosts } from '@noobblog/database';
 
 const { posts, pagination } = await getPublishedPosts({
@@ -195,7 +195,7 @@ const { posts, pagination } = await getPublishedPosts({
   limit: 10,
   categoryId: 'tech',
 });
-\`\`\`
+```
 
 ---
 
@@ -203,7 +203,7 @@ const { posts, pagination } = await getPublishedPosts({
 
 ### **Development**
 
-\`\`\`bash
+```bash
 # Generate Prisma Client (after schema changes)
 pnpm db:generate
 
@@ -216,17 +216,17 @@ pnpm db:studio
 
 # Seed database with sample data
 pnpm db:seed
-\`\`\`
+```
 
 ### **Production**
 
-\`\`\`bash
+```bash
 # Create a migration (for production)
 pnpm db:migrate
 
 # This creates a SQL migration file for version control
 # Example: packages/database/prisma/migrations/20231201_init/migration.sql
-\`\`\`
+```
 
 ---
 
@@ -234,10 +234,10 @@ pnpm db:migrate
 
 ### **Option 1: Prisma Studio (Recommended)**
 
-\`\`\`bash
+```bash
 cd packages/database
 pnpm db:studio
-\`\`\`
+```
 
 - Opens at http://localhost:5555
 - Visual interface to browse/edit data
@@ -253,14 +253,14 @@ pnpm db:studio
 ### **Option 3: DBeaver / TablePlus**
 
 Connect using your `DATABASE_URL_UNPOOLED`:
-\`\`\`
+```
 Host: ep-shiny-math-ahr6vjv4.c-3.us-east-1.aws.neon.tech
 Port: 5432
 Database: neondb
 User: neondb_owner
 Password: your_database_password
 SSL: Required
-\`\`\`
+```
 
 ---
 
@@ -269,18 +269,18 @@ SSL: Required
 ### **Example: Add a new field**
 
 1. **Edit schema.prisma:**
-\`\`\`prisma
+```prisma
 model Post {
   id      String @id
   title   String
   views   Int    @default(0)  // ← Add this
 }
-\`\`\`
+```
 
 2. **Push to database:**
-\`\`\`bash
+```bash
 pnpm db:push
-\`\`\`
+```
 
 3. **Prisma automatically:**
    - Adds the column to the database
@@ -288,12 +288,12 @@ pnpm db:push
    - Updates Prisma Client
 
 4. **Use in code immediately:**
-\`\`\`typescript
+```typescript
 const post = await prisma.post.update({
   where: { id: '123' },
   data: { views: { increment: 1 } },  // ← TypeScript knows about 'views'
 });
-\`\`\`
+```
 
 ---
 
@@ -302,14 +302,14 @@ const post = await prisma.post.update({
 ### **Development vs Production**
 
 **Development (what we're using):**
-\`\`\`bash
+```bash
 pnpm db:push  # Quick, no migration files
-\`\`\`
+```
 
 **Production (recommended):**
-\`\`\`bash
+```bash
 pnpm db:migrate  # Creates migration files
-\`\`\`
+```
 
 ### **Why use migrations in production?**
 
@@ -320,7 +320,7 @@ pnpm db:migrate  # Creates migration files
 
 ### **Migration workflow:**
 
-\`\`\`bash
+```bash
 # 1. Make schema changes
 # Edit schema.prisma
 
@@ -337,7 +337,7 @@ git commit -m "Add views counter to posts"
 
 # 5. Deploy (migrations run automatically on Vercel)
 vercel --prod
-\`\`\`
+```
 
 ---
 
@@ -346,39 +346,39 @@ vercel --prod
 ### **Error: "Can't reach database server"**
 
 **Fix:**
-\`\`\`bash
+```bash
 # Check your DATABASE_URL in .env.local
 echo $DATABASE_URL
 
 # Make sure you're using the pooled URL
 # Should end with: -pooler.c-3.us-east-1.aws.neon.tech
-\`\`\`
+```
 
 ### **Error: "Table doesn't exist"**
 
 **Fix:**
-\`\`\`bash
+```bash
 # Push schema to create tables
 cd packages/database
 pnpm db:push
-\`\`\`
+```
 
 ### **Error: "Prisma Client is not generated"**
 
 **Fix:**
-\`\`\`bash
+```bash
 # Generate Prisma Client
 cd packages/database
 pnpm db:generate
-\`\`\`
+```
 
 ### **Error: "Column doesn't exist"**
 
 **Fix:**
-\`\`\`bash
+```bash
 # Schema and database are out of sync
 pnpm db:push  # Updates database to match schema
-\`\`\`
+```
 
 ---
 
@@ -402,11 +402,11 @@ pnpm db:push  # Updates database to match schema
 - ✅ Production-ready setup
 
 ### **Quick reference:**
-\`\`\`bash
+```bash
 pnpm db:generate  # Generate Prisma Client
 pnpm db:push      # Update database schema
 pnpm db:studio    # View/edit data visually
 pnpm db:seed      # Add sample data
-\`\`\`
+```
 
 **Your database is ready! No SQL files needed! 🎉**

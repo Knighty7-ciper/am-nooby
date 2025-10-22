@@ -206,14 +206,14 @@ A **complete, production-ready, enterprise-level blogging platform** with:
 ## 🚀 Next Steps
 
 1. **Push to GitHub**:
-   \`\`\`bash
+   ```bash
    git init
    git add .
    git commit -m "Initial commit: Complete NoobBlog platform"
    git branch -M main
    git remote add origin https://github.com/Knighty7-ciper/noobblog.git
    git push -u origin main
-   \`\`\`
+   ```
 
 2. **Deploy to Vercel**:
    - Import GitHub repo
@@ -222,11 +222,11 @@ A **complete, production-ready, enterprise-level blogging platform** with:
    - Deploy admin (apps/admin)
 
 3. **Set Up Database**:
-   \`\`\`bash
+   ```bash
    cd packages/database
    pnpm db:push
    pnpm db:seed
-   \`\`\`
+   ```
 
 4. **Start Building Your Audience!** 🎉
 

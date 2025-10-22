@@ -2,170 +2,144 @@
 
 ## Overview
 
-This guide will help you deploy NoobBlog to Vercel for both the main blog site and admin dashboard.
+This guide will help you deploy NoobBlog to Netlify.
+
+> **📘 Detailed Guide**: See <filepath>NETLIFY_DEPLOYMENT.md</filepath> for comprehensive step-by-step instructions.
 
 ## Prerequisites
 
 - GitHub account
-- Vercel account (free)
-- Neon PostgreSQL database (provided)
-- Stack Auth project (provided)
+- Netlify account (free)
+- Neon PostgreSQL database
+- Stack Auth project
 
-## Step 1: Push Code to GitHub
+## Quick Start
 
-\`\`\`bash
+### Step 1: Push Code to GitHub
+
+```bash
 git init
 git add .
 git commit -m "Initial commit"
 git branch -M main
-git remote add origin https://github.com/Knighty7-ciper/noobblog.git
+git remote add origin https://github.com/yourusername/noobblog.git
 git push -u origin main
-\`\`\`
+```
 
-## Step 2: Deploy Main Blog Site
+### Step 2: Deploy to Netlify
 
-### 2.1 Import to Vercel
+1. Go to [Netlify Dashboard](https://app.netlify.com/)
+2. Click "Add new site" → "Import an existing project"
+3. Connect to GitHub and select your repository
+4. Netlify will auto-detect Next.js settings
+5. Click "Deploy site"
 
-1. Go to [Vercel Dashboard](https://vercel.com/dashboard)
-2. Click "Add New..." → "Project"
-3. Import your GitHub repository
-4. Configure project:
-   - **Framework Preset**: Next.js
-   - **Root Directory**: `apps/web`
-   - **Build Command**: `cd ../.. && pnpm build:web`
-   - **Output Directory**: `.next`
+### Step 3: Configure Environment Variables
 
-### 2.2 Environment Variables
+In Netlify Dashboard → Site settings → Environment variables, add:
 
-Add the following environment variables:
+```env
+# Database (from Neon)
+DATABASE_URL=your_database_connection_string
 
-\`\`\`env
-NEON_DATABASE_URL=postgresql://user:password@host.region.aws.neon.tech/dbname?sslmode=require
+# Auth (from Stack Auth)
+NEXT_PUBLIC_STACK_PROJECT_ID=your_project_id
+NEXT_PUBLIC_STACK_PUBLISHABLE_CLIENT_KEY=your_publishable_key
+STACK_SECRET_SERVER_KEY=your_secret_key
 
-NEXT_PUBLIC_STACK_PROJECT_ID=your-stack-project-id
-STACK_PUBLISHABLE_CLIENT_KEY=pck_your_publishable_key_here
-STACK_SECRET_SERVER_KEY=ssk_your_secret_key_here
+# Site URLs (update after first deploy)
+NEXT_PUBLIC_APP_URL=https://your-site-name.netlify.app
+NEXT_PUBLIC_ADMIN_URL=https://your-admin-site.netlify.app
+```
 
-NEXT_PUBLIC_APP_URL=https://noobblog.vercel.app
-NEXT_PUBLIC_ADMIN_URL=https://noobblog-admin.vercel.app
-\`\`\`
+> **⚠️ Important**: Use placeholder values from `.env.example`, NOT real credentials in this file.
 
-<!-- Removed NEXT_PUBLIC_ prefix from STACK_PUBLISHABLE_CLIENT_KEY for security - it's now fetched server-side via API -->
+### Step 4: Update Stack Auth URLs
 
-### 2.3 Deploy
+After deployment:
 
-Click "Deploy" and wait for the build to complete.
+1. Note your Netlify URL (e.g., `https://your-site-name.netlify.app`)
+2. Go to [Stack Auth Dashboard](https://app.stack-auth.com/)
+3. Add your Netlify URL to **Allowed Domains**
+4. Update environment variables with your actual Netlify URL
 
-### 2.4 Configure Custom Domain
-
-1. Go to Project Settings → Domains
-2. Add `noobblog.vercel.app` or your custom domain
-3. Follow Vercel's instructions to configure DNS
-
-## Step 3: Deploy Admin Dashboard
-
-### 3.1 Create New Project
-
-1. Click "Add New..." → "Project"
-2. Import the **same** GitHub repository
-3. Configure project:
-   - **Framework Preset**: Next.js
-   - **Root Directory**: `apps/admin`
-   - **Build Command**: `cd ../.. && pnpm build:admin`
-   - **Output Directory**: `.next`
-
-### 3.2 Environment Variables
-
-\`\`\`env
-DATABASE_URL=postgresql://user:password@host.region.aws.neon.tech/dbname?sslmode=require
-
-NEXT_PUBLIC_STACK_PROJECT_ID=your-stack-project-id
-STACK_PUBLISHABLE_CLIENT_KEY=pck_your_publishable_key_here
-STACK_SECRET_SERVER_KEY=ssk_your_secret_key_here
-
-NEXT_PUBLIC_APP_URL=https://noobblog-admin.vercel.app
-\`\`\`
-
-<!-- Removed NEXT_PUBLIC_ prefix from STACK_PUBLISHABLE_CLIENT_KEY for security -->
-
-### 3.3 Deploy
-
-Click "Deploy" and wait for completion.
-
-### 3.4 Configure Domain
-
-Add `noobblog-admin.vercel.app` as the domain.
-
-## Step 4: Initialize Database
-
-### 4.1 Push Schema
+### Step 5: Initialize Database
 
 From your local machine:
 
-\`\`\`bash
+```bash
 cd packages/database
 pnpm db:push
-\`\`\`
-
-### 4.2 Seed Data
-
-\`\`\`bash
 pnpm db:seed
-\`\`\`
+```
 
-This will create:
-- Default admin user
-- Sample categories
-- Sample tags
-- Welcome post
-
-## Step 5: Verify Deployment
-
-1. Visit `https://noobblog.vercel.app`
-2. Visit `https://noobblog-admin.vercel.app`
-3. Test creating an account
-4. Test writing a post
+This creates:
+- Database schema
+- Sample data
+- Admin user
 
 ## Automatic Deployments
 
-Vercel will automatically deploy:
+Netlify automatically deploys:
 - **Production**: On push to `main` branch
-- **Preview**: On pull requests
+- **Deploy Previews**: On pull requests
+
+## Configuration Files
+
+### `netlify.toml`
+
+```toml
+[build]
+  command = "pnpm run build"
+  publish = ".next"
+
+[build.environment]
+  NODE_VERSION = "22"
+  NETLIFY_USE_PNPM = "true"
+```
+
+### `.npmrc`
+
+Required for monorepo setup:
+
+```ini
+auto-install-peers=true
+shamefully-hoist=true
+node-linker=hoisted
+public-hoist-pattern[]=*prisma*
+```
 
 ## Troubleshooting
 
 ### Build Failures
 
-**Issue**: Build fails with module not found
-**Solution**: Ensure `transpilePackages` is configured in `next.config.js`
+**Issue**: Prisma client generation fails
+**Solution**: Ensure `prisma generate` is in build script
 
-**Issue**: Database connection fails
-**Solution**: Check environment variables are correctly set
+**Issue**: Module not found errors
+**Solution**: Check `transpilePackages` in `next.config.js`
+
+**Issue**: Environment variables not working
+**Solution**: Verify they're set in Netlify dashboard, not in code
 
 ### Runtime Errors
 
-**Issue**: 500 errors on API routes
-**Solution**: Check Vercel logs in the dashboard
+**Issue**: Database connection fails
+**Solution**: Check `DATABASE_URL` format and permissions
 
-**Issue**: Authentication not working
-**Solution**: Verify Stack Auth credentials and URLs
+**Issue**: Authentication not working  
+**Solution**: Verify Stack Auth URLs and credentials
+
+**Issue**: 500 errors on API routes
+**Solution**: Check Netlify function logs in dashboard
 
 ## Performance Optimization
 
-### Enable Edge Functions
-
-For better performance, consider using Vercel Edge Functions:
-
-\`\`\`javascript
-// Add to your API route
-export const runtime = 'edge'
-\`\`\`
-
 ### Image Optimization
 
-Vercel automatically optimizes images. Use Next.js Image component:
+Use Next.js Image component:
 
-\`\`\`tsx
+```tsx
 import Image from 'next/image'
 
 <Image
@@ -174,31 +148,41 @@ import Image from 'next/image'
   height={600}
   alt="Description"
 />
-\`\`\`
+```
 
 ### Caching
 
 Configure revalidation for static pages:
 
-\`\`\`typescript
+```typescript
 export const revalidate = 60 // Revalidate every 60 seconds
-\`\`\`
+```
+
+### Edge Functions
+
+For better performance:
+
+```javascript
+export const config = {
+  runtime: 'edge',
+}
+```
 
 ## Monitoring
 
 ### Analytics
 
-1. Go to Vercel Dashboard → Analytics
-2. View real-time traffic and performance
-3. Monitor Web Vitals
+1. Netlify Analytics (built-in)
+2. Google Analytics (optional)
+3. Vercel Analytics (if migrating)
 
 ### Error Tracking
 
-Integrate Sentry for error tracking:
+Integrate Sentry:
 
-\`\`\`bash
+```bash
 pnpm add @sentry/nextjs
-\`\`\`
+```
 
 ## Scaling
 
@@ -208,11 +192,11 @@ Neon PostgreSQL scales automatically. Monitor usage in Neon dashboard.
 
 ### Serverless Functions
 
-Vercel scales automatically. No configuration needed.
+Netlify Functions scale automatically. No configuration needed.
 
 ### CDN
 
-Vercel uses a global CDN. Your content is automatically distributed worldwide.
+Netlify uses global CDN. Content is distributed worldwide automatically.
 
 ## Backup
 
@@ -222,11 +206,43 @@ Neon provides automatic backups. Configure in Neon dashboard.
 
 ### Code Backups
 
-Your code is backed up in GitHub. Enable branch protection.
+Your code is backed up in GitHub. Enable branch protection:
+
+1. Repository Settings → Branches
+2. Add rule for `main`
+3. Enable "Require pull request reviews"
+
+## Security Best Practices
+
+1. **Environment Variables**: Never commit `.env` file
+2. **API Keys**: Rotate keys regularly
+3. **Database**: Use connection pooling
+4. **HTTPS**: Enabled by default on Netlify
+5. **CSP**: Configure Content Security Policy headers
+
+### Security Headers
+
+Add to `netlify.toml`:
+
+```toml
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+```
 
 ## Support
 
 If you need help:
-- Check [Vercel Documentation](https://vercel.com/docs)
-- Check [Neon Documentation](https://neon.tech/docs)
-- Open an issue on GitHub
+- 📖 [Netlify Documentation](https://docs.netlify.com/)
+- 📖 [Neon Documentation](https://neon.tech/docs)
+- 📖 [Stack Auth Documentation](https://docs.stack-auth.com/)
+- 💬 Open an issue on GitHub
+
+## Additional Resources
+
+- <filepath>NETLIFY_DEPLOYMENT.md</filepath> - Detailed deployment guide
+- <filepath>.env.example</filepath> - Environment variables template
+- <filepath>README.md</filepath> - Project overview

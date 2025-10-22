@@ -1,0 +1,29 @@
+[build]
+  # Build command
+  command = "pnpm run build"
+  
+  # Output directory
+  publish = ".next"
+
+[build.environment]
+  # Use pnpm
+  NPM_FLAGS = "--version"
+  
+  # Node version
+  NODE_VERSION = "22"
+  
+  # Enable pnpm
+  NETLIFY_USE_PNPM = "true"
+  
+  # Prisma needs this
+  PRISMA_GENERATE_DATAPROXY = "false"
+
+# Next.js plugin for Netlify
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
+
+# Redirects for Next.js
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200

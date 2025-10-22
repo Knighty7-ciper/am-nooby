@@ -24,7 +24,6 @@ export const metadata: Metadata = {
     site: '@noobblog',
     creator: '@noobblog',
   },
-    generator: 'v0.app'
 }
 
 export default function RootLayout({

@@ -1,30 +1,28 @@
-"use client"
+'use client'
 
-import type React from "react"
-
-import { useState, useEffect } from "react"
-import { useSearchParams } from "next/navigation"
-import { Input } from "@/components/ui/input"
-import { Button } from "@/components/ui/button"
-import { Card } from "@/components/ui/card"
-import { PostCard } from "@/components/post-card"
-import { Avatar } from "@/components/ui/avatar"
-import { Badge } from "@/components/ui/badge"
-import { SearchIcon, Loader2 } from "lucide-react"
-import Link from "next/link"
+import { useState, useEffect } from 'react'
+import { useSearchParams } from 'next/navigation'
+import { Input } from '@/components/ui/input'
+import { Button } from '@/components/ui/button'
+import { Card } from '@/components/ui/card'
+import { PostCard } from '@/components/post-card'
+import { Avatar } from '@/components/ui/avatar'
+import { Badge } from '@/components/ui/badge'
+import { Search as SearchIcon, Loader2 } from 'lucide-react'
+import Link from 'next/link'
 
 export function SearchContent() {
   const searchParams = useSearchParams()
-  const [query, setQuery] = useState(searchParams.get("q") || "")
+  const [query, setQuery] = useState(searchParams.get('q') || '')
   const [results, setResults] = useState<any>(null)
   const [isLoading, setIsLoading] = useState(false)
-  const [activeTab, setActiveTab] = useState<"all" | "posts" | "users" | "tags">("all")
+  const [activeTab, setActiveTab] = useState<'all' | 'posts' | 'users' | 'tags'>('all')
 
   useEffect(() => {
-    const q = searchParams.get("q")
+    const q = searchParams.get('q')
     if (q) {
       setQuery(q)
-      performSearch(q, "all")
+      performSearch(q, 'all')
     }
   }, [searchParams])
 
@@ -50,7 +48,7 @@ export function SearchContent() {
     <div className="container max-w-6xl py-8">
       <div className="mb-8">
         <h1 className="text-4xl font-bold mb-6">Search</h1>
-
+        
         <form onSubmit={handleSearch} className="flex gap-2 mb-6">
           <Input
             value={query}
@@ -64,10 +62,10 @@ export function SearchContent() {
         </form>
 
         <div className="flex gap-2">
-          {(["all", "posts", "users", "tags"] as const).map((tab) => (
+          {(['all', 'posts', 'users', 'tags'] as const).map((tab) => (
             <Button
               key={tab}
-              variant={activeTab === tab ? "default" : "outline"}
+              variant={activeTab === tab ? 'default' : 'outline'}
               onClick={() => {
                 setActiveTab(tab)
                 if (query) performSearch(query, tab)
@@ -81,7 +79,8 @@ export function SearchContent() {
 
       {results && (
         <div className="space-y-8">
-          {(activeTab === "all" || activeTab === "posts") && results.posts && (
+          {/* Posts Results */}
+          {(activeTab === 'all' || activeTab === 'posts') && results.posts && (
             <div>
               <h2 className="text-2xl font-bold mb-4">Posts ({results.posts.length})</h2>
               <div className="grid gap-6">
@@ -92,7 +91,8 @@ export function SearchContent() {
             </div>
           )}
 
-          {(activeTab === "all" || activeTab === "users") && results.users && (
+          {/* Users Results */}
+          {(activeTab === 'all' || activeTab === 'users') && results.users && (
             <div>
               <h2 className="text-2xl font-bold mb-4">Users ({results.users.length})</h2>
               <div className="grid gap-4">
@@ -101,7 +101,7 @@ export function SearchContent() {
                     <Card className="p-4 hover:bg-muted/50 transition">
                       <div className="flex items-center gap-4">
                         <Avatar className="h-12 w-12">
-                          <img src={user.avatar || "/default-avatar.png"} alt={user.name} />
+                          <img src={user.avatar || '/default-avatar.png'} alt={user.name} />
                         </Avatar>
                         <div>
                           <h3 className="font-semibold">{user.name}</h3>
@@ -116,16 +116,14 @@ export function SearchContent() {
             </div>
           )}
 
-          {(activeTab === "all" || activeTab === "tags") && results.tags && (
+          {/* Tags Results */}
+          {(activeTab === 'all' || activeTab === 'tags') && results.tags && (
             <div>
               <h2 className="text-2xl font-bold mb-4">Tags ({results.tags.length})</h2>
               <div className="flex flex-wrap gap-2">
                 {results.tags.map((tag: any) => (
                   <Link key={tag.id} href={`/tag/${tag.slug}`}>
-                    <Badge
-                      variant="secondary"
-                      className="text-sm py-2 px-4 hover:bg-primary hover:text-primary-foreground transition"
-                    >
+                    <Badge variant="secondary" className="text-sm py-2 px-4 hover:bg-primary hover:text-primary-foreground transition">
                       #{tag.name}
                     </Badge>
                   </Link>

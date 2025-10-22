@@ -8,7 +8,7 @@ This guide will help you get started with creating amazing content on NoobBlog.
 
 ### Creating Your Account
 
-1. Visit [noobblog.vercel.app](https://noobblog.vercel.app)
+1. Visit your deployed site (e.g., `https://your-site-name.netlify.app`)
 2. Click "Get Started" or "Sign Up"
 3. Enter your details:
    - Email address
@@ -100,7 +100,7 @@ Use our rich text editor with:
 
 You can also use Markdown:
 
-\`\`\`markdown
+```markdown
 # Heading 1
 ## Heading 2
 ### Heading 3
@@ -115,8 +115,8 @@ You can also use Markdown:
 
 `inline code`
 
-\`\`\`code block```
-\`\`\`
+```code block```
+```
 
 ### Adding Images
 

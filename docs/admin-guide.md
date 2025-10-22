@@ -4,7 +4,7 @@
 
 The NoobBlog Admin Dashboard provides powerful tools to manage your blogging platform.
 
-**Access**: `https://noobblog-admin.vercel.app`
+**Access**: Your admin dashboard URL will be provided after deployment (e.g., `https://your-admin-site.netlify.app`)
 
 ## Getting Started
 
