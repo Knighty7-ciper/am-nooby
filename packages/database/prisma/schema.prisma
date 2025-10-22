@@ -1,0 +1,388 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// =====================
+// USER & AUTH MODELS
+// =====================
+
+enum UserRole {
+  ADMIN
+  EDITOR
+  AUTHOR
+  READER
+}
+
+enum UserStatus {
+  ACTIVE
+  SUSPENDED
+  BANNED
+}
+
+model User {
+  id            String      @id @default(cuid())
+  email         String      @unique
+  username      String      @unique
+  name          String?
+  avatar        String?
+  bio           String?     @db.Text
+  website       String?
+  location      String?
+  twitter       String?
+  github        String?
+  linkedin      String?
+  
+  role          UserRole    @default(READER)
+  status        UserStatus  @default(ACTIVE)
+  emailVerified Boolean     @default(false)
+  
+  // Stats
+  followerCount Int         @default(0)
+  followingCount Int        @default(0)
+  postCount     Int         @default(0)
+  
+  // Preferences
+  newsletter    Boolean     @default(true)
+  darkMode      Boolean     @default(false)
+  
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+  lastLoginAt   DateTime?
+  
+  // Relations
+  posts         Post[]      @relation("AuthorPosts")
+  comments      Comment[]
+  likes         Like[]
+  bookmarks     Bookmark[]
+  views         View[]
+  followers     Follow[]    @relation("Following")
+  following     Follow[]    @relation("Follower")
+  notifications Notification[] @relation("NotificationRecipient")
+  sentNotifications Notification[] @relation("NotificationSender")
+  
+  @@index([email])
+  @@index([username])
+  @@index([role])
+}
+
+model Follow {
+  id          String   @id @default(cuid())
+  followerId  String
+  followingId String
+  createdAt   DateTime @default(now())
+  
+  follower    User     @relation("Follower", fields: [followerId], references: [id], onDelete: Cascade)
+  following   User     @relation("Following", fields: [followingId], references: [id], onDelete: Cascade)
+  
+  @@unique([followerId, followingId])
+  @@index([followerId])
+  @@index([followingId])
+}
+
+// =====================
+// CONTENT MODELS
+// =====================
+
+enum PostStatus {
+  DRAFT
+  PUBLISHED
+  SCHEDULED
+  ARCHIVED
+}
+
+model Post {
+  id              String      @id @default(cuid())
+  slug            String      @unique
+  title           String
+  excerpt         String?     @db.Text
+  content         String      @db.Text
+  coverImage      String?
+  
+  // SEO
+  metaTitle       String?
+  metaDescription String?     @db.Text
+  keywords        String[]
+  canonicalUrl    String?
+  
+  // Publishing
+  status          PostStatus  @default(DRAFT)
+  publishedAt     DateTime?
+  scheduledFor    DateTime?
+  
+  // Features
+  featured        Boolean     @default(false)
+  allowComments   Boolean     @default(true)
+  isPremium       Boolean     @default(false)
+  
+  // Stats
+  viewCount       Int         @default(0)
+  likeCount       Int         @default(0)
+  commentCount    Int         @default(0)
+  bookmarkCount   Int         @default(0)
+  shareCount      Int         @default(0)
+  
+  // Reading time in minutes
+  readingTime     Int         @default(0)
+  
+  authorId        String
+  categoryId      String?
+  seriesId        String?
+  
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+  
+  // Relations
+  author          User        @relation("AuthorPosts", fields: [authorId], references: [id], onDelete: Cascade)
+  category        Category?   @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+  series          Series?     @relation(fields: [seriesId], references: [id], onDelete: SetNull)
+  tags            PostTag[]
+  comments        Comment[]
+  likes           Like[]
+  bookmarks       Bookmark[]
+  views           View[]
+  versions        PostVersion[]
+  
+  @@index([slug])
+  @@index([authorId])
+  @@index([categoryId])
+  @@index([status])
+  @@index([publishedAt])
+  @@index([featured])
+}
+
+model PostVersion {
+  id        String   @id @default(cuid())
+  postId    String
+  title     String
+  content   String   @db.Text
+  createdAt DateTime @default(now())
+  
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  
+  @@index([postId])
+}
+
+model Category {
+  id          String   @id @default(cuid())
+  name        String   @unique
+  slug        String   @unique
+  description String?  @db.Text
+  icon        String?
+  color       String?  @default("#6366f1")
+  postCount   Int      @default(0)
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  posts       Post[]
+  
+  @@index([slug])
+}
+
+model Tag {
+  id        String    @id @default(cuid())
+  name      String    @unique
+  slug      String    @unique
+  postCount Int       @default(0)
+  
+  createdAt DateTime  @default(now())
+  
+  posts     PostTag[]
+  
+  @@index([slug])
+}
+
+model PostTag {
+  postId String
+  tagId  String
+  
+  post   Post   @relation(fields: [postId], references: [id], onDelete: Cascade)
+  tag    Tag    @relation(fields: [tagId], references: [id], onDelete: Cascade)
+  
+  @@id([postId, tagId])
+  @@index([postId])
+  @@index([tagId])
+}
+
+model Series {
+  id          String   @id @default(cuid())
+  name        String
+  slug        String   @unique
+  description String?  @db.Text
+  coverImage  String?
+  postCount   Int      @default(0)
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  posts       Post[]
+  
+  @@index([slug])
+}
+
+// =====================
+// ENGAGEMENT MODELS
+// =====================
+
+model Comment {
+  id        String   @id @default(cuid())
+  content   String   @db.Text
+  postId    String
+  userId    String
+  parentId  String?
+  
+  likeCount Int      @default(0)
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  parent    Comment? @relation("CommentReplies", fields: [parentId], references: [id], onDelete: Cascade)
+  replies   Comment[] @relation("CommentReplies")
+  
+  @@index([postId])
+  @@index([userId])
+  @@index([parentId])
+}
+
+model Like {
+  id        String   @id @default(cuid())
+  userId    String
+  postId    String
+  createdAt DateTime @default(now())
+  
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  
+  @@unique([userId, postId])
+  @@index([userId])
+  @@index([postId])
+}
+
+model Bookmark {
+  id        String   @id @default(cuid())
+  userId    String
+  postId    String
+  createdAt DateTime @default(now())
+  
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  
+  @@unique([userId, postId])
+  @@index([userId])
+  @@index([postId])
+}
+
+model View {
+  id        String   @id @default(cuid())
+  postId    String
+  userId    String?
+  ipAddress String?
+  userAgent String?
+  createdAt DateTime @default(now())
+  
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  user      User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  
+  @@index([postId])
+  @@index([userId])
+  @@index([createdAt])
+}
+
+// =====================
+// NOTIFICATION MODELS
+// =====================
+
+enum NotificationType {
+  COMMENT
+  LIKE
+  FOLLOW
+  MENTION
+  REPLY
+  POST_PUBLISHED
+  NEWSLETTER
+}
+
+model Notification {
+  id          String           @id @default(cuid())
+  type        NotificationType
+  title       String
+  message     String           @db.Text
+  link        String?
+  read        Boolean          @default(false)
+  
+  recipientId String
+  senderId    String?
+  
+  createdAt   DateTime         @default(now())
+  
+  recipient   User             @relation("NotificationRecipient", fields: [recipientId], references: [id], onDelete: Cascade)
+  sender      User?            @relation("NotificationSender", fields: [senderId], references: [id], onDelete: SetNull)
+  
+  @@index([recipientId])
+  @@index([read])
+  @@index([createdAt])
+}
+
+// =====================
+// NEWSLETTER MODELS
+// =====================
+
+enum SubscriberStatus {
+  ACTIVE
+  UNSUBSCRIBED
+}
+
+model Newsletter {
+  id          String            @id @default(cuid())
+  email       String            @unique
+  status      SubscriberStatus  @default(ACTIVE)
+  subscribedAt DateTime         @default(now())
+  
+  @@index([email])
+  @@index([status])
+}
+
+// =====================
+// ANALYTICS MODELS
+// =====================
+
+model Analytics {
+  id            String   @id @default(cuid())
+  date          DateTime @db.Date
+  
+  // Daily aggregates
+  totalViews    Int      @default(0)
+  uniqueVisitors Int     @default(0)
+  totalPosts    Int      @default(0)
+  totalComments Int      @default(0)
+  totalLikes    Int      @default(0)
+  totalShares   Int      @default(0)
+  newUsers      Int      @default(0)
+  newSubscribers Int     @default(0)
+  
+  createdAt     DateTime @default(now())
+  
+  @@unique([date])
+  @@index([date])
+}
+
+// =====================
+// SITE SETTINGS
+// =====================
+
+model SiteSetting {
+  id    String @id @default(cuid())
+  key   String @unique
+  value String @db.Text
+  
+  updatedAt DateTime @updatedAt
+  
+  @@index([key])
+}

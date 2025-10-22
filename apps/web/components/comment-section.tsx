@@ -1,0 +1,208 @@
+'use client'
+
+import { useState } from 'react'
+import { Avatar } from '@/components/ui/avatar'
+import { Button } from '@/components/ui/button'
+import { Textarea } from '@/components/ui/textarea'
+import { Heart, MessageCircle, MoreVertical } from 'lucide-react'
+import { formatDistanceToNow } from 'date-fns'
+
+interface Comment {
+  id: string
+  content: string
+  createdAt: Date
+  author: {
+    id: string
+    name: string
+    username: string
+    avatar?: string
+  }
+  replies?: Comment[]
+}
+
+interface CommentItemProps {
+  comment: Comment
+  onReply: (commentId: string, content: string) => Promise<void>
+  onDelete: (commentId: string) => Promise<void>
+  currentUserId?: string
+}
+
+export function CommentItem({ comment, onReply, onDelete, currentUserId }: CommentItemProps) {
+  const [isReplying, setIsReplying] = useState(false)
+  const [replyContent, setReplyContent] = useState('')
+  const [isSubmitting, setIsSubmitting] = useState(false)
+
+  const handleReply = async () => {
+    if (!replyContent.trim()) return
+
+    setIsSubmitting(true)
+    try {
+      await onReply(comment.id, replyContent)
+      setReplyContent('')
+      setIsReplying(false)
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
+
+  return (
+    <div className="space-y-4">
+      <div className="flex gap-4">
+        <Avatar className="h-10 w-10">
+          <img src={comment.author.avatar || '/default-avatar.png'} alt={comment.author.name} />
+        </Avatar>
+        
+        <div className="flex-1 space-y-2">
+          <div className="flex items-center justify-between">
+            <div>
+              <span className="font-semibold">{comment.author.name}</span>
+              <span className="text-sm text-muted-foreground ml-2">@{comment.author.username}</span>
+              <span className="text-sm text-muted-foreground ml-2">
+                {formatDistanceToNow(new Date(comment.createdAt), { addSuffix: true })}
+              </span>
+            </div>
+            {currentUserId === comment.author.id && (
+              <Button variant="ghost" size="sm" onClick={() => onDelete(comment.id)}>
+                <MoreVertical className="h-4 w-4" />
+              </Button>
+            )}
+          </div>
+          
+          <p className="text-sm">{comment.content}</p>
+          
+          <div className="flex items-center gap-4">
+            <Button variant="ghost" size="sm" onClick={() => setIsReplying(!isReplying)}>
+              <MessageCircle className="h-4 w-4 mr-1" />
+              Reply
+            </Button>
+          </div>
+
+          {isReplying && (
+            <div className="space-y-2 pt-2">
+              <Textarea
+                value={replyContent}
+                onChange={(e) => setReplyContent(e.target.value)}
+                placeholder="Write a reply..."
+                rows={3}
+              />
+              <div className="flex gap-2">
+                <Button size="sm" onClick={handleReply} disabled={isSubmitting}>
+                  {isSubmitting ? 'Posting...' : 'Post Reply'}
+                </Button>
+                <Button size="sm" variant="outline" onClick={() => setIsReplying(false)}>
+                  Cancel
+                </Button>
+              </div>
+            </div>
+          )}
+
+          {comment.replies && comment.replies.length > 0 && (
+            <div className="ml-8 mt-4 space-y-4 border-l-2 pl-4">
+              {comment.replies.map((reply) => (
+                <CommentItem
+                  key={reply.id}
+                  comment={reply}
+                  onReply={onReply}
+                  onDelete={onDelete}
+                  currentUserId={currentUserId}
+                />
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  )
+}
+
+interface CommentSectionProps {
+  postId: string
+  comments: Comment[]
+  currentUserId?: string
+}
+
+export function CommentSection({ postId, comments, currentUserId }: CommentSectionProps) {
+  const [newComment, setNewComment] = useState('')
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [localComments, setLocalComments] = useState(comments)
+
+  const handleSubmit = async () => {
+    if (!newComment.trim()) return
+
+    setIsSubmitting(true)
+    try {
+      const response = await fetch('/api/comments', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ postId, content: newComment }),
+      })
+
+      if (response.ok) {
+        const { comment } = await response.json()
+        setLocalComments([comment, ...localComments])
+        setNewComment('')
+      }
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
+
+  const handleReply = async (parentId: string, content: string) => {
+    const response = await fetch('/api/comments', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ postId, content, parentId }),
+    })
+
+    if (response.ok) {
+      // Refresh comments
+      window.location.reload()
+    }
+  }
+
+  const handleDelete = async (commentId: string) => {
+    if (!confirm('Are you sure you want to delete this comment?')) return
+
+    const response = await fetch(`/api/comments/${commentId}`, {
+      method: 'DELETE',
+    })
+
+    if (response.ok) {
+      setLocalComments(localComments.filter(c => c.id !== commentId))
+    }
+  }
+
+  return (
+    <div className="space-y-8">
+      <div className="space-y-4">
+        <h2 className="text-2xl font-bold">Comments ({localComments.length})</h2>
+        
+        {currentUserId && (
+          <div className="space-y-2">
+            <Textarea
+              value={newComment}
+              onChange={(e) => setNewComment(e.target.value)}
+              placeholder="Write a comment..."
+              rows={4}
+            />
+            <Button onClick={handleSubmit} disabled={isSubmitting}>
+              {isSubmitting ? 'Posting...' : 'Post Comment'}
+            </Button>
+          </div>
+        )}
+      </div>
+
+      <div className="space-y-6">
+        {localComments.map((comment) => (
+          <CommentItem
+            key={comment.id}
+            comment={comment}
+            onReply={handleReply}
+            onDelete={handleDelete}
+            currentUserId={currentUserId}
+          />
+        ))}
+      </div>
+    </div>
+  )
+}
