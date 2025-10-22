@@ -309,7 +309,7 @@
 ## 🎯 NEXT STEPS
 
 ### To Start Development
-\`\`\`bash
+```bash
 # 1. Install dependencies
 bash setup.sh
 
@@ -318,10 +318,10 @@ pnpm dev:web      # http://localhost:3000
 pnpm dev:admin    # http://localhost:3001
 
 # 3. Open in browser and test!
-\`\`\`
+```
 
 ### To Deploy to Production
-\`\`\`bash
+```bash
 # 1. Push to GitHub
 git init
 git add .
@@ -335,7 +335,7 @@ vercel --prod
 # 3. Configure domains
 # - noobblog.vercel.app (main blog)
 # - noobblog-admin.vercel.app (admin)
-\`\`\`
+```
 
 ---
 

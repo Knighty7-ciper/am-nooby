@@ -12,7 +12,7 @@
 
 ### 1. **Core App Files** ✅
 
-\`\`\`
+```
 noobblogger/
 ├── app/
 │   ├── layout.tsx          # Root layout (re-exports from apps/web)
@@ -24,11 +24,11 @@ noobblogger/
 ├── postcss.config.js       # PostCSS configuration
 ├── tsconfig.json           # TypeScript configuration
 └── .env.example            # Environment variables template
-\`\`\`
+```
 
 ### 2. **Components** (All Re-exported from `apps/web/`) ✅
 
-\`\`\`
+```
 noobblogger/components/
 ├── theme-provider.tsx      ✅ ThemeProvider
 ├── stack-provider.tsx      ✅ StackProvider
@@ -50,11 +50,11 @@ noobblogger/components/
     ├── badge.tsx           ✅ Badge
     ├── table.tsx           ✅ Table, TableHeader, TableBody, etc.
     └── label.tsx           ✅ Label
-\`\`\`
+```
 
 ### 3. **Utilities** (All Re-exported from `apps/web/`) ✅
 
-\`\`\`
+```
 noobblogger/lib/
 ├── utils.ts                ✅ cn, formatDate, generateSlug
 ├── stack-server.ts         ✅ stackServerApp
@@ -64,7 +64,7 @@ noobblogger/lib/
 ├── image-optimizer.ts      ✅ handleImageOptimization, optimizeImage
 └── middleware/
     └── rate-limit.ts       ✅ withRateLimit
-\`\`\`
+```
 
 ---
 
@@ -81,7 +81,7 @@ noobblogger/lib/
 
 ### Scripts Available:
 
-\`\`\`json
+```json
 {
   "dev": "next dev",              // Run root-level Next.js app
   "build": "next build",          // Build root-level app for deployment
@@ -94,7 +94,7 @@ noobblogger/lib/
   "db:seed": "...",                // Seed database
   "db:studio": "..."               // Open Prisma Studio
 }
-\`\`\`
+```
 
 ---
 
@@ -105,12 +105,12 @@ noobblogger/lib/
 All root-level files use **re-exports** to avoid code duplication:
 
 **Example: `components/header.tsx`**
-\`\`\`typescript
+```typescript
 export { Header } from '../apps/web/components/header'
-\`\`\`
+```
 
 **Example: `lib/utils.ts`**
-\`\`\`typescript
+```typescript
 export {
   cn,
   formatDate,
@@ -118,13 +118,13 @@ export {
   generateSlug,
   truncate,
 } from '../apps/web/lib/utils'
-\`\`\`
+```
 
 **Example: `app/page.tsx`**
-\`\`\`typescript
+```typescript
 export { default } from '../apps/web/app/page'
 export { revalidate } from '../apps/web/app/page'
-\`\`\`
+```
 
 ### Benefits:
 
@@ -148,14 +148,14 @@ export { revalidate } from '../apps/web/app/page'
 6. Add environment variables from `.env.example`
 
 **Environment Variables Required:**
-\`\`\`env
+```env
 DATABASE_URL=postgresql://...
 NEXT_PUBLIC_STACK_PROJECT_ID=...
 NEXT_PUBLIC_STACK_PUBLISHABLE_CLIENT_KEY=...
 STACK_SECRET_SERVER_KEY=...
 NEXT_PUBLIC_APP_URL=https://your-domain.vercel.app
 NEXT_PUBLIC_SITE_URL=https://your-domain.vercel.app
-\`\`\`
+```
 
 ### Option 2: Deploy from `apps/web/`
 
@@ -183,13 +183,13 @@ NEXT_PUBLIC_SITE_URL=https://your-domain.vercel.app
 
 ### Test Locally:
 
-\`\`\`bash
+```bash
 cd noobblogger
 pnpm install
 pnpm db:push
 pnpm build
 pnpm start
-\`\`\`
+```
 
 **Expected Result:** App runs on `http://localhost:3000` ✅
 
@@ -214,27 +214,27 @@ pnpm start
 ## ✨ What's Next?
 
 ### 1. Install Dependencies
-\`\`\`bash
+```bash
 cd noobblogger
 pnpm install
-\`\`\`
+```
 
 ### 2. Setup Database
-\`\`\`bash
+```bash
 pnpm db:push
 pnpm db:generate
-\`\`\`
+```
 
 ### 3. Run Locally
-\`\`\`bash
+```bash
 pnpm dev
-\`\`\`
+```
 
 ### 4. Deploy to Vercel
-\`\`\`bash
+```bash
 pnpm build  # Test build locally first
 # Then push to GitHub and deploy on Vercel
-\`\`\`
+```
 
 ---
 

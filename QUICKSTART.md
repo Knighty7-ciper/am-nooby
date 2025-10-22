@@ -5,54 +5,54 @@
 ### Option 1: Automatic Setup (Recommended)
 
 **Linux/Mac:**
-\`\`\`bash
+```bash
 bash setup.sh
-\`\`\`
+```
 
 **Windows:**
-\`\`\`bash
+```bash
 setup.bat
-\`\`\`
+```
 
 ### Option 2: Manual Setup
 
 1. **Install dependencies**
-   \`\`\`bash
+   ```bash
    pnpm install
-   \`\`\`
+   ```
 
 2. **Set up environment**
-   \`\`\`bash
+   ```bash
    cp apps/web/.env.example apps/web/.env.local
    cp apps/admin/.env.example apps/admin/.env.local
-   \`\`\`
+   ```
 
 3. **Initialize database**
-   \`\`\`bash
+   ```bash
    cd packages/database
    pnpm db:push
    pnpm db:seed
    cd ../..
-   \`\`\`
+   ```
 
 ## Running Locally
 
 ### Start Main Blog
-\`\`\`bash
+```bash
 pnpm dev:web
-\`\`\`
+```
 Visit: http://localhost:3000
 
 ### Start Admin Dashboard
-\`\`\`bash
+```bash
 pnpm dev:admin
-\`\`\`
+```
 Visit: http://localhost:3001
 
 ### Run Both
-\`\`\`bash
+```bash
 pnpm dev
-\`\`\`
+```
 
 ## First Steps
 
@@ -64,14 +64,14 @@ pnpm dev
 ## Deploy to Vercel (10 minutes)
 
 ### 1. Push to GitHub
-\`\`\`bash
+```bash
 git init
 git add .
 git commit -m "Initial commit"
 git branch -M main
 git remote add origin https://github.com/Knighty7-ciper/noobblog.git
 git push -u origin main
-\`\`\`
+```
 
 ### 2. Deploy Main Site
 1. Go to [vercel.com](https://vercel.com)
@@ -88,14 +88,14 @@ git push -u origin main
 
 ### 4. Update URLs
 Update these in both deployments:
-\`\`\`
+```
 NEXT_PUBLIC_APP_URL=https://noobblog.vercel.app
 NEXT_PUBLIC_ADMIN_URL=https://noobblog-admin.vercel.app
-\`\`\`
+```
 
 ## Common Commands
 
-\`\`\`bash
+```bash
 # Development
 pnpm dev:web          # Start main blog
 pnpm dev:admin        # Start admin dashboard
@@ -115,28 +115,28 @@ pnpm db:studio        # Open Prisma Studio
 # Code Quality
 pnpm lint             # Run linter
 pnpm format           # Format code
-\`\`\`
+```
 
 ## Environment Variables
 
 **Required in both apps/web/.env.local and apps/admin/.env.local:**
 
-\`\`\`env
+```env
 DATABASE_URL="postgresql://..."
 NEXT_PUBLIC_STACK_PROJECT_ID="..."
 NEXT_PUBLIC_STACK_PUBLISHABLE_CLIENT_KEY="..."
 STACK_SECRET_SERVER_KEY="..."
 NEXT_PUBLIC_APP_URL="http://localhost:3000"
 NEXT_PUBLIC_ADMIN_URL="http://localhost:3001"
-\`\`\`
+```
 
 ## Troubleshooting
 
 ### Port Already in Use
-\`\`\`bash
+```bash
 # Change port in package.json
 "dev": "next dev -p 3002"
-\`\`\`
+```
 
 ### Database Connection Error
 - Check DATABASE_URL is correct
@@ -144,19 +144,19 @@ NEXT_PUBLIC_ADMIN_URL="http://localhost:3001"
 - Verify internet connection
 
 ### Build Errors
-\`\`\`bash
+```bash
 # Clear cache and rebuild
 rm -rf .next node_modules
 pnpm install
 pnpm build
-\`\`\`
+```
 
 ### Module Not Found
-\`\`\`bash
+```bash
 # Regenerate Prisma client
 cd packages/database
 pnpm db:generate
-\`\`\`
+```
 
 ## Getting Help
 

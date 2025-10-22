@@ -26,12 +26,12 @@
 - Automatic count updates (followers, likes, comments)
 
 **Usage:**
-\`\`\`typescript
+```typescript
 import { getUserByUsername, getPublishedPosts } from '@noobblog/database';
 
 const user = await getUserByUsername('john');
 const { posts, pagination } = await getPublishedPosts({ page: 1, limit: 10 });
-\`\`\`
+```
 
 ---
 
@@ -54,14 +54,14 @@ const { posts, pagination } = await getPublishedPosts({ page: 1, limit: 10 });
 - Authentication: 10 requests/minute
 
 **Usage:**
-\`\`\`typescript
+```typescript
 import { withRateLimit } from '@/lib/middleware/rate-limit';
 
 export const POST = withRateLimit(
   async (request) => { /* handler */ },
   { maxRequests: 100, windowMs: 60000 }
 );
-\`\`\`
+```
 
 ---
 
@@ -85,12 +85,12 @@ export const POST = withRateLimit(
 - API responses: 1-5 minutes
 
 **Usage:**
-\`\`\`typescript
+```typescript
 import { withCache, setCacheHeaders } from '@/lib/cache';
 
 const data = await withCache('key', fetcher, { ttl: 300 });
 return setCacheHeaders(response, { ttl: 300, staleWhileRevalidate: 60 });
-\`\`\`
+```
 
 ---
 
@@ -115,13 +115,13 @@ return setCacheHeaders(response, { ttl: 300, staleWhileRevalidate: 60 });
 - Recent request history
 
 **Usage:**
-\`\`\`typescript
+```typescript
 import { withPerformanceMonitoring } from '@/lib/performance';
 
 export const GET = withPerformanceMonitoring(async (request) => {
   // Your handler - automatically monitored
 });
-\`\`\`
+```
 
 **View Stats:** `GET /api/performance`
 
@@ -183,7 +183,7 @@ export const GET = withPerformanceMonitoring(async (request) => {
 **Sitemap URL:** `https://yoursite.com/api/sitemap.xml`
 
 **Usage:**
-\`\`\`typescript
+```typescript
 import { generateSEO, generateArticleSchema, JSONLDSchema } from '@/lib/seo';
 
 export const metadata = generateSEO({
@@ -194,7 +194,7 @@ export const metadata = generateSEO({
 
 const schema = generateArticleSchema({ /* ... */ });
 <JSONLDSchema data={schema} />
-\`\`\`
+```
 
 ---
 
@@ -221,17 +221,17 @@ const schema = generateArticleSchema({ /* ... */ });
 - WebP optimization
 
 **API Endpoint:**
-\`\`\`
+```
 GET /api/optimize?url=IMAGE_URL&w=800&h=600&q=80&f=webp
-\`\`\`
+```
 
 **Helper Functions:**
-\`\`\`typescript
+```typescript
 import { getOptimizedImageUrl, generateSrcSet } from '@/lib/image-optimizer';
 
 const url = getOptimizedImageUrl(src, { width: 800, quality: 80 });
 const srcSet = generateSrcSet(src, [320, 640, 1024]);
-\`\`\`
+```
 
 ---
 
@@ -271,7 +271,7 @@ const srcSet = generateSrcSet(src, [320, 640, 1024]);
 - Customizable themes
 
 **Usage:**
-\`\`\`typescript
+```typescript
 import { RichTextEditor } from '@/components/rich-text-editor';
 
 <RichTextEditor
@@ -279,7 +279,7 @@ import { RichTextEditor } from '@/components/rich-text-editor';
   onChange={(html) => setContent(html)}
   placeholder="Start writing..."
 />
-\`\`\`
+```
 
 ---
 
@@ -368,7 +368,7 @@ import { RichTextEditor } from '@/components/rich-text-editor';
 
 Update `.env.local` with production values:
 
-\`\`\`bash
+```bash
 # Required
 DATABASE_URL=<production-db-url>
 NEXT_PUBLIC_STACK_PROJECT_ID=<stack-project-id>
@@ -380,33 +380,33 @@ REVALIDATE_SECRET=<random-secret>
 # Optional
 NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION=<verification-code>
 NEXT_PUBLIC_GA_TRACKING_ID=<ga-id>
-\`\`\`
+```
 
 ### **2. Database Migration**
 
-\`\`\`bash
+```bash
 cd packages/database
 pnpm db:generate
 pnpm db:push  # or db:migrate for production
-\`\`\`
+```
 
 ### **3. Build & Test**
 
-\`\`\`bash
+```bash
 pnpm build
 pnpm start  # Test production build locally
-\`\`\`
+```
 
 ### **4. Deploy to Vercel**
 
-\`\`\`bash
+```bash
 # Web app
 vercel --prod
 
 # Admin dashboard
 cd apps/admin
 vercel --prod
-\`\`\`
+```
 
 ### **5. Post-Deployment**
 
@@ -421,22 +421,22 @@ vercel --prod
 ## 📝 **Environment Variables Reference**
 
 **Required:**
-\`\`\`bash
+```bash
 DATABASE_URL                              # Neon PostgreSQL connection
 NEXT_PUBLIC_STACK_PROJECT_ID              # Stack Auth project
 NEXT_PUBLIC_STACK_PUBLISHABLE_CLIENT_KEY  # Stack public key
 STACK_SECRET_SERVER_KEY                   # Stack secret key
 NEXT_PUBLIC_SITE_URL                      # Your domain
 REVALIDATE_SECRET                         # Cache revalidation secret
-\`\`\`
+```
 
 **Optional but Recommended:**
-\`\`\`bash
+```bash
 NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION      # Google Search Console
 NEXT_PUBLIC_GA_TRACKING_ID                # Google Analytics
 SENTRY_DSN                                # Error tracking
 UPSTASH_REDIS_URL                         # Redis for caching
-\`\`\`
+```
 
 ---
 

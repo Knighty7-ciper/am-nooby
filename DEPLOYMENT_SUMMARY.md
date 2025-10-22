@@ -55,7 +55,7 @@ Updated both `apps/web/lib/stack-server.ts` and `apps/admin/lib/stack-server.ts`
 
 ## 📁 Complete File Structure
 
-\`\`\`
+```
 noobblogger/
 ├── 📦 Root-Level App (NEW - Deployment Ready)
 │   ├── app/
@@ -112,7 +112,7 @@ noobblogger/
     ├── DEPLOYMENT_SUMMARY.md  (this file)
     ├── README.md
     └── verify-structure.sh
-\`\`\`
+```
 
 ---
 
@@ -122,7 +122,7 @@ noobblogger/
 
 All root-level files use re-exports to avoid code duplication:
 
-\`\`\`typescript
+```typescript
 // components/header.tsx
 export { Header } from '../apps/web/components/header'
 
@@ -131,7 +131,7 @@ export { cn, formatDate, generateSlug } from '../apps/web/lib/utils'
 
 // app/page.tsx
 export { default } from '../apps/web/app/page'
-\`\`\`
+```
 
 **Benefits:**
 - ✅ No code duplication
@@ -146,12 +146,12 @@ export { default } from '../apps/web/app/page'
 ### Quick Deploy to Vercel
 
 **1. Push to GitHub:**
-\`\`\`bash
+```bash
 cd noobblogger
 git add .
 git commit -m "Add root-level deployment structure"
 git push origin main
-\`\`\`
+```
 
 **2. Deploy on Vercel:**
 - Go to [vercel.com](https://vercel.com)
@@ -162,14 +162,14 @@ git push origin main
 - **Output Directory:** `.next` (auto-detected)
 
 **3. Add Environment Variables:**
-\`\`\`env
+```env
 DATABASE_URL=postgresql://neondb_owner:npg_fKoj69ErPxXi@ep-shiny-math-ahr6vjv4-pooler.c-3.us-east-1.aws.neon.tech/neondb?sslmode=require
 NEXT_PUBLIC_STACK_PROJECT_ID=b9d83c23-8940-4835-8323-a13649ca0e56
 NEXT_PUBLIC_STACK_PUBLISHABLE_CLIENT_KEY=pck_q4f2q777frjx8f9vdzgvcdt2nz0v15pbqavcykk811gj8
 STACK_SECRET_SERVER_KEY=ssk_b2f0mysbrtcr73rq86aye7ebgkw6tf9gq6xdyb97tq4x8
 NEXT_PUBLIC_APP_URL=https://your-domain.vercel.app
 NEXT_PUBLIC_SITE_URL=https://your-domain.vercel.app
-\`\`\`
+```
 
 **4. Deploy!** 🚀
 
@@ -178,13 +178,13 @@ NEXT_PUBLIC_SITE_URL=https://your-domain.vercel.app
 ## ✅ Verification
 
 ### Run Verification Script:
-\`\`\`bash
+```bash
 cd noobblogger
 bash verify-structure.sh
-\`\`\`
+```
 
 **Expected Output:**
-\`\`\`
+```
 🔍 Verifying NoobBlog Root-Level Deployment Structure...
 
 📋 Core App Files:
@@ -196,17 +196,17 @@ bash verify-structure.sh
 ✨ Verification Complete!
 📊 Status: All essential files are in place!
 🚀 Ready for deployment!
-\`\`\`
+```
 
 ### Test Build Locally:
-\`\`\`bash
+```bash
 cd noobblogger
 pnpm install
 pnpm db:push
 pnpm db:generate
 pnpm build
 pnpm start
-\`\`\`
+```
 
 **Expected:** App runs successfully on `http://localhost:3000` ✅
 
@@ -215,30 +215,30 @@ pnpm start
 ## 📝 Scripts Reference
 
 ### Root-Level Scripts (For Deployment)
-\`\`\`bash
+```bash
 pnpm dev        # Run Next.js dev server at root
 pnpm build      # Build for production (what Vercel runs)
 pnpm start      # Start production server
 pnpm lint       # Lint the project
-\`\`\`
+```
 
 ### Monorepo Scripts (For Development)
-\`\`\`bash
+```bash
 pnpm dev:web      # Run web app only
 pnpm dev:admin    # Run admin app only
 pnpm dev:all      # Run both apps concurrently
 pnpm build:web    # Build web app
 pnpm build:admin  # Build admin app
 pnpm build:all    # Build both apps
-\`\`\`
+```
 
 ### Database Scripts
-\`\`\`bash
+```bash
 pnpm db:push      # Push Prisma schema to database
 pnpm db:generate  # Generate Prisma Client
 pnpm db:seed      # Seed database with sample data
 pnpm db:studio    # Open Prisma Studio (GUI)
-\`\`\`
+```
 
 ---
 
@@ -259,17 +259,17 @@ pnpm db:studio    # Open Prisma Studio (GUI)
 ## 🎯 What's Different From Before?
 
 ### Before ❌
-\`\`\`
+```
 noobblogger/
 ├── apps/
 │   └── web/  <- All files here
 └── packages/
-\`\`\`
+```
 
 **Problem:** Deployment platforms couldn't find files at root level.
 
 ### After ✅
-\`\`\`
+```
 noobblogger/
 ├── components/  <- Re-exports from apps/web
 ├── lib/         <- Re-exports from apps/web
@@ -277,7 +277,7 @@ noobblogger/
 ├── apps/
 │   └── web/  <- Original source code
 └── packages/
-\`\`\`
+```
 
 **Solution:** Root-level files re-export from `apps/web/` - deployment platforms happy!
 
@@ -297,10 +297,10 @@ noobblogger/
 
 ### Issue: "Prisma Client not initialized"
 **Solution:**
-\`\`\`bash
+```bash
 cd packages/database
 pnpm db:generate
-\`\`\`
+```
 
 ### Issue: "Build fails on Vercel"
 **Solution:**
@@ -326,7 +326,7 @@ pnpm db:generate
 
 ## 🚀 Final Status
 
-\`\`\`
+```
 ██████████████████████████ 100% COMPLETE
 
 🟢 ROOT STRUCTURE: CREATED
@@ -335,7 +335,7 @@ pnpm db:generate
 🟢 CONFIGURATION: COMPLETE
 🟢 DOCUMENTATION: COMPREHENSIVE
 🟢 READY FOR DEPLOYMENT: YES!
-\`\`\`
+```
 
 ---
 

@@ -11,7 +11,7 @@ You asked: *"Where are the SQL files? How does Neon work?"*
 ## 🔗 **How It All Works**
 
 ### **Traditional Approach (OLD ❌)**
-\`\`\`
+```
 1. Write SQL files manually:
    - create_users_table.sql
    - create_posts_table.sql
@@ -22,10 +22,10 @@ You asked: *"Where are the SQL files? How does Neon work?"*
 
 3. Write SQL queries in your code:
    SELECT * FROM posts WHERE status = 'published'
-\`\`\`
+```
 
 ### **Modern Approach (THIS PROJECT ✅)**
-\`\`\`
+```
 1. Define schema in TypeScript-like syntax:
    schema.prisma (ONE FILE)
 
@@ -36,7 +36,7 @@ You asked: *"Where are the SQL files? How does Neon work?"*
 
 4. Use TypeScript in your code (no SQL!):
    await prisma.post.findMany({ where: { status: 'PUBLISHED' } })
-\`\`\`
+```
 
 ---
 
@@ -48,7 +48,7 @@ You asked: *"Where are the SQL files? How does Neon work?"*
 
 This ONE file defines your ENTIRE database:
 
-\`\`\`prisma
+```prisma
 model User {
   id       String @id @default(cuid())
   email    String @unique
@@ -65,7 +65,7 @@ model Post {
 }
 
 // ... 14 more models
-\`\`\`
+```
 
 **What Prisma does with this:**
 1. Generates SQL: `CREATE TABLE "User" (...)`
@@ -84,10 +84,10 @@ model Post {
 - No server management needed
 
 **Your Database:**
-\`\`\`bash
+```bash
 # From your .env.local
 DATABASE_URL="postgresql://neondb_owner:npg_fKoj69ErPxXi@ep-shiny-math-ahr6vjv4-pooler.c-3.us-east-1.aws.neon.tech/neondb?sslmode=require"
-\`\`\`
+```
 
 **This connects to:**
 - Database: `neondb`
@@ -103,7 +103,7 @@ DATABASE_URL="postgresql://neondb_owner:npg_fKoj69ErPxXi@ep-shiny-math-ahr6vjv4-
 
 Pre-built functions for common operations:
 
-\`\`\`typescript
+```typescript
 import { getPublishedPosts, createPost } from '@noobblog/database';
 
 // Get posts with pagination
@@ -119,29 +119,29 @@ const post = await createPost({
   content: 'Content here',
   authorId: userId,
 });
-\`\`\`
+```
 
 ---
 
 ## 🚀 **Setup Process (3 Steps)**
 
 ### **Step 1: Install Dependencies**
-\`\`\`bash
+```bash
 pnpm install
-\`\`\`
+```
 
 ### **Step 2: Generate Prisma Client**
-\`\`\`bash
+```bash
 cd packages/database
 pnpm db:generate
-\`\`\`
+```
 
 This reads `schema.prisma` and generates TypeScript code.
 
 ### **Step 3: Create Tables in Neon**
-\`\`\`bash
+```bash
 pnpm db:push
-\`\`\`
+```
 
 This:
 1. Reads your `schema.prisma`
@@ -150,13 +150,13 @@ This:
 4. Creates tables, indexes, foreign keys, everything!
 
 **OR Use the Script:**
-\`\`\`bash
+```bash
 # Linux/Mac
 bash setup-database.sh
 
 # Windows
 setup-database.bat
-\`\`\`
+```
 
 ---
 
@@ -164,9 +164,9 @@ setup-database.bat
 
 ### **Option 1: Prisma Studio (Recommended)**
 
-\`\`\`bash
+```bash
 pnpm db:studio
-\`\`\`
+```
 
 - Opens at http://localhost:5555
 - Visual interface like phpMyAdmin
@@ -185,16 +185,16 @@ pnpm db:studio
 ## 📝 **Example: How a Query Works**
 
 ### **Your Code (TypeScript):**
-\`\`\`typescript
+```typescript
 const posts = await prisma.post.findMany({
   where: { status: 'PUBLISHED' },
   include: { author: true },
   orderBy: { createdAt: 'desc' },
 });
-\`\`\`
+```
 
 ### **What Prisma Generates (SQL):**
-\`\`\`sql
+```sql
 SELECT 
   "Post".*, 
   "User".*
@@ -202,7 +202,7 @@ FROM "Post"
 LEFT JOIN "User" ON "Post"."authorId" = "User"."id"
 WHERE "Post"."status" = 'PUBLISHED'
 ORDER BY "Post"."createdAt" DESC;
-\`\`\`
+```
 
 ### **What Happens:**
 1. Prisma generates SQL automatically
@@ -240,7 +240,7 @@ ORDER BY "Post"."createdAt" DESC;
 
 ## 🔧 **Common Commands**
 
-\`\`\`bash
+```bash
 # Generate Prisma Client (after schema changes)
 pnpm db:generate
 
@@ -255,7 +255,7 @@ pnpm db:seed
 
 # Create migration (for production)
 pnpm db:migrate
-\`\`\`
+```
 
 ---
 
@@ -323,7 +323,7 @@ pnpm db:migrate
 **Your database is ready to use! 🚀**
 
 Just run:
-\`\`\`bash
+```bash
 bash setup-database.sh
 pnpm dev:web
-\`\`\`
+```

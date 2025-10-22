@@ -10,7 +10,6 @@ const nextConfig = {
       },
     ],
   },
-  transpilePackages: ['@noobblog/database'],
 }
 
 module.exports = nextConfig

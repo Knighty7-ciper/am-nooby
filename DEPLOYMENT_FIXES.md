@@ -33,7 +33,7 @@ All missing module exports and dependencies have been resolved! ✅
 - `apps/admin/lib/stack-server.ts`
 
 **Before:**
-\`\`\`typescript
+```typescript
 import { StackServerApp } from '@stackframe/stack'
 
 export const stackServerApp = new StackServerApp({
@@ -42,15 +42,15 @@ export const stackServerApp = new StackServerApp({
     home: process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000',
   },
 })
-\`\`\`
+```
 
 **After:**
-\`\`\`typescript
+```typescript
 import 'server-only'
 import { stackServerApp } from '@stack-auth/next/server-app'
 
 export { stackServerApp }
-\`\`\`
+```
 
 **Reason:** The code was using the old `@stackframe/stack` package. Updated to use the correct `@stack-auth/next` package that's already in dependencies.
 
@@ -99,16 +99,16 @@ All components and utilities now have proper named exports:
 ### To Deploy:
 
 1. **Install dependencies:**
-   \`\`\`bash
+   ```bash
    cd noobblogger
    pnpm install
-   \`\`\`
+   ```
 
 2. **Build the project:**
-   \`\`\`bash
+   ```bash
    pnpm build:web
    pnpm build:admin
-   \`\`\`
+   ```
 
 3. **Deploy to Vercel:**
    - Web app: Deploy from `apps/web` directory

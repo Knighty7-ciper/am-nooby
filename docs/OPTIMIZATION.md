@@ -6,7 +6,7 @@
 
 Protect your API from abuse with built-in rate limiting.
 
-\`\`\`typescript
+```typescript
 import { withRateLimit } from '@/lib/middleware/rate-limit';
 
 export const POST = withRateLimit(
@@ -15,13 +15,13 @@ export const POST = withRateLimit(
   },
   { maxRequests: 100, windowMs: 60000 } // 100 requests per minute
 );
-\`\`\`
+```
 
 ### 2. **Caching Strategy**
 
 Intelligent caching with stale-while-revalidate.
 
-\`\`\`typescript
+```typescript
 import { withCache, setCacheHeaders } from '@/lib/cache';
 
 // Cache API responses
@@ -36,19 +36,19 @@ return setCacheHeaders(
   NextResponse.json(data),
   { ttl: 300, staleWhileRevalidate: 60 }
 );
-\`\`\`
+```
 
 ### 3. **Performance Monitoring**
 
 Track request performance automatically.
 
-\`\`\`typescript
+```typescript
 import { withPerformanceMonitoring } from '@/lib/performance';
 
 export const GET = withPerformanceMonitoring(async (request) => {
   // Your handler
 });
-\`\`\`
+```
 
 View metrics at `/api/performance`
 
@@ -56,7 +56,7 @@ View metrics at `/api/performance`
 
 Automatic image optimization with Sharp.
 
-\`\`\`typescript
+```typescript
 import { getOptimizedImageUrl, generateSrcSet } from '@/lib/image-optimizer';
 
 // Single optimized image
@@ -68,7 +68,7 @@ const url = getOptimizedImageUrl(src, {
 
 // Responsive images
 const srcSet = generateSrcSet(src);
-\`\`\`
+```
 
 Optimization endpoint: `/api/optimize?url=IMAGE_URL&w=800&q=80&f=webp`
 
@@ -76,7 +76,7 @@ Optimization endpoint: `/api/optimize?url=IMAGE_URL&w=800&q=80&f=webp`
 
 Generate SEO metadata easily.
 
-\`\`\`typescript
+```typescript
 import { generateSEO, generateArticleSchema, JSONLDSchema } from '@/lib/seo';
 
 // In your page.tsx
@@ -98,7 +98,7 @@ const schema = generateArticleSchema({
 });
 
 <JSONLDSchema data={schema} />
-\`\`\`
+```
 
 ### 6. **RSS Feed**
 
@@ -120,7 +120,7 @@ Dynamic sitemap generation.
 
 Powerful TipTap-based editor.
 
-\`\`\`typescript
+```typescript
 import { RichTextEditor } from '@/components/rich-text-editor';
 
 <RichTextEditor
@@ -128,7 +128,7 @@ import { RichTextEditor } from '@/components/rich-text-editor';
   onChange={(html) => setContent(html)}
   placeholder="Start writing..."
 />
-\`\`\`
+```
 
 **Features:**
 - ✅ Bold, Italic, Strikethrough
@@ -144,7 +144,7 @@ import { RichTextEditor } from '@/components/rich-text-editor';
 
 Use optimized query helpers instead of raw Prisma.
 
-\`\`\`typescript
+```typescript
 import {
   getUserByUsername,
   getPublishedPosts,
@@ -168,7 +168,7 @@ const { posts, pagination } = await getPublishedPosts({
 
 // Get trending posts
 const trending = await getTrendingPosts(10);
-\`\`\`
+```
 
 ---
 
@@ -176,11 +176,11 @@ const trending = await getTrendingPosts(10);
 
 ### Environment Variables
 
-\`\`\`bash
+```bash
 # Add to .env.local
 REVALIDATE_SECRET=your-secret-key
 NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION=your-verification-code
-\`\`\`
+```
 
 ### Deployment Optimizations
 
@@ -197,10 +197,10 @@ NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION=your-verification-code
    - Use `DATABASE_URL` for pooled connections
 
 4. **Redis for Caching** (Recommended for production)
-   \`\`\`typescript
+   ```typescript
    // Replace in-memory cache with Redis
    import { Redis } from '@upstash/redis';
-   \`\`\`
+   ```
 
 5. **Analytics**
    - Add Google Analytics
@@ -235,7 +235,7 @@ NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION=your-verification-code
 
 ## 🔄 Cache Invalidation
 
-\`\`\`typescript
+```typescript
 // Invalidate specific path
 await fetch('/api/revalidate', {
   method: 'POST',
@@ -245,7 +245,7 @@ await fetch('/api/revalidate', {
   },
   body: JSON.stringify({ path: '/post/my-slug' }),
 });
-\`\`\`
+```
 
 ---
 

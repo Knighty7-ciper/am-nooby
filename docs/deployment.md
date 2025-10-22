@@ -13,14 +13,14 @@ This guide will help you deploy NoobBlog to Vercel for both the main blog site a
 
 ## Step 1: Push Code to GitHub
 
-\`\`\`bash
+```bash
 git init
 git add .
 git commit -m "Initial commit"
 git branch -M main
 git remote add origin https://github.com/Knighty7-ciper/noobblog.git
 git push -u origin main
-\`\`\`
+```
 
 ## Step 2: Deploy Main Blog Site
 
@@ -39,7 +39,7 @@ git push -u origin main
 
 Add the following environment variables:
 
-\`\`\`env
+```env
 DATABASE_URL=postgresql://neondb_owner:npg_fKoj69ErPxXi@ep-shiny-math-ahr6vjv4-pooler.c-3.us-east-1.aws.neon.tech/neondb?sslmode=require
 
 NEXT_PUBLIC_STACK_PROJECT_ID=b9d83c23-8940-4835-8323-a13649ca0e56
@@ -48,7 +48,7 @@ STACK_SECRET_SERVER_KEY=ssk_b2f0mysbrtcr73rq86aye7ebgkw6tf9gq6xdyb97tq4x8
 
 NEXT_PUBLIC_APP_URL=https://noobblog.vercel.app
 NEXT_PUBLIC_ADMIN_URL=https://noobblog-admin.vercel.app
-\`\`\`
+```
 
 ### 2.3 Deploy
 
@@ -74,7 +74,7 @@ Click "Deploy" and wait for the build to complete.
 
 ### 3.2 Environment Variables
 
-\`\`\`env
+```env
 DATABASE_URL=postgresql://neondb_owner:npg_fKoj69ErPxXi@ep-shiny-math-ahr6vjv4-pooler.c-3.us-east-1.aws.neon.tech/neondb?sslmode=require
 
 NEXT_PUBLIC_STACK_PROJECT_ID=b9d83c23-8940-4835-8323-a13649ca0e56
@@ -82,7 +82,7 @@ NEXT_PUBLIC_STACK_PUBLISHABLE_CLIENT_KEY=pck_q4f2q777frjx8f9vdzgvcdt2nz0v15pbqav
 STACK_SECRET_SERVER_KEY=ssk_b2f0mysbrtcr73rq86aye7ebgkw6tf9gq6xdyb97tq4x8
 
 NEXT_PUBLIC_APP_URL=https://noobblog-admin.vercel.app
-\`\`\`
+```
 
 ### 3.3 Deploy
 
@@ -98,16 +98,16 @@ Add `noobblog-admin.vercel.app` as the domain.
 
 From your local machine:
 
-\`\`\`bash
+```bash
 cd packages/database
 pnpm db:push
-\`\`\`
+```
 
 ### 4.2 Seed Data
 
-\`\`\`bash
+```bash
 pnpm db:seed
-\`\`\`
+```
 
 This will create:
 - Default admin user
@@ -152,16 +152,16 @@ Vercel will automatically deploy:
 
 For better performance, consider using Vercel Edge Functions:
 
-\`\`\`javascript
+```javascript
 // Add to your API route
 export const runtime = 'edge'
-\`\`\`
+```
 
 ### Image Optimization
 
 Vercel automatically optimizes images. Use Next.js Image component:
 
-\`\`\`tsx
+```tsx
 import Image from 'next/image'
 
 <Image
@@ -170,15 +170,15 @@ import Image from 'next/image'
   height={600}
   alt="Description"
 />
-\`\`\`
+```
 
 ### Caching
 
 Configure revalidation for static pages:
 
-\`\`\`typescript
+```typescript
 export const revalidate = 60 // Revalidate every 60 seconds
-\`\`\`
+```
 
 ## Monitoring
 
@@ -192,9 +192,9 @@ export const revalidate = 60 // Revalidate every 60 seconds
 
 Integrate Sentry for error tracking:
 
-\`\`\`bash
+```bash
 pnpm add @sentry/nextjs
-\`\`\`
+```
 
 ## Scaling
 
