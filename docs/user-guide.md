@@ -100,7 +100,7 @@ Use our rich text editor with:
 
 You can also use Markdown:
 
-```markdown
+\`\`\`markdown
 # Heading 1
 ## Heading 2
 ### Heading 3
@@ -115,8 +115,8 @@ You can also use Markdown:
 
 `inline code`
 
-```code block```
-```
+\`\`\`code block```
+\`\`\`
 
 ### Adding Images
 

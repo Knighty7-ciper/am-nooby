@@ -12,7 +12,7 @@ Shared database package for NoobBlog monorepo.
 
 ## Usage
 
-```typescript
+\`\`\`typescript
 import { prisma, getUserByUsername, getPublishedPosts } from '@noobblog/database';
 
 // Direct Prisma access
@@ -21,11 +21,11 @@ const users = await prisma.user.findMany();
 // Use query helpers
 const user = await getUserByUsername('john');
 const { posts, pagination } = await getPublishedPosts({ page: 1, limit: 10 });
-```
+\`\`\`
 
 ## Commands
 
-```bash
+\`\`\`bash
 # Generate Prisma client
 pnpm db:generate
 
@@ -40,7 +40,7 @@ pnpm db:studio
 
 # Seed database
 pnpm db:seed
-```
+\`\`\`
 
 ## Query Helpers
 

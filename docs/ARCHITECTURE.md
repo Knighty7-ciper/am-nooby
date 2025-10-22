@@ -2,7 +2,7 @@
 
 ## 🗺️ **Complete System Architecture**
 
-```
+\`\`\`
 ┌────────────────────────────────────────────────────────────────┐
 │                         FRONTEND LAYER                            │
 │────────────────────────────────────────────────────────────────│
@@ -116,13 +116,13 @@
 │  │  & User Management   │  │  WebP Conversion    │  │
 │  └──────────────────────────┘  └──────────────────────────┘  │
 └────────────────────────────────────────────────────────────────┘
-```
+\`\`\`
 
 ---
 
 ## 🔄 **Data Flow Example: Creating a Post**
 
-```
+\`\`\`
 1. User clicks "Publish" in Rich Text Editor
    ↓
 2. Frontend (Next.js) sends POST to /api/posts
@@ -152,7 +152,7 @@
    - Cache headers set for optimization
    ↓
 10. Frontend updates UI with new post
-```
+\`\`\`
 
 ---
 
@@ -177,7 +177,7 @@
 
 ## 🚀 **Getting Started**
 
-```bash
+\`\`\`bash
 # 1. Setup database (ONE TIME)
 bash setup-database.sh
 
@@ -186,6 +186,6 @@ pnpm dev:web
 
 # 3. View database visually (optional)
 pnpm db:studio
-```
+\`\`\`
 
 **That's it!** No SQL knowledge required! 🎉

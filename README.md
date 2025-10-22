@@ -86,29 +86,29 @@
 
 ### **1. Clone & Install**
 
-```bash
+\`\`\`bash
 # Clone the repository
 git clone https://github.com/yourusername/noobblog.git
 cd noobblog
 
 # Install dependencies
 pnpm install
-```
+\`\`\`
 
 ### **2. Environment Setup**
 
-```bash
+\`\`\`bash
 # Copy environment variables
 cp .env.example .env.local
 
 # Edit .env.local with your credentials
 # - DATABASE_URL from Neon
 # - Stack Auth keys from dashboard
-```
+\`\`\`
 
 ### **3. Database Setup**
 
-```bash
+\`\`\`bash
 # Generate Prisma client
 cd packages/database
 pnpm db:generate
@@ -118,11 +118,11 @@ pnpm db:push
 
 # (Optional) Seed with sample data
 pnpm db:seed
-```
+\`\`\`
 
 ### **4. Run Development Servers**
 
-```bash
+\`\`\`bash
 # Terminal 1 - Web app (http://localhost:3000)
 cd apps/web
 pnpm dev
@@ -130,7 +130,7 @@ pnpm dev
 # Terminal 2 - Admin dashboard (http://localhost:3001)
 cd apps/admin
 pnpm dev
-```
+\`\`\`
 
 ### **5. Access the Apps**
 
@@ -142,7 +142,7 @@ pnpm dev
 
 ## 📁 **Project Structure**
 
-```
+\`\`\`
 noobblog/
 ├── apps/
 │   ├── web/              # Main blog application
@@ -159,30 +159,30 @@ noobblog/
 │       └── src/           # Query helpers
 ├── docs/                 # Documentation
 └── package.json          # Workspace config
-```
+\`\`\`
 
 ---
 
 ## 🔧 **Available Commands**
 
 ### **Development**
-```bash
+\`\`\`bash
 pnpm dev              # Start all apps in development
 pnpm dev:web          # Start web app only
 pnpm dev:admin        # Start admin dashboard only
 pnpm build            # Build all apps for production
 pnpm lint             # Run ESLint
 pnpm type-check       # Run TypeScript type checking
-```
+\`\`\`
 
 ### **Database**
-```bash
+\`\`\`bash
 pnpm db:generate      # Generate Prisma client
 pnpm db:push          # Push schema to database
 pnpm db:migrate       # Run migrations
 pnpm db:studio        # Open Prisma Studio
 pnpm db:seed          # Seed database with sample data
-```
+\`\`\`
 
 ---
 
@@ -254,14 +254,14 @@ pnpm db:seed          # Seed database with sample data
 ### **Vercel (Recommended)**
 
 1. **Deploy Web App**
-```bash
+\`\`\`bash
 vercel --prod
-```
+\`\`\`
 
 2. **Deploy Admin Dashboard**
-```bash
+\`\`\`bash
 vercel --prod --cwd apps/admin
-```
+\`\`\`
 
 3. **Configure Environment Variables** in Vercel dashboard
 
@@ -311,7 +311,7 @@ For detailed optimization guide, see <filepath>docs/OPTIMIZATION.md</filepath>
 
 Contributions are welcome! Please read our [Contributing Guide](docs/CONTRIBUTING.md).
 
-```bash
+\`\`\`bash
 # Fork the repo, create a branch
 git checkout -b feature/amazing-feature
 
@@ -320,7 +320,7 @@ git commit -m "Add amazing feature"
 
 # Push and create PR
 git push origin feature/amazing-feature
-```
+\`\`\`
 
 ---
 
