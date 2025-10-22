@@ -29,10 +29,13 @@ export async function POST(request: NextRequest) {
     const words = data.content.split(/\s+/).length
     const readingTime = Math.ceil(words / wordsPerMinute)
 
+    // Extract tags from data (many-to-many relation handled separately)
+    const { tags, ...postData } = data
+
     // Create post
     const post = await prisma.post.create({
       data: {
-        ...data,
+        ...postData,
         authorId: userId,
         readingTime,
         publishedAt: data.status === 'PUBLISHED' ? new Date() : null,
@@ -40,8 +43,8 @@ export async function POST(request: NextRequest) {
     })
 
     // Add tags if provided
-    if (data.tags && data.tags.length > 0) {
-      for (const tagName of data.tags) {
+    if (tags && tags.length > 0) {
+      for (const tagName of tags) {
         // Find or create tag
         const tag = await prisma.tag.upsert({
           where: { slug: tagName.toLowerCase().replace(/\s+/g, '-') },
