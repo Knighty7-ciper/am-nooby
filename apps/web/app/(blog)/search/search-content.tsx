@@ -97,7 +97,7 @@ export function SearchContent() {
               <h2 className="text-2xl font-bold mb-4">Users ({results.users.length})</h2>
               <div className="grid gap-4">
                 {results.users.map((user: any) => (
-                  <Link key={user.id} href={`/@${user.username}`}>
+                  <Link key={user.id} href={`/${user.username}`}>
                     <Card className="p-4 hover:bg-muted/50 transition">
                       <div className="flex items-center gap-4">
                         <Avatar className="h-12 w-12">

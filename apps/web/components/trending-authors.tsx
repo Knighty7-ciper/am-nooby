@@ -21,14 +21,14 @@ export async function TrendingAuthors() {
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
       {authors.map((author) => (
         <div key={author.id} className="flex items-center gap-4 p-4 rounded-lg border bg-card hover:shadow-md transition-shadow">
-          <Link href={`/@${author.username}`}>
+          <Link href={`/${author.username}`}>
             <Avatar className="h-16 w-16">
               <AvatarImage src={author.avatar || undefined} />
               <AvatarFallback>{author.name?.[0] || 'U'}</AvatarFallback>
             </Avatar>
           </Link>
           <div className="flex-1 min-w-0">
-            <Link href={`/@${author.username}`}>
+            <Link href={`/${author.username}`}>
               <h3 className="font-semibold truncate hover:text-primary transition-colors">
                 {author.name || author.username}
               </h3>

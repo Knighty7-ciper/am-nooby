@@ -74,7 +74,7 @@ export function PostCard({ post, featured = false }: PostCardProps) {
 
         {/* Author & Meta */}
         <div className="flex items-center justify-between mt-6 pt-6 border-t">
-          <Link href={`/@${post.author.username}`} className="flex items-center gap-3 group/author">
+          <Link href={`/${post.author.username}`} className="flex items-center gap-3 group/author">
             <Avatar className="h-8 w-8">
               <AvatarImage src={post.author.avatar} />
               <AvatarFallback>{post.author.name?.[0] || 'U'}</AvatarFallback>

@@ -74,7 +74,7 @@ export default async function PostPage({ params }: PageProps) {
 
         {/* Author & Meta Info */}
         <div className="flex items-center justify-between flex-wrap gap-4">
-          <Link href={`/@${post.author.username}`} className="flex items-center gap-3">
+          <Link href={`/${post.author.username}`} className="flex items-center gap-3">
             <Avatar className="h-12 w-12">
               <img src={post.author.avatar || '/default-avatar.png'} alt={post.author.name || post.author.username} />
             </Avatar>
@@ -152,7 +152,7 @@ export default async function PostPage({ params }: PageProps) {
           <div className="flex-1">
             <h3 className="text-xl font-bold mb-1">Written by {post.author.name || post.author.username}</h3>
             {post.author.bio && <p className="text-muted-foreground mb-3">{post.author.bio}</p>}
-            <Link href={`/@${post.author.username}`}>
+            <Link href={`/${post.author.username}`}>
               <Button variant="outline" size="sm">View Profile</Button>
             </Link>
           </div>
