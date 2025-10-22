@@ -1,6 +1,8 @@
 import { getPublishedPosts } from '@noobblog/database';
 import { NextRequest, NextResponse } from 'next/server';
 
+export const dynamic = 'force-dynamic'
+
 /**
  * RSS Feed Generator
  */

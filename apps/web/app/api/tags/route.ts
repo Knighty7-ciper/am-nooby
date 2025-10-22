@@ -3,6 +3,8 @@ import { prisma } from '@noobblog/database'
 import { z } from 'zod'
 import { stackServerApp } from '@/lib/stack-server'
 
+export const dynamic = 'force-dynamic'
+
 const tagSchema = z.object({
   name: z.string().min(1).max(50),
   slug: z.string().min(1).max(50),

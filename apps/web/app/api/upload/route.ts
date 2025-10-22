@@ -3,6 +3,8 @@ import { stackServerApp } from '@/lib/stack-server'
 import { writeFile } from 'fs/promises'
 import { join } from 'path'
 
+export const dynamic = 'force-dynamic'
+
 export async function POST(request: NextRequest) {
   try {
     const user = await stackServerApp.getUser()

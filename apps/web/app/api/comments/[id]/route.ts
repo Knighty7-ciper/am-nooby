@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@noobblog/database'
 import { stackServerApp } from '@/lib/stack-server'
 
+export const dynamic = 'force-dynamic'
+
 // Update comment
 export async function PATCH(
   request: NextRequest,

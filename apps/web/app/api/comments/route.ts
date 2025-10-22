@@ -3,6 +3,8 @@ import { prisma } from '@noobblog/database'
 import { z } from 'zod'
 import { stackServerApp } from '@/lib/stack-server'
 
+export const dynamic = 'force-dynamic'
+
 const commentSchema = z.object({
   content: z.string().min(1).max(5000),
   postId: z.string(),

@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@noobblog/database'
 import { z } from 'zod'
 
+export const dynamic = 'force-dynamic'
+
 const postSchema = z.object({
   title: z.string().min(1).max(255),
   slug: z.string().min(1).max(255),

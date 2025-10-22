@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@noobblog/database'
 import { stackServerApp } from '@/lib/stack-server'
 
+export const dynamic = 'force-dynamic'
+
 // Get all users (Admin only)
 export async function GET(request: NextRequest) {
   try {

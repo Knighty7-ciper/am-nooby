@@ -15,8 +15,6 @@
   # Enable pnpm
   NETLIFY_USE_PNPM = "true"
   
-  # Prisma needs this
-  PRISMA_GENERATE_DATAPROXY = "false"
 
 # Next.js plugin for Netlify
 [[plugins]]

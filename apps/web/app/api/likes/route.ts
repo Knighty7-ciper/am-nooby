@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@noobblog/database'
 import { stackServerApp } from '@/lib/stack-server'
 
+export const dynamic = 'force-dynamic'
+
 // Toggle like on a post
 export async function POST(request: NextRequest) {
   try {
