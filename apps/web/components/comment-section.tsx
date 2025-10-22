@@ -13,9 +13,9 @@ interface Comment {
   createdAt: Date
   user: {
     id: string
-    name: string
+    name: string | null
     username: string
-    avatar?: string
+    avatar: string | null
   }
   replies?: Comment[]
 }
@@ -55,7 +55,7 @@ export function CommentItem({ comment, onReply, onDelete, currentUserId }: Comme
         <div className="flex-1 space-y-2">
           <div className="flex items-center justify-between">
             <div>
-              <span className="font-semibold">{comment.user.name}</span>
+              <span className="font-semibold">{comment.user.name || comment.user.username}</span>
               <span className="text-sm text-muted-foreground ml-2">@{comment.user.username}</span>
               <span className="text-sm text-muted-foreground ml-2">
                 {formatDistanceToNow(new Date(comment.createdAt), { addSuffix: true })}

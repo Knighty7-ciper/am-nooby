@@ -72,7 +72,7 @@ export default async function AdminPostsPage() {
                   <TableCell>
                     <div className="max-w-xs truncate font-medium">{post.title}</div>
                   </TableCell>
-                  <TableCell>{post.author.name}</TableCell>
+                  <TableCell>{post.author.name || post.author.username}</TableCell>
                   <TableCell>{post.category?.name || '-'}</TableCell>
                   <TableCell>
                     <Badge

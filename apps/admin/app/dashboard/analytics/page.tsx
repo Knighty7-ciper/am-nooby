@@ -123,7 +123,7 @@ export default async function AdminAnalyticsPage() {
                   <div className="text-2xl font-bold text-muted-foreground">#{index + 1}</div>
                   <div>
                     <h3 className="font-semibold">{post.title}</h3>
-                    <p className="text-sm text-muted-foreground">by {post.author.name}</p>
+                    <p className="text-sm text-muted-foreground">by {post.author.name || post.author.username}</p>
                   </div>
                 </div>
                 <div className="flex gap-6 text-sm">

@@ -20,8 +20,8 @@ export async function generateMetadata({ params }: PageProps) {
   if (!user) return { title: 'User Not Found' }
 
   return {
-    title: `${user.name} (@${user.username}) - NoobBlog`,
-    description: user.bio || `Check out ${user.name}'s profile on NoobBlog`,
+    title: `${user.name || user.username} (@${user.username}) - NoobBlog`,
+    description: user.bio || `Check out ${user.name || user.username}'s profile on NoobBlog`,
   }
 }
 
@@ -63,7 +63,7 @@ export default async function UserProfilePage({ params }: PageProps) {
             <div className="flex-1">
               <div className="flex items-start justify-between mb-4">
                 <div>
-                  <h1 className="text-3xl font-bold mb-1">{user.name}</h1>
+                  <h1 className="text-3xl font-bold mb-1">{user.name || user.username}</h1>
                   <p className="text-muted-foreground">@{user.username}</p>
                   <Badge className="mt-2">{user.role}</Badge>
                 </div>
@@ -112,7 +112,7 @@ export default async function UserProfilePage({ params }: PageProps) {
 
       {/* User's Posts */}
       <div>
-        <h2 className="text-2xl font-bold mb-6">Posts by {user.name}</h2>
+        <h2 className="text-2xl font-bold mb-6">Posts by {user.name || user.username}</h2>
         {user.posts.length > 0 ? (
           <div className="grid gap-6">
             {user.posts.map((post) => (

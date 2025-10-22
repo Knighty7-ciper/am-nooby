@@ -104,7 +104,7 @@ export function SearchContent() {
                           <img src={user.avatar || '/default-avatar.png'} alt={user.name || user.username} />
                         </Avatar>
                         <div>
-                          <h3 className="font-semibold">{user.name}</h3>
+                          <h3 className="font-semibold">{user.name || user.username}</h3>
                           <p className="text-sm text-muted-foreground">@{user.username}</p>
                           {user.bio && <p className="text-sm mt-1">{user.bio}</p>}
                         </div>

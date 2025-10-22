@@ -70,7 +70,7 @@ export default async function AdminUsersPage() {
                 <TableRow key={user.id}>
                   <TableCell>
                     <div>
-                      <div className="font-medium">{user.name}</div>
+                      <div className="font-medium">{user.name || user.username}</div>
                       <div className="text-sm text-muted-foreground">@{user.username}</div>
                     </div>
                   </TableCell>

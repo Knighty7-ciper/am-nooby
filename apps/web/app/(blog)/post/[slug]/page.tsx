@@ -79,7 +79,7 @@ export default async function PostPage({ params }: PageProps) {
               <img src={post.author.avatar || '/default-avatar.png'} alt={post.author.name || post.author.username} />
             </Avatar>
             <div>
-              <div className="font-semibold">{post.author.name}</div>
+              <div className="font-semibold">{post.author.name || post.author.username}</div>
               <div className="text-sm text-muted-foreground">
                 {post.publishedAt
                   ? formatDistanceToNow(new Date(post.publishedAt), { addSuffix: true })
@@ -150,7 +150,7 @@ export default async function PostPage({ params }: PageProps) {
             <img src={post.author.avatar || '/default-avatar.png'} alt={post.author.name || post.author.username} />
           </Avatar>
           <div className="flex-1">
-            <h3 className="text-xl font-bold mb-1">Written by {post.author.name}</h3>
+            <h3 className="text-xl font-bold mb-1">Written by {post.author.name || post.author.username}</h3>
             {post.author.bio && <p className="text-muted-foreground mb-3">{post.author.bio}</p>}
             <Link href={`/@${post.author.username}`}>
               <Button variant="outline" size="sm">View Profile</Button>
