@@ -5,7 +5,7 @@
   "description": "Professional blogging platform with advanced features",
   "scripts": {
     "dev": "next dev",
-    "build": "npx prisma generate --schema=./packages/database/prisma/schema.prisma && next build",
+    "build": "pnpm prisma generate --schema=./packages/database/prisma/schema.prisma && next build",
     "start": "next start",
     "lint": "next lint",
     "dev:web": "cd apps/web && pnpm dev",
@@ -14,10 +14,10 @@
     "build:web": "cd apps/web && pnpm build",
     "build:admin": "cd apps/admin && pnpm build",
     "build:all": "pnpm build:web && pnpm build:admin",
-    "db:push": "npx prisma db push --schema=./packages/database/prisma/schema.prisma",
-    "db:generate": "npx prisma generate --schema=./packages/database/prisma/schema.prisma",
+    "db:push": "pnpm prisma db push --schema=./packages/database/prisma/schema.prisma",
+    "db:generate": "pnpm prisma generate --schema=./packages/database/prisma/schema.prisma",
     "db:seed": "tsx packages/database/seed.ts",
-    "db:studio": "npx prisma studio --schema=./packages/database/prisma/schema.prisma",
+    "db:studio": "pnpm prisma studio --schema=./packages/database/prisma/schema.prisma",
     "format": "prettier --write \"**/*.{ts,tsx,md}\""
   },
   "dependencies": {
