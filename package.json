@@ -5,7 +5,7 @@
   "description": "Professional blogging platform with advanced features",
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "prisma generate --schema=./packages/database/prisma/schema.prisma && next build",
     "start": "next start",
     "lint": "next lint",
     "dev:web": "cd apps/web && pnpm dev",
