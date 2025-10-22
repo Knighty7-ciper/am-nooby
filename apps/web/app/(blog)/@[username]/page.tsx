@@ -57,7 +57,7 @@ export default async function UserProfilePage({ params }: PageProps) {
         <CardContent className="pt-6">
           <div className="flex flex-col md:flex-row gap-6">
             <Avatar className="h-32 w-32">
-              <img src={user.avatar || '/default-avatar.png'} alt={user.name} />
+              <img src={user.avatar || '/default-avatar.png'} alt={user.name || user.username} />
             </Avatar>
             
             <div className="flex-1">
