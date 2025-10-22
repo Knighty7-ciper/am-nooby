@@ -13,7 +13,10 @@ export async function rateLimit(
   const ip = request.ip || request.headers.get('x-forwarded-for') || 'unknown';
   
   const customLimiter = options
-    ? new RateLimiter(options)
+    ? new RateLimiter({
+        maxRequests: options.maxRequests ?? 100,
+        windowMs: options.windowMs ?? 60 * 1000,
+      })
     : limiter;
   
   const { success, remaining, reset } = await customLimiter.check(ip);
