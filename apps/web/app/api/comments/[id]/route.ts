@@ -18,7 +18,7 @@ export async function PATCH(
       where: { id: params.id },
     })
 
-    if (!comment || comment.authorId !== user.id) {
+    if (!comment || comment.userId !== user.id) {
       return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
     }
 
@@ -60,7 +60,7 @@ export async function DELETE(
       where: { id: user.id },
     })
 
-    if (comment.authorId !== user.id && userProfile?.role !== 'ADMIN') {
+    if (comment.userId !== user.id && userProfile?.role !== 'ADMIN') {
       return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
     }
 

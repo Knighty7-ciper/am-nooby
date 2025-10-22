@@ -24,10 +24,10 @@ export async function POST(request: NextRequest) {
     const comment = await prisma.comment.create({
       data: {
         ...data,
-        authorId: user.id,
+        userId: user.id,
       },
       include: {
-        author: true,
+        user: true,
         replies: true,
       },
     })
@@ -67,10 +67,10 @@ export async function GET(request: NextRequest) {
     const comments = await prisma.comment.findMany({
       where,
       include: {
-        author: true,
+        user: true,
         replies: {
           include: {
-            author: true,
+            user: true,
           },
           orderBy: { createdAt: 'asc' },
         },
