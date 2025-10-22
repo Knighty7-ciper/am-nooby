@@ -12,6 +12,7 @@
     "db:push": "prisma db push --schema=./packages/database/prisma/schema.prisma",
     "db:seed": "tsx packages/database/seed.ts",
     "db:studio": "prisma studio --schema=./packages/database/prisma/schema.prisma",
+<<<<<<< Updated upstream
     "dev": "next dev",
     "dev:admin": "cd apps/admin && pnpm dev",
     "dev:all": "concurrently \"pnpm dev:web\" \"pnpm dev:admin\"",
@@ -20,6 +21,9 @@
     "postinstall": "prisma generate --schema=./packages/database/prisma/schema.prisma",
     "lint": "next lint",
     "start": "next start"
+=======
+    "format": "prettier --write \"**/*.{ts,tsx,md}\""
+>>>>>>> Stashed changes
   },
   "dependencies": {
     "@prisma/client": "latest",
