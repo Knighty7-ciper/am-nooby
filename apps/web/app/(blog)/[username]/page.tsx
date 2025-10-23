@@ -49,8 +49,8 @@ export default async function UserProfilePage({ params }: PageProps) {
 
   if (!user) notFound()
 
-  const totalLikes = user.posts.reduce((sum, post) => sum + post.likeCount, 0)
-  const totalViews = user.posts.reduce((sum, post) => sum + post.viewCount, 0)
+  const totalLikes = user.posts.reduce((sum: number, post) => sum + post.likeCount, 0)
+  const totalViews = user.posts.reduce((sum: number, post) => sum + post.viewCount, 0)
 
   return (
     <div className="container max-w-7xl py-8">
