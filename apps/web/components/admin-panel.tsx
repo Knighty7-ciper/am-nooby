@@ -284,14 +284,14 @@ export function AdminPanel() {
                       <Card key={user.id} className="p-6">
                         <div className="flex items-start gap-4">
                           <img
-                            src={user.avatar || `https://ui-avatars.com/api/?name=${user.name}`}
-                            alt={user.name}
+                            src={user.avatar || `https://ui-avatars.com/api/?name=${user.name ?? 'User'}`}
+                            alt={user.name ?? 'User'}
                             className="w-12 h-12 rounded-full"
                           />
                           <div className="flex-1">
                             <div className="flex items-start justify-between mb-2">
                               <div>
-                                <h3 className="font-semibold">{user.name}</h3>
+                                <h3 className="font-semibold">{user.name ?? user.username}</h3>
                                 <p className="text-sm text-gray-600 dark:text-gray-400">@{user.username}</p>
                                 <p className="text-sm text-gray-500">{user.email}</p>
                               </div>
@@ -443,14 +443,14 @@ export function AdminPanel() {
                   <Card key={comment.id} className="p-6">
                     <div className="flex items-start gap-4">
                       <img
-                        src={comment.user?.avatar || `https://ui-avatars.com/api/?name=${comment.user?.name}`}
-                        alt={comment.user?.name}
+                        src={comment.user?.avatar || `https://ui-avatars.com/api/?name=${comment.user?.name ?? 'User'}`}
+                        alt={comment.user?.name ?? 'User'}
                         className="w-10 h-10 rounded-full"
                       />
                       <div className="flex-1">
                         <div className="flex items-start justify-between mb-2">
                           <div>
-                            <h4 className="font-semibold">{comment.user?.name}</h4>
+                            <h4 className="font-semibold">{comment.user?.name ?? comment.user?.username}</h4>
                             <p className="text-sm text-gray-600 dark:text-gray-400">
                               on <Link href={`/post/${comment.post?.slug}`} className="text-primary hover:underline">{comment.post?.title}</Link>
                             </p>

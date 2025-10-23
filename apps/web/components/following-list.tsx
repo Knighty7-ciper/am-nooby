@@ -89,8 +89,8 @@ export function FollowingList({ userId }: FollowingListProps) {
                 <div className="flex items-start gap-4">
                   <Link href={`/${user.username}`}>
                     <img
-                      src={user.avatar || `https://ui-avatars.com/api/?name=${user.name}&background=random`}
-                      alt={user.name}
+                      src={user.avatar || `https://ui-avatars.com/api/?name=${user.name ?? 'User'}&background=random`}
+                      alt={user.name ?? 'User'}
                       className="w-16 h-16 rounded-full object-cover"
                     />
                   </Link>
@@ -99,7 +99,7 @@ export function FollowingList({ userId }: FollowingListProps) {
                       <div>
                         <Link href={`/${user.username}`}>
                           <h3 className="font-semibold text-lg hover:text-primary transition-colors">
-                            {user.name}
+                            {user.name ?? user.username}
                           </h3>
                         </Link>
                         <p className="text-gray-600 dark:text-gray-400 text-sm">@{user.username}</p>
