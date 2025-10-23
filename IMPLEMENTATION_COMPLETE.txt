@@ -83,8 +83,8 @@ Documentation:
 1. 🔐 ADD ENVIRONMENT VARIABLES TO NETLIFY (5 min)
    → Site Settings → Environment Variables → Add:
    
-   PESAPAL_CONSUMER_KEY: tQofl7BAKu8QUx7oD1kMg/qmfUzITnMg
-   PESAPAL_CONSUMER_SECRET: Q4XAb5j1TWPRv8qHySWf0r9muBM=
+   PESAPAL_CONSUMER_KEY: <your_pesapal_consumer_key>
+   PESAPAL_CONSUMER_SECRET: <your_pesapal_consumer_secret>
    PESAPAL_ENVIRONMENT: sandbox
    
    ⚠️  Don't wrap in quotes! Copy-paste exactly.

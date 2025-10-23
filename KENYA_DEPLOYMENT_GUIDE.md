@@ -113,8 +113,8 @@ Make sure these are set in **Netlify Dashboard** → **Environment Variables**:
 
 ```bash
 # PesaPal (Already added ✓)
-PESAPAL_CONSUMER_KEY=tQofl7BAKu8QUx7oD1kMg/qmfUzITnMg
-PESAPAL_CONSUMER_SECRET=Q4XAb5j1TWPRv8qHySWf0r9muBM=
+PESAPAL_CONSUMER_KEY=<your_pesapal_consumer_key>
+PESAPAL_CONSUMER_SECRET=<your_pesapal_consumer_secret>
 PESAPAL_ENVIRONMENT=sandbox
 
 # App URL (Need to add!)
@@ -122,8 +122,8 @@ NEXT_PUBLIC_APP_URL=https://noobblog.netlify.app
 
 # Stack Auth (Already added ✓)
 NEXT_PUBLIC_STACK_PROJECT_ID=819019f5-01ce-4077-b9b5-c5354d33a247
-NEXT_PUBLIC_STACK_PUBLISHABLE_CLIENT_KEY=pck_japaw8gn18cva825ytm9gtqqbrtjzn1rqkaqd09c881yg
-STACK_SECRET_SERVER_KEY=ssk_hjz7jbnc2zr2sv1rnd04j994zcws6mrhsks76ekdsbs08
+NEXT_PUBLIC_STACK_PUBLISHABLE_CLIENT_KEY=<your_stack_publishable_key>
+STACK_SECRET_SERVER_KEY=<your_stack_secret_server_key>
 
 # Database (Already connected ✓)
 DATABASE_URL=your_database_url

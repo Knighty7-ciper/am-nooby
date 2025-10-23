@@ -37,11 +37,11 @@
    ```
    Variable 1:
    Key:   PESAPAL_CONSUMER_KEY
-   Value: tQofl7BAKu8QUx7oD1kMg/qmfUzITnMg
+   Value: <your_pesapal_consumer_key>
    
    Variable 2:
    Key:   PESAPAL_CONSUMER_SECRET
-   Value: Q4XAb5j1TWPRv8qHySWf0r9muBM=
+   Value: <your_pesapal_consumer_secret>
    
    Variable 3:
    Key:   PESAPAL_ENVIRONMENT

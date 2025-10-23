@@ -17,11 +17,11 @@ You mentioned having issues adding the PesaPal keys to your env file. Here's the
 ```bash
 # Variable 1
 Key:   PESAPAL_CONSUMER_KEY
-Value: tQofl7BAKu8QUx7oD1kMg/qmfUzITnMg
+Value: <your_pesapal_consumer_key>
 
 # Variable 2
 Key:   PESAPAL_CONSUMER_SECRET
-Value: Q4XAb5j1TWPRv8qHySWf0r9muBM=
+Value: <your_pesapal_consumer_secret>
 
 # Variable 3
 Key:   PESAPAL_ENVIRONMENT
@@ -40,8 +40,8 @@ For local testing, create/update `apps/web/.env.local`:
 
 ```bash
 # PesaPal Configuration
-PESAPAL_CONSUMER_KEY="tQofl7BAKu8QUx7oD1kMg/qmfUzITnMg"
-PESAPAL_CONSUMER_SECRET="Q4XAb5j1TWPRv8qHySWf0r9muBM="
+PESAPAL_CONSUMER_KEY="<your_pesapal_consumer_key>"
+PESAPAL_CONSUMER_SECRET="<your_pesapal_consumer_secret>"
 PESAPAL_ENVIRONMENT="sandbox"
 ```
 
