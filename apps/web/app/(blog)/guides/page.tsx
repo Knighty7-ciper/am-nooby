@@ -2,60 +2,23 @@ import { Card } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { PlayCircle, Clock, Award } from 'lucide-react'
 import Link from 'next/link'
+import { prisma } from '@noobblog/database'
 
-export default function GuidesPage() {
-  const guides = [
-    {
-      title: 'Getting Started with NoobBlog',
-      description: 'Learn the basics of NoobBlog in just 10 minutes',
-      duration: '10 min',
-      level: 'Beginner',
-      thumbnail: 'https://images.unsplash.com/photo-1499750310107-5fef28a66643?w=800',
-    },
-    {
-      title: 'Writing Your First Post',
-      description: 'A step-by-step guide to creating engaging content',
-      duration: '15 min',
-      level: 'Beginner',
-      thumbnail: 'https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?w=800',
-    },
-    {
-      title: 'SEO Optimization Tips',
-      description: 'Make your posts discoverable and rank higher',
-      duration: '20 min',
-      level: 'Intermediate',
-      thumbnail: 'https://images.unsplash.com/photo-1432888622747-4eb9a8f2c293?w=800',
-    },
-    {
-      title: 'Building Your Audience',
-      description: 'Strategies to grow your follower base',
-      duration: '25 min',
-      level: 'Intermediate',
-      thumbnail: 'https://images.unsplash.com/photo-1552664730-d307ca884978?w=800',
-    },
-    {
-      title: 'Monetization Strategies',
-      description: 'Turn your writing into a sustainable income',
-      duration: '30 min',
-      level: 'Advanced',
-      thumbnail: 'https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?w=800',
-    },
-    {
-      title: 'Advanced Analytics',
-      description: 'Deep dive into metrics and data analysis',
-      duration: '35 min',
-      level: 'Advanced',
-      thumbnail: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800',
-    },
-  ]
+export const revalidate = 60 // Revalidate every 60 seconds
+
+export default async function GuidesPage() {
+  const guides = await prisma.guide.findMany({
+    where: { published: true },
+    orderBy: { order: 'asc' },
+  })
 
   const getLevelColor = (level: string) => {
     switch (level) {
-      case 'Beginner':
+      case 'BEGINNER':
         return 'bg-green-500'
-      case 'Intermediate':
+      case 'INTERMEDIATE':
         return 'bg-yellow-500'
-      case 'Advanced':
+      case 'ADVANCED':
         return 'bg-red-500'
       default:
         return 'bg-gray-500'
@@ -98,35 +61,45 @@ export default function GuidesPage() {
       </div>
 
       {/* Guides Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {guides.map((guide) => (
-          <Link key={guide.title} href="#">
-            <Card className="overflow-hidden hover:shadow-lg transition-all hover:-translate-y-1">
-              <div className="relative h-48">
-                <img
-                  src={guide.thumbnail}
-                  alt={guide.title}
-                  className="w-full h-full object-cover"
-                />
-                <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 hover:opacity-100 transition">
-                  <PlayCircle className="w-16 h-16 text-white" />
+      {guides.length > 0 ? (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {guides.map((guide) => (
+            <Link key={guide.id} href={guide.videoUrl} target="_blank">
+              <Card className="overflow-hidden hover:shadow-lg transition-all hover:-translate-y-1">
+                <div className="relative h-48">
+                  <img
+                    src={guide.thumbnail}
+                    alt={guide.title}
+                    className="w-full h-full object-cover"
+                  />
+                  <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 hover:opacity-100 transition">
+                    <PlayCircle className="w-16 h-16 text-white" />
+                  </div>
+                  <Badge className={`absolute top-3 right-3 ${getLevelColor(guide.level)}`}>
+                    {guide.level}
+                  </Badge>
                 </div>
-                <Badge className={`absolute top-3 right-3 ${getLevelColor(guide.level)}`}>
-                  {guide.level}
-                </Badge>
-              </div>
-              <div className="p-6">
-                <h3 className="text-xl font-bold mb-2">{guide.title}</h3>
-                <p className="text-muted-foreground text-sm mb-4">{guide.description}</p>
-                <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                  <Clock className="w-4 h-4" />
-                  {guide.duration}
+                <div className="p-6">
+                  <h3 className="text-xl font-bold mb-2">{guide.title}</h3>
+                  <p className="text-muted-foreground text-sm mb-4">{guide.description}</p>
+                  <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                    <Clock className="w-4 h-4" />
+                    {guide.duration}
+                  </div>
                 </div>
-              </div>
-            </Card>
-          </Link>
-        ))}
-      </div>
+              </Card>
+            </Link>
+          ))}
+        </div>
+      ) : (
+        <Card className="p-12 text-center">
+          <PlayCircle className="w-16 h-16 mx-auto mb-4 text-muted-foreground" />
+          <h3 className="text-2xl font-bold mb-2">No Guides Yet</h3>
+          <p className="text-muted-foreground">
+            Check back soon! We're working on creating helpful video guides for you.
+          </p>
+        </Card>
+      )}
 
       {/* CTA */}
       <Card className="p-12 text-center bg-gradient-to-br from-primary/10 to-background mt-16">

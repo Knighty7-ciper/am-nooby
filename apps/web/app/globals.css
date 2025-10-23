@@ -1,78 +1,114 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    /* Background Layers */
+    --background: 210 17% 98%; /* #F8F9FA */
+    --foreground: 210 11% 15%; /* #212529 */
+    --card: 0 0% 100%; /* #FFFFFF */
+    --card-foreground: 210 11% 15%;
+    
+    /* Primary Orange System */
+    --primary: 16 100% 60%; /* #FF6B35 */
+    --primary-foreground: 0 0% 100%;
+    --primary-50: 16 100% 97%; /* #FFF4F0 */
+    --primary-100: 16 100% 93%; /* #FFE5DB */
+    --primary-700: 16 82% 53%; /* #E55A28 */
+    --primary-900: 16 65% 43%; /* #B84520 */
+    
+    /* Neutrals */
+    --neutral-50: 210 17% 98%;
+    --neutral-100: 0 0% 100%;
+    --neutral-300: 210 14% 89%; /* #DEE2E6 */
+    --neutral-500: 210 9% 46%; /* #6C757D */
+    --neutral-700: 210 11% 31%; /* #495057 */
+    --neutral-900: 210 11% 15%;
+    
+    /* Secondary & Accents */
+    --secondary: 16 100% 97%;
+    --secondary-foreground: 16 82% 53%;
+    --muted: 210 17% 98%;
+    --muted-foreground: 210 9% 46%;
+    --accent: 16 100% 93%;
+    --accent-foreground: 16 82% 53%;
+    
+    /* Semantic Colors */
+    --success: 158 64% 52%; /* #10B981 */
+    --warning: 38 92% 50%; /* #F59E0B */
+    --destructive: 0 84% 60%; /* #EF4444 */
+    --destructive-foreground: 0 0% 100%;
+    --info: 217 91% 60%; /* #3B82F6 */
+    
+    /* UI Elements */
     --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
-    --primary: 221.2 83.2% 53.3%;
-    --primary-foreground: 210 40% 98%;
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 221.2 83.2% 53.3%;
-    --radius: 0.5rem;
+    --popover-foreground: 210 11% 15%;
+    --border: 210 14% 89%;
+    --input: 210 14% 89%;
+    --ring: 16 100% 60%;
+    --radius: 0.75rem;
   }
 
-  .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
-    --primary: 217.2 91.2% 59.8%;
-    --primary-foreground: 222.2 47.4% 11.2%;
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 224.3 76.3% 48%;
-  }
 }
 
 @layer base {
+  html {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  
+  code, pre {
+    font-family: 'JetBrains Mono', 'Courier New', monospace;
+  }
+
   * {
     @apply border-border;
   }
+  
   body {
     @apply bg-background text-foreground;
+    font-size: 18px;
+    line-height: 1.7;
+  }
+  
+  h1 {
+    @apply text-6xl font-black leading-tight;
+  }
+  
+  h2 {
+    @apply text-5xl font-extrabold leading-tight;
+  }
+  
+  h3 {
+    @apply text-3xl font-bold leading-snug;
+  }
+  
+  h4 {
+    @apply text-2xl font-bold leading-snug;
   }
 }
 
-/* Custom scrollbar */
+/* Custom scrollbar with orange accent */
 ::-webkit-scrollbar {
-  width: 8px;
+  width: 10px;
 }
 
 ::-webkit-scrollbar-track {
-  @apply bg-secondary;
+  @apply bg-neutral-100;
 }
 
 ::-webkit-scrollbar-thumb {
-  @apply bg-primary/50 rounded-full;
+  background: linear-gradient(180deg, hsl(var(--primary)) 0%, hsl(var(--primary-700)) 100%);
+  border-radius: 10px;
+  border: 2px solid hsl(var(--background));
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  @apply bg-primary;
+  background: hsl(var(--primary-700));
 }
 
 /* Prose customization for blog content */

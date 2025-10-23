@@ -13,19 +13,19 @@ interface PostCardProps {
 
 export function PostCard({ post, featured = false }: PostCardProps) {
   return (
-    <Card className="group overflow-hidden hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
+    <Card className="group overflow-hidden border-2 border-neutral-200 hover:border-primary shadow-orange-sm hover:shadow-orange-lg transition-all duration-300 hover:-translate-y-2 hover:scale-[1.02] rounded-2xl">
       {/* Cover Image */}
       {post.coverImage && (
-        <Link href={`/post/${post.slug}`} className="block relative h-48 overflow-hidden">
+        <Link href={`/post/${post.slug}`} className="block relative h-56 overflow-hidden">
           <Image
             src={post.coverImage || 'https://images.unsplash.com/photo-1499750310107-5fef28a66643?w=800'}
             alt={post.title}
             fill
-            className="object-cover group-hover:scale-105 transition-transform duration-300"
+            className="object-cover group-hover:scale-110 transition-transform duration-500"
           />
           {featured && (
-            <div className="absolute top-3 right-3">
-              <Badge className="bg-yellow-500 text-white">Featured</Badge>
+            <div className="absolute top-4 right-4">
+              <Badge className="bg-gradient-to-r from-primary to-primary-700 text-white font-semibold px-3 py-1 shadow-orange-md">✨ Featured</Badge>
             </div>
           )}
         </Link>
@@ -36,7 +36,7 @@ export function PostCard({ post, featured = false }: PostCardProps) {
         {post.category && (
           <Link 
             href={`/category/${post.category.slug}`}
-            className="text-sm font-medium text-primary hover:underline"
+            className="inline-block text-sm font-bold text-primary hover:text-primary-700 transition-colors"
           >
             {post.category.name}
           </Link>
@@ -44,14 +44,14 @@ export function PostCard({ post, featured = false }: PostCardProps) {
 
         {/* Title */}
         <Link href={`/post/${post.slug}`}>
-          <h3 className="mt-2 text-xl font-bold line-clamp-2 group-hover:text-primary transition-colors">
+          <h3 className="mt-3 text-2xl font-bold line-clamp-2 text-neutral-900 group-hover:text-primary transition-colors leading-snug">
             {post.title}
           </h3>
         </Link>
 
         {/* Excerpt */}
         {post.excerpt && (
-          <p className="mt-2 text-muted-foreground text-sm line-clamp-3">
+          <p className="mt-3 text-neutral-700 text-base line-clamp-3 leading-relaxed">
             {post.excerpt}
           </p>
         )}
@@ -64,7 +64,7 @@ export function PostCard({ post, featured = false }: PostCardProps) {
                 key={postTag.tag.id}
                 href={`/tag/${postTag.tag.slug}`}
               >
-                <Badge variant="secondary" className="text-xs">
+                <Badge variant="secondary" className="text-xs font-medium px-3 py-1 hover:bg-primary-100 hover:text-primary-700 transition-colors">
                   #{postTag.tag.name}
                 </Badge>
               </Link>
@@ -73,29 +73,29 @@ export function PostCard({ post, featured = false }: PostCardProps) {
         )}
 
         {/* Author & Meta */}
-        <div className="flex items-center justify-between mt-6 pt-6 border-t">
+        <div className="flex items-center justify-between mt-6 pt-6 border-t-2 border-neutral-200">
           <Link href={`/${post.author.username}`} className="flex items-center gap-3 group/author">
-            <Avatar className="h-8 w-8">
+            <Avatar className="h-10 w-10 border-2 border-primary-100 group-hover/author:border-primary transition-colors">
               <AvatarImage src={post.author.avatar || undefined} />
-              <AvatarFallback>{post.author.name?.[0] || 'U'}</AvatarFallback>
+              <AvatarFallback className="bg-primary-50 text-primary font-bold">{post.author.name?.[0] || 'U'}</AvatarFallback>
             </Avatar>
             <div>
-              <p className="text-sm font-medium group-hover/author:text-primary transition-colors">
+              <p className="text-sm font-bold text-neutral-900 group-hover/author:text-primary transition-colors">
                 {post.author.name || post.author.username}
               </p>
-              <p className="text-xs text-muted-foreground">
+              <p className="text-xs text-neutral-600 font-medium">
                 {formatDate(post.publishedAt || post.createdAt)}
               </p>
             </div>
           </Link>
 
-          <div className="flex items-center gap-3 text-muted-foreground text-xs">
-            <span className="flex items-center gap-1">
-              <Clock className="h-3 w-3" />
+          <div className="flex items-center gap-4 text-neutral-600 text-xs font-medium">
+            <span className="flex items-center gap-1.5">
+              <Clock className="h-4 w-4 text-primary" />
               {post.readingTime}m
             </span>
-            <span className="flex items-center gap-1">
-              <Heart className="h-3 w-3" />
+            <span className="flex items-center gap-1.5">
+              <Heart className="h-4 w-4 text-primary" />
               {post.likeCount}
             </span>
           </div>

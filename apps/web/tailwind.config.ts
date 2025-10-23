@@ -17,6 +17,14 @@ const config: Config = {
       },
     },
     extend: {
+      fontFamily: {
+        sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
+        mono: ['JetBrains Mono', 'Courier New', 'monospace'],
+      },
+      fontSize: {
+        'hero': ['4rem', { lineHeight: '1.2', fontWeight: '900' }],
+        'display': ['3rem', { lineHeight: '1.3', fontWeight: '800' }],
+      },
       colors: {
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',
@@ -26,6 +34,18 @@ const config: Config = {
         primary: {
           DEFAULT: 'hsl(var(--primary))',
           foreground: 'hsl(var(--primary-foreground))',
+          50: 'hsl(var(--primary-50))',
+          100: 'hsl(var(--primary-100))',
+          700: 'hsl(var(--primary-700))',
+          900: 'hsl(var(--primary-900))',
+        },
+        neutral: {
+          50: 'hsl(var(--neutral-50))',
+          100: 'hsl(var(--neutral-100))',
+          300: 'hsl(var(--neutral-300))',
+          500: 'hsl(var(--neutral-500))',
+          700: 'hsl(var(--neutral-700))',
+          900: 'hsl(var(--neutral-900))',
         },
         secondary: {
           DEFAULT: 'hsl(var(--secondary))',
@@ -51,11 +71,28 @@ const config: Config = {
           DEFAULT: 'hsl(var(--card))',
           foreground: 'hsl(var(--card-foreground))',
         },
+        success: 'hsl(var(--success))',
+        warning: 'hsl(var(--warning))',
+        info: 'hsl(var(--info))',
       },
       borderRadius: {
         lg: 'var(--radius)',
         md: 'calc(var(--radius) - 2px)',
         sm: 'calc(var(--radius) - 4px)',
+        xl: '1rem',
+        '2xl': '1.5rem',
+      },
+      boxShadow: {
+        'orange-sm': '0 2px 8px rgba(255, 107, 53, 0.08)',
+        'orange-md': '0 4px 16px rgba(255, 107, 53, 0.10)',
+        'orange-lg': '0 8px 24px rgba(255, 107, 53, 0.12)',
+        'orange-xl': '0 16px 48px rgba(255, 107, 53, 0.15)',
+      },
+      spacing: {
+        '18': '4.5rem',
+        '88': '22rem',
+        '100': '25rem',
+        '128': '32rem',
       },
       keyframes: {
         'accordion-down': {

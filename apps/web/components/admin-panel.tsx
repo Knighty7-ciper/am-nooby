@@ -21,20 +21,25 @@ import {
   Ban,
   CheckCircle,
   XCircle,
-  UserCog
+  UserCog,
+  PlayCircle,
+  Plus
 } from 'lucide-react'
 import Link from 'next/link'
 
-type Tab = 'overview' | 'users' | 'posts' | 'comments' | 'reports' | 'settings'
+type Tab = 'overview' | 'users' | 'posts' | 'comments' | 'guides' | 'reports' | 'settings'
 
 export function AdminPanel() {
   const [activeTab, setActiveTab] = useState<Tab>('overview')
   const [users, setUsers] = useState<any[]>([])
   const [posts, setPosts] = useState<any[]>([])
   const [comments, setComments] = useState<any[]>([])
+  const [guides, setGuides] = useState<any[]>([])
   const [stats, setStats] = useState<any>(null)
   const [searchQuery, setSearchQuery] = useState('')
   const [loading, setLoading] = useState(true)
+  const [showGuideForm, setShowGuideForm] = useState(false)
+  const [editingGuide, setEditingGuide] = useState<any>(null)
 
   useEffect(() => {
     loadData()
@@ -59,6 +64,10 @@ export function AdminPanel() {
         const response = await fetch('/api/admin/comments')
         const data = await response.json()
         setComments(data)
+      } else if (activeTab === 'guides') {
+        const response = await fetch('/api/admin/guides')
+        const data = await response.json()
+        setGuides(data)
       }
     } catch (error) {
       console.error('Failed to load data:', error)
@@ -112,11 +121,50 @@ export function AdminPanel() {
     }
   }
 
+  const handleGuideSubmit = async (formData: any) => {
+    try {
+      const url = editingGuide 
+        ? `/api/admin/guides/${editingGuide.id}`
+        : '/api/admin/guides'
+      const method = editingGuide ? 'PATCH' : 'POST'
+      
+      const response = await fetch(url, {
+        method,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
+      })
+      
+      if (response.ok) {
+        setShowGuideForm(false)
+        setEditingGuide(null)
+        loadData()
+      }
+    } catch (error) {
+      console.error('Failed to save guide:', error)
+    }
+  }
+
+  const handleGuideDelete = async (guideId: string) => {
+    if (!confirm('Are you sure you want to delete this guide?')) return
+    
+    try {
+      const response = await fetch(`/api/admin/guides/${guideId}`, {
+        method: 'DELETE',
+      })
+      if (response.ok) {
+        loadData()
+      }
+    } catch (error) {
+      console.error('Failed to delete guide:', error)
+    }
+  }
+
   const tabs = [
     { id: 'overview' as Tab, label: 'Overview', icon: TrendingUp },
     { id: 'users' as Tab, label: 'Users', icon: Users },
     { id: 'posts' as Tab, label: 'Posts', icon: FileText },
     { id: 'comments' as Tab, label: 'Comments', icon: MessageCircle },
+    { id: 'guides' as Tab, label: 'Guides', icon: PlayCircle },
     { id: 'reports' as Tab, label: 'Reports', icon: Flag },
     { id: 'settings' as Tab, label: 'Settings', icon: Settings },
   ]
@@ -496,6 +544,212 @@ export function AdminPanel() {
                   All clear! No content has been reported.
                 </p>
               </Card>
+            )}
+
+
+            {/* Guides Tab */}
+            {activeTab === 'guides' && (
+              <div className="space-y-6">
+                <Card className="p-6">
+                  <div className="flex items-center justify-between mb-6">
+                    <h2 className="text-2xl font-bold">Video Guides Management</h2>
+                    <Button 
+                      onClick={() => {
+                        setEditingGuide(null)
+                        setShowGuideForm(true)
+                      }}
+                    >
+                      <Plus className="w-4 h-4 mr-2" />
+                      Add New Guide
+                    </Button>
+                  </div>
+
+                  {/* Guide Form */}
+                  {showGuideForm && (
+                    <Card className="p-6 mb-6 bg-gray-50">
+                      <h3 className="text-lg font-bold mb-4">
+                        {editingGuide ? 'Edit Guide' : 'Create New Guide'}
+                      </h3>
+                      <form onSubmit={(e) => {
+                        e.preventDefault()
+                        const formData = new FormData(e.currentTarget)
+                        handleGuideSubmit({
+                          title: formData.get('title'),
+                          description: formData.get('description'),
+                          videoUrl: formData.get('videoUrl'),
+                          thumbnail: formData.get('thumbnail'),
+                          duration: formData.get('duration'),
+                          level: formData.get('level'),
+                          published: formData.get('published') === 'on',
+                        })
+                      }}>
+                        <div className="grid grid-cols-2 gap-4 mb-4">
+                          <div>
+                            <label className="block text-sm font-medium mb-2">Title</label>
+                            <input
+                              name="title"
+                              type="text"
+                              required
+                              defaultValue={editingGuide?.title}
+                              className="w-full px-3 py-2 border rounded-lg"
+                              placeholder="Getting Started with NoobBlog"
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-sm font-medium mb-2">Duration</label>
+                            <input
+                              name="duration"
+                              type="text"
+                              required
+                              defaultValue={editingGuide?.duration}
+                              className="w-full px-3 py-2 border rounded-lg"
+                              placeholder="10 min"
+                            />
+                          </div>
+                        </div>
+                        <div className="mb-4">
+                          <label className="block text-sm font-medium mb-2">Description</label>
+                          <textarea
+                            name="description"
+                            required
+                            defaultValue={editingGuide?.description}
+                            className="w-full px-3 py-2 border rounded-lg"
+                            rows={3}
+                            placeholder="A comprehensive guide to..."
+                          />
+                        </div>
+                        <div className="grid grid-cols-2 gap-4 mb-4">
+                          <div>
+                            <label className="block text-sm font-medium mb-2">Video URL (YouTube, Vimeo, etc.)</label>
+                            <input
+                              name="videoUrl"
+                              type="url"
+                              required
+                              defaultValue={editingGuide?.videoUrl}
+                              className="w-full px-3 py-2 border rounded-lg"
+                              placeholder="https://youtube.com/watch?v=..."
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-sm font-medium mb-2">Thumbnail URL</label>
+                            <input
+                              name="thumbnail"
+                              type="url"
+                              required
+                              defaultValue={editingGuide?.thumbnail}
+                              className="w-full px-3 py-2 border rounded-lg"
+                              placeholder="https://..."
+                            />
+                          </div>
+                        </div>
+                        <div className="grid grid-cols-2 gap-4 mb-4">
+                          <div>
+                            <label className="block text-sm font-medium mb-2">Level</label>
+                            <select
+                              name="level"
+                              required
+                              defaultValue={editingGuide?.level || 'BEGINNER'}
+                              className="w-full px-3 py-2 border rounded-lg"
+                            >
+                              <option value="BEGINNER">Beginner</option>
+                              <option value="INTERMEDIATE">Intermediate</option>
+                              <option value="ADVANCED">Advanced</option>
+                            </select>
+                          </div>
+                          <div className="flex items-center">
+                            <label className="flex items-center gap-2">
+                              <input
+                                name="published"
+                                type="checkbox"
+                                defaultChecked={editingGuide?.published ?? true}
+                                className="w-4 h-4"
+                              />
+                              <span className="text-sm font-medium">Publish immediately</span>
+                            </label>
+                          </div>
+                        </div>
+                        <div className="flex gap-2">
+                          <Button type="submit">
+                            {editingGuide ? 'Update Guide' : 'Create Guide'}
+                          </Button>
+                          <Button 
+                            type="button" 
+                            variant="outline"
+                            onClick={() => {
+                              setShowGuideForm(false)
+                              setEditingGuide(null)
+                            }}
+                          >
+                            Cancel
+                          </Button>
+                        </div>
+                      </form>
+                    </Card>
+                  )}
+
+                  {/* Guides List */}
+                  <div className="space-y-4">
+                    {guides.length === 0 ? (
+                      <div className="text-center py-12 text-gray-500">
+                        <PlayCircle className="w-12 h-12 mx-auto mb-3 opacity-50" />
+                        <p>No guides yet. Click "Add New Guide" to create one.</p>
+                      </div>
+                    ) : (
+                      guides.map((guide: any) => (
+                        <Card key={guide.id} className="p-4">
+                          <div className="flex items-start gap-4">
+                            <img
+                              src={guide.thumbnail}
+                              alt={guide.title}
+                              className="w-32 h-20 object-cover rounded"
+                            />
+                            <div className="flex-1">
+                              <div className="flex items-start justify-between">
+                                <div>
+                                  <h3 className="font-bold text-lg">{guide.title}</h3>
+                                  <p className="text-sm text-gray-600 mt-1">{guide.description}</p>
+                                  <div className="flex items-center gap-4 mt-2">
+                                    <Badge className={
+                                      guide.level === 'BEGINNER' ? 'bg-green-500' :
+                                      guide.level === 'INTERMEDIATE' ? 'bg-yellow-500' :
+                                      'bg-red-500'
+                                    }>
+                                      {guide.level}
+                                    </Badge>
+                                    <span className="text-sm text-gray-500">{guide.duration}</span>
+                                    <Badge variant={guide.published ? 'default' : 'secondary'}>
+                                      {guide.published ? 'Published' : 'Draft'}
+                                    </Badge>
+                                  </div>
+                                </div>
+                                <div className="flex gap-2">
+                                  <Button
+                                    size="sm"
+                                    variant="outline"
+                                    onClick={() => {
+                                      setEditingGuide(guide)
+                                      setShowGuideForm(true)
+                                    }}
+                                  >
+                                    <Edit className="w-4 h-4" />
+                                  </Button>
+                                  <Button
+                                    size="sm"
+                                    variant="destructive"
+                                    onClick={() => handleGuideDelete(guide.id)}
+                                  >
+                                    <Trash2 className="w-4 h-4" />
+                                  </Button>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </Card>
+                      ))
+                    )}
+                  </div>
+                </Card>
+              </div>
             )}
 
             {/* Settings Tab */}
