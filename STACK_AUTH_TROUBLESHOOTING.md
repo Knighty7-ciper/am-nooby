@@ -12,9 +12,9 @@
 2. Verify these 3 variables exist:
 
 ```bash
-NEXT_PUBLIC_STACK_PROJECT_ID=""
-NEXT_PUBLIC_STACK_PUBLISHABLE_CLIENT_KEY= ""
-STACK_SECRET_SERVER_KEY=""
+NEXT_PUBLIC_STACK_PROJECT_ID=819019f5-01ce-4077-b9b5-c5354d33a247
+NEXT_PUBLIC_STACK_PUBLISHABLE_CLIENT_KEY=pck_japaw8gn18cva825ytm9gtqqbrtjzn1rqkaqd09c881yg
+STACK_SECRET_SERVER_KEY=ssk_hjz7jbnc2zr2sv1rnd04j994zcws6mrhsks76ekdsbs08
 ```
 
 **If they're missing:** Add them NOW!
@@ -100,7 +100,13 @@ STACK_SECRET_SERVER_KEY=""
 
 ## 🛠️ Quick Fixes
 
-
+### Fix #1: Missing Environment Variables
+```bash
+# In Netlify dashboard, add:
+NEXT_PUBLIC_STACK_PROJECT_ID=819019f5-01ce-4077-b9b5-c5354d33a247
+NEXT_PUBLIC_STACK_PUBLISHABLE_CLIENT_KEY=pck_japaw8gn18cva825ytm9gtqqbrtjzn1rqkaqd09c881yg
+STACK_SECRET_SERVER_KEY=ssk_hjz7jbnc2zr2sv1rnd04j994zcws6mrhsks76ekdsbs08
+```
 
 ### Fix #2: Domain Not Whitelisted
 1. Go to Stack Auth dashboard

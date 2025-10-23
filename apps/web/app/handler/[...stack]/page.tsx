@@ -1,6 +1,7 @@
 'use client'
 
 import { StackHandler } from "@stackframe/stack";
+import { stackServerApp } from "@/lib/stack-server";
 import Image from "next/image";
 import { Sparkles } from "lucide-react";
 
@@ -9,12 +10,11 @@ export default function Handler(props: any) {
     <div className="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
       {/* Aesthetic Background */}
       <div className="absolute inset-0 z-0">
-        <Image
-          src="/images/aesthetic/wp13154126-writing-aesthetic-wallpapers.jpg"
-          alt="Background"
-          fill
-          className="object-cover opacity-20"
-          priority
+        <div 
+          className="w-full h-full bg-cover bg-center opacity-20"
+          style={{
+            backgroundImage: "url('/images/aesthetic/wp13154126-writing-aesthetic-wallpapers.jpg')"
+          }}
         />
         <div className="absolute inset-0 bg-gradient-to-br from-white/90 via-primary-50/80 to-white/90" />
       </div>
@@ -41,7 +41,7 @@ export default function Handler(props: any) {
         {/* Auth Form Card */}
         <div className="bg-white/80 backdrop-blur-xl rounded-3xl shadow-2xl border border-neutral-200/50 p-8 sm:p-10">
           <div className="stack-auth-custom">
-            <StackHandler fullPage={false} {...props} />
+            <StackHandler fullPage={false} app={stackServerApp} routeProps={props} />
           </div>
         </div>
 

@@ -5,7 +5,6 @@ import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Check, Sparkles, Zap } from 'lucide-react'
 import Link from 'next/link'
-import Image from 'next/image'
 import { useState } from 'react'
 
 // Payment Button Component
@@ -127,16 +126,13 @@ export default function PricingPage() {
     <div className="container max-w-7xl py-6 sm:py-8 px-4 sm:px-6">
       {/* Hero with Image */}
       <div className="relative mb-12 sm:mb-16 rounded-2xl sm:rounded-3xl overflow-hidden shadow-xl sm:shadow-orange-lg">
-        <div className="absolute inset-0">
-          <Image
-            src="/images/aesthetic/wp14048942-writer-aesthetic-wallpapers.jpg"
-            alt="Writing aesthetic"
-            fill
-            className="object-cover opacity-95"
-            priority
-          />
-          <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/70" />
-        </div>
+        <div 
+          className="absolute inset-0 bg-cover bg-center opacity-95"
+          style={{
+            backgroundImage: "url('/images/aesthetic/wp14048942-writer-aesthetic-wallpapers.jpg')"
+          }}
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/70" />
         
         <div className="relative z-10 text-center px-6 py-16 sm:px-8 sm:py-20 md:py-24">
           <Badge className="mb-4 bg-white/10 backdrop-blur-sm border-white/20 text-white text-xs sm:text-sm">

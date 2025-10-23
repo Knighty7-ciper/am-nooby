@@ -110,10 +110,10 @@ export default function FeaturesPage() {
   ]
 
   const highlights = [
-    { label: 'Monthly Active Writers', value: '10,000+', icon: Users },
-    { label: 'Posts Published', value: '50,000+', icon: Sparkles },
-    { label: 'Monthly Readers', value: '1M+', icon: TrendingUp },
-    { label: 'Uptime', value: '99.9%', icon: Rocket },
+    { label: 'Lightning Fast', value: 'SEO Ready', icon: Zap },
+    { label: 'Rich Editor', value: 'Markdown+', icon: Sparkles },
+    { label: 'Analytics', value: 'Real-time', icon: TrendingUp },
+    { label: 'Support', value: '24/7', icon: Rocket },
   ]
 
   return (

@@ -13,6 +13,11 @@ export const metadata: Metadata = {
   description: 'Write, share, and grow your audience with NoobBlog - a modern blogging platform built for creators.',
   keywords: ['blog', 'writing', 'content', 'publishing', 'creators'],
   authors: [{ name: 'NoobBlog Team' }],
+  icons: {
+    icon: '/favicon.svg',
+    shortcut: '/favicon.ico',
+    apple: '/favicon.svg',
+  },
   openGraph: {
     type: 'website',
     locale: 'en_US',

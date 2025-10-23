@@ -3,7 +3,6 @@
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { Check, Sparkles, TrendingUp, Zap } from 'lucide-react'
-import Image from 'next/image'
 import Link from 'next/link'
 
 interface UpgradeToProProps {
@@ -53,16 +52,13 @@ export function UpgradeToPro({ reason, variant = 'default' }: UpgradeToProProps)
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
         {/* Hero Section with Image */}
         <div className="relative mb-12 sm:mb-16 rounded-2xl sm:rounded-3xl overflow-hidden shadow-xl sm:shadow-orange-lg">
-          <div className="absolute inset-0">
-            <Image
-              src="/images/aesthetic/wp14049069-writer-aesthetic-wallpapers.jpg"
-              alt="Writing aesthetic"
-              fill
-              className="object-cover opacity-90"
-              priority
-            />
-            <div className="absolute inset-0 bg-gradient-to-r from-black/70 to-black/40" />
-          </div>
+          <div 
+            className="absolute inset-0 bg-cover bg-center opacity-90"
+            style={{
+              backgroundImage: "url('/images/aesthetic/wp14049069-writer-aesthetic-wallpapers.jpg')"
+            }}
+          />
+          <div className="absolute inset-0 bg-gradient-to-r from-black/70 to-black/40" />
           
           <div className="relative z-10 px-6 py-16 sm:px-8 sm:py-20 md:px-16 md:py-32">
             <div className="max-w-2xl">
@@ -149,15 +145,13 @@ export function UpgradeToPro({ reason, variant = 'default' }: UpgradeToProProps)
 
         {/* CTA with Image */}
         <div className="mt-12 sm:mt-16 relative rounded-xl sm:rounded-2xl overflow-hidden shadow-lg sm:shadow-orange-lg">
-          <div className="absolute inset-0">
-            <Image
-              src="/images/aesthetic/wp13154126-writing-aesthetic-wallpapers.jpg"
-              alt="Start writing"
-              fill
-              className="object-cover"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-black/20" />
-          </div>
+          <div 
+            className="absolute inset-0 bg-cover bg-center"
+            style={{
+              backgroundImage: "url('/images/aesthetic/wp13154126-writing-aesthetic-wallpapers.jpg')"
+            }}
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-black/20" />
           <div className="relative z-10 text-center py-12 sm:py-16 px-6 sm:px-8">
             <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-4 leading-tight">
               Ready to Take Your Blog Further?
