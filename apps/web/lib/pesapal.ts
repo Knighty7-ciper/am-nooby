@@ -2,7 +2,7 @@ import crypto from 'crypto'
 
 /**
  * PesaPal Configuration
- * Handles payment processing for Pro subscriptions
+ * Handles payment processing for Pro subscriptions - Production Ready
  */
 
 interface PesaPalConfig {
@@ -23,7 +23,7 @@ const PESAPAL_URLS = {
 }
 
 /**
- * Generate OAuth signature for PesaPal API requests
+ * Generate OAuth signature for PesaPal API requests (OAuth 1.0)
  */
 function generateOAuthSignature(
   method: string,
@@ -48,7 +48,8 @@ function generateOAuthSignature(
 }
 
 /**
- * Initialize payment with PesaPal
+ * Initialize payment with PesaPal - PRODUCTION VERSION
+ * Makes actual API call to PesaPal and returns checkout URL
  */
 export async function initializePayment({
   userId,
@@ -66,10 +67,11 @@ export async function initializePayment({
   reference: string
   description: string
   callbackUrl: string
-}) {
+}): Promise<{ checkoutUrl: string; reference: string }> {
   const baseUrl = PESAPAL_URLS[config.environment]
+  const endpoint = `${baseUrl}/PostPesapalDirectOrderV4`
   
-  const params = {
+  const params: Record<string, string> = {
     oauth_consumer_key: config.consumerKey,
     oauth_signature_method: 'HMAC-SHA1',
     oauth_timestamp: Math.floor(Date.now() / 1000).toString(),
@@ -84,27 +86,59 @@ export async function initializePayment({
       Email: userEmail,
       FirstName: userName.split(' ')[0] || userName,
       LastName: userName.split(' ')[1] || '',
-      Currency: 'KES', // Kenyan Shillings - adjust as needed
+      Currency: 'KES',
     }),
   }
 
-  const signature = generateOAuthSignature('POST', `${baseUrl}/PostPesapalDirectOrderV4`, params)
+  const signature = generateOAuthSignature('POST', endpoint, params)
   params['oauth_signature'] = signature
 
-  return {
-    url: `${baseUrl}/PostPesapalDirectOrderV4`,
-    params,
-    reference,
+  // Build the form data for POST request
+  const formData = new URLSearchParams(params)
+
+  try {
+    // Make actual POST request to PesaPal
+    const response = await fetch(endpoint, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: formData.toString(),
+    })
+
+    const responseText = await response.text()
+
+    // PesaPal returns an iframe URL in the response
+    // Extract the checkout URL from the response
+    if (!responseText || responseText.includes('error')) {
+      throw new Error(`PesaPal API error: ${responseText}`)
+    }
+
+    // The response is typically an iframe URL or redirect URL
+    const checkoutUrl = responseText.trim()
+
+    return {
+      checkoutUrl,
+      reference,
+    }
+  } catch (error) {
+    console.error('PesaPal initializePayment error:', error)
+    throw new Error(`Failed to initialize payment with PesaPal: ${error instanceof Error ? error.message : 'Unknown error'}`)
   }
 }
 
 /**
- * Verify payment status
+ * Verify payment status - PRODUCTION VERSION
+ * Makes actual API call to PesaPal to verify payment status
  */
-export async function verifyPayment(reference: string, trackingId: string) {
+export async function verifyPayment(
+  reference: string,
+  trackingId: string
+): Promise<{ status: string; method: string; reference: string }> {
   const baseUrl = PESAPAL_URLS[config.environment]
+  const endpoint = `${baseUrl}/QueryPaymentStatus`
 
-  const params = {
+  const params: Record<string, string> = {
     oauth_consumer_key: config.consumerKey,
     oauth_signature_method: 'HMAC-SHA1',
     oauth_timestamp: Math.floor(Date.now() / 1000).toString(),
@@ -114,16 +148,41 @@ export async function verifyPayment(reference: string, trackingId: string) {
     pesapal_transaction_tracking_id: trackingId,
   }
 
-  const signature = generateOAuthSignature(
-    'GET',
-    `${baseUrl}/QueryPaymentStatus`,
-    params
-  )
+  const signature = generateOAuthSignature('GET', endpoint, params)
   params['oauth_signature'] = signature
 
-  return {
-    url: `${baseUrl}/QueryPaymentStatus`,
-    params,
+  // Build query string for GET request
+  const queryString = new URLSearchParams(params).toString()
+  const fullUrl = `${endpoint}?${queryString}`
+
+  try {
+    // Make actual GET request to PesaPal
+    const response = await fetch(fullUrl, {
+      method: 'GET',
+      headers: {
+        'Accept': 'text/plain',
+      },
+    })
+
+    const responseText = await response.text()
+
+    // PesaPal returns status in format: pesapal_response_data=<status>&pesapal_transaction_tracking_id=<id>
+    // OR just the status directly (COMPLETED, PENDING, FAILED, INVALID)
+    const statusMatch = responseText.match(/pesapal_response_data=([^&]+)/)
+    const status = statusMatch ? statusMatch[1] : responseText.trim()
+
+    // Extract payment method if available
+    const methodMatch = responseText.match(/pesapal_payment_method=([^&]+)/)
+    const method = methodMatch ? methodMatch[1] : 'unknown'
+
+    return {
+      status: status.toUpperCase(),
+      method,
+      reference,
+    }
+  } catch (error) {
+    console.error('PesaPal verifyPayment error:', error)
+    throw new Error(`Failed to verify payment with PesaPal: ${error instanceof Error ? error.message : 'Unknown error'}`)
   }
 }
 

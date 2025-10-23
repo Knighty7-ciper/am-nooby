@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getCurrentUser } from '@/lib/session'
-import { initializePayment, getSubscriptionPrice, generatePaymentReference } from '@/lib/pesapal'
+import { getSubscriptionPrice, generatePaymentReference, initializePayment } from '@/lib/pesapal'
 import prisma from '@/lib/prisma'
 
 export async function POST(request: NextRequest) {
@@ -23,16 +23,6 @@ export async function POST(request: NextRequest) {
     const reference = generatePaymentReference(user.id)
     const callbackUrl = `${process.env.NEXT_PUBLIC_APP_URL}/api/payment/callback`
 
-    const paymentData = await initializePayment({
-      userId: user.id,
-      userEmail: user.email,
-      userName: user.name || user.username,
-      amount,
-      reference,
-      description: 'NoobBlog Pro Subscription - Monthly',
-      callbackUrl,
-    })
-
     // Store pending payment in database
     await prisma.payment.create({
       data: {
@@ -44,11 +34,28 @@ export async function POST(request: NextRequest) {
       },
     })
 
-    return NextResponse.json({ paymentUrl: paymentData.url, reference })
+    // Make actual API call to PesaPal to get checkout URL
+    const paymentResult = await initializePayment({
+      userId: user.id,
+      userEmail: user.email,
+      userName: user.name || user.email,
+      amount,
+      reference,
+      description: `Pro Subscription - ${user.email}`,
+      callbackUrl,
+    })
+
+    console.log(`Payment initialized for user ${user.id}, reference: ${reference}`)
+
+    // Return the actual PesaPal checkout URL
+    return NextResponse.json({ 
+      paymentUrl: paymentResult.checkoutUrl,
+      reference: paymentResult.reference,
+    })
   } catch (error) {
     console.error('Payment initialization error:', error)
     return NextResponse.json(
-      { error: 'Failed to initialize payment' },
+      { error: error instanceof Error ? error.message : 'Failed to initialize payment' },
       { status: 500 }
     )
   }

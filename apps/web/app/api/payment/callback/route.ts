@@ -8,15 +8,13 @@ export async function GET(request: NextRequest) {
   const trackingId = searchParams.get('pesapal_transaction_tracking_id')
 
   if (!reference || !trackingId) {
+    console.error('Missing required parameters:', { reference, trackingId })
     return NextResponse.redirect(
-      `${process.env.NEXT_PUBLIC_APP_URL}/pricing?error=invalid`
+      `${process.env.NEXT_PUBLIC_APP_URL}/pricing?error=invalid_callback`
     )
   }
 
   try {
-    // Verify payment with PesaPal
-    const verification = await verifyPayment(reference, trackingId)
-    
     // Find the payment record
     const payment = await prisma.payment.findFirst({
       where: { reference },
@@ -24,15 +22,29 @@ export async function GET(request: NextRequest) {
     })
 
     if (!payment) {
-      throw new Error('Payment not found')
+      console.error('Payment not found for reference:', reference)
+      return NextResponse.redirect(
+        `${process.env.NEXT_PUBLIC_APP_URL}/pricing?error=payment_not_found`
+      )
     }
 
-    // Check verification status
-    // PesaPal returns status in verification response
-    const paymentStatus = verification.status || verification.payment_status_description
-    
-    if (paymentStatus === 'COMPLETED' || paymentStatus === 'Completed') {
-      // Update payment and user subscription in a transaction
+    // If payment is already completed, redirect to success
+    if (payment.status === 'COMPLETED') {
+      console.log(`Payment ${reference} already completed, redirecting to success`)
+      return NextResponse.redirect(
+        `${process.env.NEXT_PUBLIC_APP_URL}/dashboard?success=already_subscribed`
+      )
+    }
+
+    // Make actual API call to PesaPal to verify payment status
+    console.log(`Verifying payment with PesaPal: ${reference}, tracking: ${trackingId}`)
+    const verification = await verifyPayment(reference, trackingId)
+
+    console.log(`PesaPal verification result:`, verification)
+
+    // Check if payment was successful
+    if (verification.status === 'COMPLETED') {
+      // Payment successful - update database in a transaction
       await prisma.$transaction([
         prisma.payment.update({
           where: { id: payment.id },
@@ -52,11 +64,19 @@ export async function GET(request: NextRequest) {
         }),
       ])
 
+      console.log(`✅ Payment completed successfully for user ${payment.userId}`)
+
       return NextResponse.redirect(
         `${process.env.NEXT_PUBLIC_APP_URL}/dashboard?success=subscribed`
       )
-    } else if (paymentStatus === 'FAILED' || paymentStatus === 'Failed') {
-      // Update payment status to failed
+    } else if (verification.status === 'PENDING') {
+      // Payment is still pending
+      console.log(`Payment ${reference} is still pending`)
+      return NextResponse.redirect(
+        `${process.env.NEXT_PUBLIC_APP_URL}/pricing?status=pending`
+      )
+    } else if (verification.status === 'FAILED' || verification.status === 'INVALID') {
+      // Payment failed
       await prisma.payment.update({
         where: { id: payment.id },
         data: {
@@ -65,19 +85,22 @@ export async function GET(request: NextRequest) {
         },
       })
 
+      console.log(`❌ Payment ${reference} failed with status: ${verification.status}`)
+
       return NextResponse.redirect(
         `${process.env.NEXT_PUBLIC_APP_URL}/pricing?error=payment_failed`
       )
     } else {
-      // Payment is still pending or in another status
+      // Unknown status
+      console.error(`Unknown payment status: ${verification.status}`)
       return NextResponse.redirect(
-        `${process.env.NEXT_PUBLIC_APP_URL}/pricing?status=pending`
+        `${process.env.NEXT_PUBLIC_APP_URL}/pricing?error=unknown_status`
       )
     }
   } catch (error) {
     console.error('Payment callback error:', error)
     return NextResponse.redirect(
-      `${process.env.NEXT_PUBLIC_APP_URL}/pricing?error=verification`
+      `${process.env.NEXT_PUBLIC_APP_URL}/pricing?error=verification_failed`
     )
   }
 }
