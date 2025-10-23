@@ -104,10 +104,7 @@ export default async function Home() {
           <div className="absolute bottom-0 left-0 w-1/2 h-1/2 bg-primary/10 blur-3xl rounded-full" />
           
           <div className="container mx-auto max-w-6xl text-center relative z-10">
-            <div className="inline-flex items-center gap-2 px-6 py-3 mb-8 rounded-full bg-white shadow-orange-sm border border-primary/20 text-primary text-sm font-semibold hover:shadow-orange-md transition-shadow duration-300">
-              <Sparkles className="w-4 h-4" />
-              <span>Welcome to the future of blogging</span>
-            </div>
+
             
             <h1 className="text-5xl md:text-7xl lg:text-8xl font-black mb-6 text-neutral-900 leading-tight">
               Share Your Story

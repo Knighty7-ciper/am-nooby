@@ -5,7 +5,11 @@ import { StackProvider as Provider, StackTheme, StackClientApp } from '@stackfra
 const stackClientApp = new StackClientApp({
   tokenStore: 'nextjs-cookie',
   urls: {
-    home: process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000',
+    home: '/',
+    signIn: '/handler/sign-in',
+    signUp: '/handler/sign-up',
+    afterSignIn: '/',
+    afterSignUp: '/',
   },
 })
 
