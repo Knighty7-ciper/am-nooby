@@ -22,6 +22,9 @@ export async function getCurrentUser() {
         followerCount: true,
         followingCount: true,
         postCount: true,
+        subscriptionPlan: true,
+        subscriptionStatus: true,
+        subscriptionEndsAt: true,
       },
     })
 

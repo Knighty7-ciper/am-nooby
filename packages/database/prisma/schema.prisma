@@ -26,6 +26,30 @@ enum UserStatus {
   BANNED
 }
 
+enum SubscriptionPlan {
+  FREE
+  PRO
+}
+
+enum SubscriptionStatus {
+  ACTIVE
+  CANCELED
+  EXPIRED
+}
+
+enum PaymentStatus {
+  PENDING
+  COMPLETED
+  FAILED
+  REFUNDED
+}
+
+enum PaymentProvider {
+  PESAPAL
+  STRIPE
+  PAYPAL
+}
+
 model User {
   id            String      @id @default(cuid())
   email         String      @unique
@@ -42,6 +66,11 @@ model User {
   role          UserRole    @default(READER)
   status        UserStatus  @default(ACTIVE)
   emailVerified Boolean     @default(false)
+  
+  // Subscription
+  subscriptionPlan SubscriptionPlan @default(FREE)
+  subscriptionStatus SubscriptionStatus @default(ACTIVE)
+  subscriptionEndsAt DateTime?
   
   // Stats
   followerCount Int         @default(0)
@@ -66,10 +95,12 @@ model User {
   following     Follow[]    @relation("Follower")
   notifications Notification[] @relation("NotificationRecipient")
   sentNotifications Notification[] @relation("NotificationSender")
+  payments      Payment[]
   
   @@index([email])
   @@index([username])
   @@index([role])
+  @@index([subscriptionPlan])
 }
 
 model Follow {
@@ -373,6 +404,30 @@ model Analytics {
   
   @@unique([date])
   @@index([date])
+}
+
+// =====================
+// PAYMENT MODELS
+// =====================
+
+model Payment {
+  id          String          @id @default(cuid())
+  userId      String
+  reference   String          @unique
+  trackingId  String?
+  amount      Float
+  currency    String          @default("KES")
+  status      PaymentStatus   @default(PENDING)
+  provider    PaymentProvider @default(PESAPAL)
+  
+  createdAt   DateTime        @default(now())
+  completedAt DateTime?
+  
+  user        User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@index([userId])
+  @@index([reference])
+  @@index([status])
 }
 
 // =====================

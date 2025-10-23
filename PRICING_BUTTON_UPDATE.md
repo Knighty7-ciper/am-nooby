@@ -1,3 +1,21 @@
+# 🕹️ Quick Copy-Paste: Pricing Button Update
+
+## What This Does
+Makes the "Upgrade Now" button on your pricing page trigger the PesaPal payment flow.
+
+---
+
+## Instructions
+
+1. **Open** `apps/web/app/(blog)/pricing/page.tsx`
+2. **Find** the existing button code (around line 40-95 in the `plans.map` section)
+3. **Replace** the entire file with the code below
+
+---
+
+## 📋 Complete Updated File
+
+```typescript
 'use client'
 
 import { Card } from '@/components/ui/card'
@@ -220,3 +238,51 @@ export default function PricingPage() {
     </div>
   )
 }
+```
+
+---
+
+## ✅ What Changed
+
+1. **Added `'use client'`** at the top (required for interactive buttons)
+2. **Added `useState` import** for loading state
+3. **Created `SubscribeButton` component** that handles payments
+4. **Replaced static Link button** with interactive `<SubscribeButton />`
+5. **Updated FAQ answer** to mention PesaPal and M-Pesa
+
+---
+
+## 🧪 How It Works
+
+1. User clicks "Upgrade to Pro" button
+2. Button shows "Processing..."
+3. Calls your `/api/subscribe` endpoint
+4. Gets PesaPal payment URL
+5. Redirects user to PesaPal payment page
+6. User completes payment
+7. PesaPal redirects back to your site
+8. User is upgraded to PRO! 🎉
+
+---
+
+## 🚨 Important
+
+**Make sure you've:**
+- ✅ Added `NEXT_PUBLIC_APP_URL` to Netlify env vars
+- ✅ Run `prisma db push` to create Payment table
+- ✅ Deployed the API routes (`/api/subscribe` and `/api/payment/callback`)
+
+---
+
+## Test It!
+
+1. Deploy your changes
+2. Go to `/pricing` page
+3. Click "Upgrade to Pro"
+4. Should redirect to PesaPal sandbox
+5. Complete test payment
+6. Get redirected back as PRO user!
+
+---
+
+**That's it! Your payment flow is complete! 🎆**

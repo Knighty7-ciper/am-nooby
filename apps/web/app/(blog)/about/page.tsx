@@ -4,8 +4,34 @@ import { Button } from '@/components/ui/button'
 import { Avatar } from '@/components/ui/avatar'
 import { Sparkles, Target, Users, Heart, Code, Globe } from 'lucide-react'
 import Link from 'next/link'
+import { prisma } from '@noobblog/database'
 
-export default function AboutPage() {
+export const revalidate = 60 // Revalidate every 60 seconds
+
+async function getRealtimeStats() {
+  const [totalAuthors, totalPosts, totalUsers] = await Promise.all([
+    prisma.user.count({
+      where: {
+        role: { in: ['AUTHOR', 'EDITOR', 'ADMIN'] },
+        postCount: { gt: 0 },
+      },
+    }),
+    prisma.post.count({
+      where: { status: 'PUBLISHED' },
+    }),
+    prisma.user.count(),
+  ])
+  
+  return {
+    authors: totalAuthors,
+    posts: totalPosts,
+    users: totalUsers,
+  }
+}
+
+export default async function AboutPage() {
+  const stats = await getRealtimeStats()
+  
   const team = [
     {
       name: 'Alex Johnson',
@@ -56,10 +82,10 @@ export default function AboutPage() {
     },
   ]
 
-  const stats = [
-    { label: 'Active Writers', value: '10,000+' },
-    { label: 'Posts Published', value: '50,000+' },
-    { label: 'Monthly Readers', value: '1M+' },
+  const displayStats = [
+    { label: 'Active Writers', value: stats.authors },
+    { label: 'Posts Published', value: stats.posts },
+    { label: 'Community Members', value: stats.users },
     { label: 'Countries', value: '120+' },
   ]
 
@@ -101,12 +127,12 @@ export default function AboutPage() {
         </div>
       </Card>
 
-      {/* Stats */}
+      {/* Real-time Stats */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-16">
-        {stats.map((stat) => (
+        {displayStats.map((stat) => (
           <Card key={stat.label} className="p-6 text-center">
             <div className="text-4xl font-bold mb-2 bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/60">
-              {stat.value}
+              {typeof stat.value === 'number' ? stat.value.toLocaleString() : stat.value}
             </div>
             <div className="text-sm text-muted-foreground">{stat.label}</div>
           </Card>
