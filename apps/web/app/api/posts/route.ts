@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@noobblog/database'
 import { z } from 'zod'
+import { stackServerApp } from '@/lib/stack-server'
 
 export const dynamic = 'force-dynamic'
 
@@ -20,8 +21,11 @@ const postSchema = z.object({
 
 export async function POST(request: NextRequest) {
   try {
-    // TODO: Get user from auth session
-    const userId = 'user-id-from-auth' // Replace with actual auth
+    const user = await stackServerApp.getUser()
+    
+    if (!user) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    }
 
     const body = await request.json()
     const data = postSchema.parse(body)
@@ -38,7 +42,7 @@ export async function POST(request: NextRequest) {
     const post = await prisma.post.create({
       data: {
         ...postData,
-        authorId: userId,
+        authorId: user.id,
         readingTime,
         publishedAt: data.status === 'PUBLISHED' ? new Date() : null,
       },

@@ -35,10 +35,12 @@
     "@tiptap/extension-code-block-lowlight": "^2.1.13",
     "@tiptap/extension-image": "^2.1.13",
     "@tiptap/extension-link": "^2.1.13",
+    "@tiptap/extension-mention": "^3.7.2",
     "@tiptap/extension-placeholder": "^2.1.13",
     "@tiptap/extension-text-align": "^2.1.13",
     "@tiptap/react": "^2.1.13",
     "@tiptap/starter-kit": "^2.1.13",
+    "@tiptap/suggestion": "^3.7.2",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",
     "date-fns": "^3.0.6",
@@ -66,8 +68,8 @@
     "postcss": "^8.4.33",
     "prettier": "^3.1.0",
     "prisma": "^5.8.1",
-    "tsx": "^4.7.0",
     "tailwindcss": "^3.4.1",
+    "tsx": "^4.7.0",
     "typescript": "^5.3.3"
   },
   "engines": {

@@ -1,93 +1,97 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { prisma } from '@noobblog/database'
-import { stackServerApp } from '@/lib/stack-server'
+import { requireRole } from '@/lib/session'
+import prisma from '@/lib/prisma'
 
-export const dynamic = 'force-dynamic'
-
-// Track a view
-export async function POST(request: NextRequest) {
+export async function GET(request: NextRequest) {
   try {
-    const { postId } = await request.json()
+    await requireRole(['AUTHOR', 'EDITOR', 'ADMIN'])
+    
+    const { searchParams } = new URL(request.url)
+    const userId = searchParams.get('userId')
+    const range = searchParams.get('range') || '30d'
+    const role = searchParams.get('role')
 
-    if (!postId) {
-      return NextResponse.json({ error: 'Post ID required' }, { status: 400 })
+    // Calculate date range
+    const days = range === '7d' ? 7 : range === '30d' ? 30 : range === '90d' ? 90 : 365
+    const startDate = new Date()
+    startDate.setDate(startDate.getDate() - days)
+
+    // Build where clause
+    const where: any = {
+      publishedAt: { gte: startDate },
+      status: 'PUBLISHED',
+    }
+    
+    if (role !== 'ADMIN' && userId) {
+      where.authorId = userId
     }
 
-    // Get user ID if authenticated
-    const user = await stackServerApp.getUser().catch(() => null)
-
-    // Create view record
-    await prisma.view.create({
-      data: {
-        postId,
-        userId: user?.id,
-        ipAddress: request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || 'unknown',
-        userAgent: request.headers.get('user-agent') || 'unknown',
+    // Get stats
+    const posts = await prisma.post.findMany({
+      where,
+      select: {
+        viewCount: true,
+        likeCount: true,
+        commentCount: true,
       },
     })
 
-    // Increment view count on post
-    await prisma.post.update({
-      where: { id: postId },
-      data: { viewCount: { increment: 1 } },
+    const totalViews = posts.reduce((sum, p) => sum + p.viewCount, 0)
+    const totalLikes = posts.reduce((sum, p) => sum + p.likeCount, 0)
+    const totalComments = posts.reduce((sum, p) => sum + p.commentCount, 0)
+
+    // Get top posts
+    const topPosts = await prisma.post.findMany({
+      where,
+      orderBy: { viewCount: 'desc' },
+      take: 10,
+      select: {
+        id: true,
+        title: true,
+        slug: true,
+        viewCount: true,
+        likeCount: true,
+        commentCount: true,
+      },
     })
 
-    return NextResponse.json({ success: true })
-  } catch (error) {
-    console.error('View tracking error:', error)
-    return NextResponse.json({ error: 'Failed to track view' }, { status: 500 })
-  }
-}
-
-// Get analytics for a post
-export async function GET(request: NextRequest) {
-  try {
-    const user = await stackServerApp.getUser()
-    
-    if (!user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    // Admin-specific metrics
+    let adminMetrics = {}
+    if (role === 'ADMIN') {
+      const totalUsers = await prisma.user.count()
+      const newUsers = await prisma.user.count({
+        where: { createdAt: { gte: startDate } },
+      })
+      const activeAuthors = await prisma.post.groupBy({
+        by: ['authorId'],
+        where: { publishedAt: { gte: startDate } },
+      })
+      
+      adminMetrics = {
+        totalUsers,
+        newUsers,
+        activeAuthors: activeAuthors.length,
+        avgEngagement: totalViews > 0 
+          ? Math.round(((totalLikes + totalComments) / totalViews) * 100)
+          : 0,
+      }
     }
-
-    const { searchParams } = new URL(request.url)
-    const postId = searchParams.get('postId')
-
-    if (!postId) {
-      return NextResponse.json({ error: 'Post ID required' }, { status: 400 })
-    }
-
-    // Check if user owns the post or is admin
-    const post = await prisma.post.findUnique({
-      where: { id: postId },
-    })
-
-    const userProfile = await prisma.user.findUnique({
-      where: { id: user.id },
-    })
-
-    if (post?.authorId !== user.id && userProfile?.role !== 'ADMIN') {
-      return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
-    }
-
-    // Get view analytics
-    const views = await prisma.view.findMany({
-      where: { postId },
-      orderBy: { createdAt: 'desc' },
-    })
-
-    // Group by date
-    const viewsByDate = views.reduce((acc: any, view) => {
-      const date = view.createdAt.toISOString().split('T')[0]
-      acc[date] = (acc[date] || 0) + 1
-      return acc
-    }, {})
 
     return NextResponse.json({
-      total: views.length,
-      viewsByDate,
-      recentViews: views.slice(0, 100),
+      stats: {
+        totalViews,
+        totalLikes,
+        totalComments,
+        totalPosts: posts.length,
+        viewsChange: 12, // Mock data - would calculate from previous period
+        likesChange: 8,
+        commentsChange: 15,
+        postsChange: 5,
+        ...adminMetrics,
+      },
+      topPosts,
     })
   } catch (error) {
-    console.error('Analytics fetch error:', error)
-    return NextResponse.json({ error: 'Failed to fetch analytics' }, { status: 500 })
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 }

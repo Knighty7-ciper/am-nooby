@@ -1,61 +1,47 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { prisma } from '@noobblog/database'
-import { stackServerApp } from '@/lib/stack-server'
+import { requireRole } from '@/lib/session'
+import prisma from '@/lib/prisma'
 
-export const dynamic = 'force-dynamic'
-
-// Update user role (Admin only)
 export async function PATCH(
   request: NextRequest,
   { params }: { params: { id: string } }
 ) {
   try {
-    const user = await stackServerApp.getUser()
+    await requireRole(['ADMIN'])
     
-    if (!user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    const { action, role } = await request.json()
+    const userId = params.id
+
+    let updateData: any = {}
+
+    if (action === 'suspend') {
+      updateData.status = 'SUSPENDED'
+    } else if (action === 'ban') {
+      updateData.status = 'BANNED'
+    } else if (action === 'activate') {
+      updateData.status = 'ACTIVE'
+      if (role) {
+        updateData.role = role
+      }
     }
 
-    const userProfile = await prisma.user.findUnique({
-      where: { id: user.id },
+    const user = await prisma.user.update({
+      where: { id: userId },
+      data: updateData,
     })
 
-    if (userProfile?.role !== 'ADMIN') {
-      return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
-    }
-
-    const body = await request.json()
-    const updated = await prisma.user.update({
-      where: { id: params.id },
-      data: { role: body.role },
-    })
-
-    return NextResponse.json({ user: updated })
+    return NextResponse.json(user)
   } catch (error) {
-    console.error('User update error:', error)
     return NextResponse.json({ error: 'Failed to update user' }, { status: 500 })
   }
 }
 
-// Delete user (Admin only)
 export async function DELETE(
   request: NextRequest,
   { params }: { params: { id: string } }
 ) {
   try {
-    const user = await stackServerApp.getUser()
-    
-    if (!user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-    }
-
-    const userProfile = await prisma.user.findUnique({
-      where: { id: user.id },
-    })
-
-    if (userProfile?.role !== 'ADMIN') {
-      return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
-    }
+    await requireRole(['ADMIN'])
 
     await prisma.user.delete({
       where: { id: params.id },
@@ -63,7 +49,6 @@ export async function DELETE(
 
     return NextResponse.json({ success: true })
   } catch (error) {
-    console.error('User deletion error:', error)
     return NextResponse.json({ error: 'Failed to delete user' }, { status: 500 })
   }
 }

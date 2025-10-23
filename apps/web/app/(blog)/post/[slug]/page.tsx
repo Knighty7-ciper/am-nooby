@@ -2,11 +2,12 @@ import { prisma } from '@noobblog/database'
 import { Avatar } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
-import { CommentSection } from '@/components/comment-section'
+import { CommentSectionEnhanced } from '@/components/comment-section-enhanced'
 import { Heart, Bookmark, Share2, Eye, Clock } from 'lucide-react'
 import { notFound } from 'next/navigation'
 import { formatDistanceToNow } from 'date-fns'
 import Link from 'next/link'
+import { getCurrentUser } from '@/lib/session'
 
 interface PageProps {
   params: { slug: string }
@@ -27,6 +28,8 @@ export async function generateMetadata({ params }: PageProps) {
 }
 
 export default async function PostPage({ params }: PageProps) {
+  const currentUser = await getCurrentUser()
+
   const post = await prisma.post.findUnique({
     where: { slug: params.slug },
     include: {
@@ -160,7 +163,11 @@ export default async function PostPage({ params }: PageProps) {
       </div>
 
       {/* Comments */}
-      <CommentSection postId={post.id} comments={comments} />
+      <CommentSectionEnhanced 
+        postId={post.id} 
+        comments={comments} 
+        currentUserId={currentUser?.id}
+      />
     </article>
   )
 }

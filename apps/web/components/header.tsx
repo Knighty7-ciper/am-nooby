@@ -15,7 +15,11 @@ import {
   LogOut,
   User,
   BarChart3,
-  BookMarked
+  BookMarked,
+  Users,
+  BookOpen,
+  Shield,
+  TrendingUp
 } from 'lucide-react'
 import { useState, useEffect } from 'react'
 import { Input } from './ui/input'
@@ -57,6 +61,9 @@ export function Header() {
             </Link>
             <Link href="/tags" className="text-muted-foreground hover:text-foreground transition-colors">
               Tags
+            </Link>
+            <Link href="/series" className="text-muted-foreground hover:text-foreground transition-colors">
+              Series
             </Link>
             <Link href="/authors" className="text-muted-foreground hover:text-foreground transition-colors">
               Authors
@@ -106,16 +113,18 @@ export function Header() {
             <>
               {/* Write button */}
               <Button asChild className="hidden sm:flex">
-                <Link href="/dashboard/new-post">
+                <Link href="/write">
                   <PenSquare className="h-4 w-4 mr-2" />
                   Write
                 </Link>
               </Button>
 
               {/* Notifications */}
-              <Button variant="ghost" size="icon" className="relative">
-                <Bell className="h-5 w-5" />
-                <span className="absolute top-1 right-1 w-2 h-2 bg-primary rounded-full" />
+              <Button variant="ghost" size="icon" className="relative" asChild>
+                <Link href="/notifications">
+                  <Bell className="h-5 w-5" />
+                  <span className="absolute top-1 right-1 w-2 h-2 bg-primary rounded-full" />
+                </Link>
               </Button>
 
               {/* User menu */}
@@ -132,17 +141,34 @@ export function Header() {
                       <BarChart3 className="h-4 w-4" />
                       <span className="text-sm">Dashboard</span>
                     </Link>
-                    <Link href="/dashboard/new-post" className="flex items-center gap-3 px-4 py-2 hover:bg-accent">
+                    <Link href="/write" className="flex items-center gap-3 px-4 py-2 hover:bg-accent">
                       <PenSquare className="h-4 w-4" />
                       <span className="text-sm">Write Post</span>
+                    </Link>
+                    <Link href="/analytics" className="flex items-center gap-3 px-4 py-2 hover:bg-accent">
+                      <TrendingUp className="h-4 w-4" />
+                      <span className="text-sm">Analytics</span>
                     </Link>
                     <Link href="/bookmarks" className="flex items-center gap-3 px-4 py-2 hover:bg-accent">
                       <BookMarked className="h-4 w-4" />
                       <span className="text-sm">Bookmarks</span>
                     </Link>
+                    <Link href="/following" className="flex items-center gap-3 px-4 py-2 hover:bg-accent">
+                      <Users className="h-4 w-4" />
+                      <span className="text-sm">Following</span>
+                    </Link>
+                    <Link href="/notifications" className="flex items-center gap-3 px-4 py-2 hover:bg-accent">
+                      <Bell className="h-4 w-4" />
+                      <span className="text-sm">Notifications</span>
+                    </Link>
                     <Link href="/settings" className="flex items-center gap-3 px-4 py-2 hover:bg-accent">
                       <Settings className="h-4 w-4" />
                       <span className="text-sm">Settings</span>
+                    </Link>
+                    <hr className="my-2" />
+                    <Link href="/admin" className="flex items-center gap-3 px-4 py-2 hover:bg-accent text-red-600 dark:text-red-400">
+                      <Shield className="h-4 w-4" />
+                      <span className="text-sm">Admin Panel</span>
                     </Link>
                     <hr className="my-2" />
                     <button className="flex items-center gap-3 px-4 py-2 hover:bg-accent w-full text-left text-destructive">

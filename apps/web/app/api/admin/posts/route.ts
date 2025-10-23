@@ -6,12 +6,20 @@ export async function GET() {
   try {
     await requireRole(['ADMIN'])
 
-    const users = await prisma.user.findMany({
+    const posts = await prisma.post.findMany({
       orderBy: { createdAt: 'desc' },
       take: 100,
+      include: {
+        author: {
+          select: {
+            name: true,
+            username: true,
+          },
+        },
+      },
     })
 
-    return NextResponse.json(users)
+    return NextResponse.json(posts)
   } catch (error) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
