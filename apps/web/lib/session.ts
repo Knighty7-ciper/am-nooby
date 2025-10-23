@@ -36,12 +36,12 @@ export async function getCurrentUser() {
 
     // If user doesn't exist in database, create them
     if (!dbUser) {
-      const isAdmin = ADMIN_EMAILS.includes(user.email || '')
+      const isAdmin = ADMIN_EMAILS.includes(user.primaryEmail || '')
       
       dbUser = await prisma.user.create({
         data: {
           id: user.id,
-          email: user.email || '',
+          email: user.primaryEmail || '',
           username: user.username || `user_${user.id.substring(0, 8)}`,
           name: user.displayName || user.username || 'User',
           avatar: user.imageUrl || null,

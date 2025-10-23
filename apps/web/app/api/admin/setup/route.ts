@@ -17,13 +17,13 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({ error: 'Not authenticated' }, { status: 401 })
     }
 
-    const isAdminEmail = ADMIN_EMAILS.includes(stackUser.email || '')
+    const isAdminEmail = ADMIN_EMAILS.includes(stackUser.primaryEmail || '')
 
     // Get or create user
     const user = await prisma.user.upsert({
       where: { id: stackUser.id },
       update: {
-        email: stackUser.email || '',
+        email: stackUser.primaryEmail || '',
         name: stackUser.displayName || stackUser.username || 'User',
         avatar: stackUser.imageUrl || null,
         // Auto-grant admin if it's an admin email
@@ -35,8 +35,8 @@ export async function GET(req: NextRequest) {
       },
       create: {
         id: stackUser.id,
-        email: stackUser.email || '',
-        username: stackUser.username || stackUser.email?.split('@')[0] || `user_${stackUser.id.substring(0, 8)}`,
+        email: stackUser.primaryEmail || '',
+        username: stackUser.username || stackUser.primaryEmail?.split('@')[0] || `user_${stackUser.id.substring(0, 8)}`,
         name: stackUser.displayName || stackUser.username || 'User',
         avatar: stackUser.imageUrl || null,
         role: isAdminEmail ? 'ADMIN' : 'READER',
