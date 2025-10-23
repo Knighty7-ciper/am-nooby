@@ -42,8 +42,8 @@ export async function getCurrentUser() {
         data: {
           id: user.id,
           email: user.primaryEmail || '',
-          username: user.username || `user_${user.id.substring(0, 8)}`,
-          name: user.displayName || user.username || 'User',
+          username: user.primaryEmail?.split('@')[0] || `user_${user.id.substring(0, 8)}`,
+          name: user.displayName || 'User',
           avatar: user.imageUrl || null,
           role: isAdmin ? 'ADMIN' : 'READER',
           status: 'ACTIVE',

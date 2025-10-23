@@ -24,7 +24,7 @@ export async function GET(req: NextRequest) {
       where: { id: stackUser.id },
       update: {
         email: stackUser.primaryEmail || '',
-        name: stackUser.displayName || stackUser.username || 'User',
+        name: stackUser.displayName || 'User',
         avatar: stackUser.imageUrl || null,
         // Auto-grant admin if it's an admin email
         ...(isAdminEmail && {
@@ -36,8 +36,8 @@ export async function GET(req: NextRequest) {
       create: {
         id: stackUser.id,
         email: stackUser.primaryEmail || '',
-        username: stackUser.username || stackUser.primaryEmail?.split('@')[0] || `user_${stackUser.id.substring(0, 8)}`,
-        name: stackUser.displayName || stackUser.username || 'User',
+        username: stackUser.primaryEmail?.split('@')[0] || `user_${stackUser.id.substring(0, 8)}`,
+        name: stackUser.displayName || 'User',
         avatar: stackUser.imageUrl || null,
         role: isAdminEmail ? 'ADMIN' : 'READER',
         status: 'ACTIVE',
