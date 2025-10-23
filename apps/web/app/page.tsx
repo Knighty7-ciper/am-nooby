@@ -91,7 +91,7 @@ export default async function Home() {
             </p>
             <div className="flex items-center justify-center gap-4">
               <Button size="lg" asChild>
-                <Link href="/auth/signup">
+                <Link href="/handler/signup">
                   Start Writing
                   <ArrowRight className="ml-2 w-4 h-4" />
                 </Link>
@@ -135,7 +135,7 @@ export default async function Home() {
               <div className="flex items-center justify-between mb-8">
                 <h2 className="text-3xl font-bold">Featured Posts</h2>
                 <Button variant="ghost" asChild>
-                  <Link href="/featured">
+                  <Link href="/trending">
                     View All <ArrowRight className="ml-2 w-4 h-4" />
                   </Link>
                 </Button>
@@ -163,7 +163,7 @@ export default async function Home() {
             <div className="flex items-center justify-between mb-8">
               <h2 className="text-3xl font-bold">Recent Posts</h2>
               <Button variant="ghost" asChild>
-                <Link href="/posts">
+                <Link href="/explore">
                   View All <ArrowRight className="ml-2 w-4 h-4" />
                 </Link>
               </Button>

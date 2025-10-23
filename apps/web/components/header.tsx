@@ -128,13 +128,13 @@ export function Header() {
                 {/* Dropdown */}
                 <div className="absolute right-0 mt-2 w-56 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all">
                   <div className="bg-popover border rounded-lg shadow-lg py-2">
-                    <Link href="/profile" className="flex items-center gap-3 px-4 py-2 hover:bg-accent">
-                      <User className="h-4 w-4" />
-                      <span className="text-sm">Profile</span>
-                    </Link>
                     <Link href="/dashboard" className="flex items-center gap-3 px-4 py-2 hover:bg-accent">
                       <BarChart3 className="h-4 w-4" />
                       <span className="text-sm">Dashboard</span>
+                    </Link>
+                    <Link href="/dashboard/new-post" className="flex items-center gap-3 px-4 py-2 hover:bg-accent">
+                      <PenSquare className="h-4 w-4" />
+                      <span className="text-sm">Write Post</span>
                     </Link>
                     <Link href="/bookmarks" className="flex items-center gap-3 px-4 py-2 hover:bg-accent">
                       <BookMarked className="h-4 w-4" />
@@ -156,10 +156,10 @@ export function Header() {
           ) : (
             <>
               <Button variant="ghost" asChild>
-                <Link href="/auth/signin">Sign In</Link>
+                <Link href="/handler/signin">Sign In</Link>
               </Button>
               <Button asChild>
-                <Link href="/auth/signup">Get Started</Link>
+                <Link href="/handler/signup">Get Started</Link>
               </Button>
             </>
           )}
