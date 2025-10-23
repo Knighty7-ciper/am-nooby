@@ -25,7 +25,7 @@ export async function GET(req: NextRequest) {
       update: {
         email: stackUser.primaryEmail || '',
         name: stackUser.displayName || 'User',
-        avatar: stackUser.imageUrl || null,
+        avatar: stackUser.profileImageUrl || null,
         // Auto-grant admin if it's an admin email
         ...(isAdminEmail && {
           role: 'ADMIN',
@@ -38,7 +38,7 @@ export async function GET(req: NextRequest) {
         email: stackUser.primaryEmail || '',
         username: stackUser.primaryEmail?.split('@')[0] || `user_${stackUser.id.substring(0, 8)}`,
         name: stackUser.displayName || 'User',
-        avatar: stackUser.imageUrl || null,
+        avatar: stackUser.profileImageUrl || null,
         role: isAdminEmail ? 'ADMIN' : 'READER',
         status: 'ACTIVE',
         subscriptionPlan: isAdminEmail ? 'PRO' : 'FREE',
