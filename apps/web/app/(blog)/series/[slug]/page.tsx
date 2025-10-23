@@ -142,11 +142,11 @@ export default async function SeriesDetailPage({ params }: SeriesPageProps) {
                         className="flex items-center gap-2 hover:text-primary transition-colors"
                       >
                         <img
-                          src={post.author.avatar || `https://ui-avatars.com/api/?name=${post.author.name}`}
-                          alt={post.author.name}
+                          src={post.author.avatar || `https://ui-avatars.com/api/?name=${post.author.name ?? post.author.username}`}
+                          alt={post.author.name ?? post.author.username}
                           className="w-6 h-6 rounded-full"
                         />
-                        <span>{post.author.name}</span>
+                        <span>{post.author.name ?? post.author.username}</span>
                       </Link>
                       <span>•</span>
                       <span>{post.readingTime} min read</span>
