@@ -38,14 +38,11 @@ export default function Handler(props: any) {
 
         {/* Auth Form Card */}
         <div className="bg-white/80 backdrop-blur-xl rounded-3xl shadow-2xl border border-neutral-200/50 p-8 sm:p-10">
-          <div className="stack-auth-handler">
-            <StackHandler 
-              fullPage={false} 
-              app={stackServerApp} 
-              routeProps={props}
-              className="space-y-6"
-            />
-          </div>
+          <StackHandler 
+            fullPage={false} 
+            app={stackServerApp} 
+            routeProps={props}
+          />
         </div>
 
         {/* Footer Text */}
