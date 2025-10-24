@@ -1,7 +1,22 @@
-import { StackHandler } from "@stackframe/stack";
-import { stackServerApp } from '@/lib/stack-server'
+'use client'
+
+import { StackHandler, StackServerApp } from "@stackframe/stack";
 import Image from "next/image";
 import { Sparkles } from "lucide-react";
+
+// Create StackServerApp inline for client component
+const stackServerApp = new StackServerApp({
+  projectId: process.env.NEXT_PUBLIC_STACK_PROJECT_ID!,
+  secretServerKey: process.env.STACK_SECRET_SERVER_KEY!,
+  tokenStore: 'nextjs-cookie',
+  urls: {
+    home: '/',
+    signIn: '/handler/sign-in',
+    signUp: '/handler/sign-up',
+    afterSignIn: '/',
+    afterSignUp: '/',
+  },
+})
 
 export default function Handler(props: any) {
   return (
