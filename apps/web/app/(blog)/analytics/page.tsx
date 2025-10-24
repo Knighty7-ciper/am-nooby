@@ -12,12 +12,12 @@ export default async function AnalyticsPage() {
   const user = await getCurrentUser()
 
   if (!user) {
-    redirect('/api/auth/signin?callbackUrl=/analytics')
+    redirect('/handler/signin')
   }
 
   // Only authors, editors, and admins can view analytics
   if (!['AUTHOR', 'EDITOR', 'ADMIN'].includes(user.role)) {
-    redirect('/dashboard')
+    redirect('/?error=insufficient_permissions')
   }
 
   return <AnalyticsDashboard userId={user.id} role={user.role} />

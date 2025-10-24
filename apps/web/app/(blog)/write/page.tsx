@@ -19,7 +19,7 @@ export default async function WritePage({
   const user = await getCurrentUser()
 
   if (!user) {
-    redirect('/api/auth/signin?callbackUrl=/write')
+    redirect('/handler/signin')
   }
 
   // Only AUTHOR, EDITOR, and ADMIN can write

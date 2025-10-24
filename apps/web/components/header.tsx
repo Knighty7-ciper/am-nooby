@@ -20,18 +20,27 @@ import {
 } from 'lucide-react'
 import { useState, useEffect } from 'react'
 import { Input } from './ui/input'
+import { useUser } from '@stackframe/stack'
 
 export function Header() {
   const [mounted, setMounted] = useState(false)
   const [searchOpen, setSearchOpen] = useState(false)
   const router = useRouter()
+  const { user, isLoading } = useUser()
 
   useEffect(() => {
     setMounted(true)
   }, [])
 
-  // Mock user - replace with actual auth
-  const user = null // Will be replaced with Stack Auth
+  // Handle sign out
+  const handleSignOut = async () => {
+    try {
+      await user?.signOut()
+      router.push('/')
+    } catch (error) {
+      console.error('Error signing out:', error)
+    }
+  }
 
   if (!mounted) return null
 
@@ -102,7 +111,13 @@ export function Header() {
             )}
           </div>
 
-          {user ? (
+          {isLoading ? (
+            // Loading state
+            <div className="flex items-center gap-4">
+              <div className="w-8 h-8 bg-neutral-200 animate-pulse rounded-full" />
+              <div className="w-20 h-8 bg-neutral-200 animate-pulse rounded" />
+            </div>
+          ) : user ? (
             <>
               {/* Write button */}
               <Button asChild className="hidden sm:flex">
@@ -123,13 +138,19 @@ export function Header() {
               {/* User menu */}
               <div className="relative group">
                 <Avatar className="cursor-pointer ring-2 ring-primary-100 hover:ring-primary transition-all duration-300">
-                  <AvatarImage src="https://github.com/shadcn.png" />
-                  <AvatarFallback className="bg-primary-50 text-primary font-bold">JD</AvatarFallback>
+                  <AvatarImage src={user?.imageUrl || 'https://github.com/shadcn.png'} />
+                  <AvatarFallback className="bg-primary-50 text-primary font-bold">
+                    {user?.displayName?.charAt(0) || 'U'}
+                  </AvatarFallback>
                 </Avatar>
                 
                 {/* Dropdown */}
                 <div className="absolute right-0 mt-3 w-64 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300">
                   <div className="bg-white border-2 border-neutral-200 rounded-2xl shadow-orange-lg py-2">
+                    <div className="px-5 py-2 border-b border-neutral-100 mb-2">
+                      <p className="font-semibold text-sm">{user?.displayName || 'User'}</p>
+                      <p className="text-xs text-neutral-500">{user?.primaryEmail || user?.email}</p>
+                    </div>
                     <Link href="/dashboard" className="flex items-center gap-3 px-5 py-3 hover:bg-primary-50 hover:text-primary transition-colors font-medium">
                       <BarChart3 className="h-5 w-5" />
                       <span>Dashboard</span>
@@ -164,7 +185,10 @@ export function Header() {
                       <span>Admin Panel</span>
                     </Link>
                     <hr className="my-2 border-neutral-200" />
-                    <button className="flex items-center gap-3 px-5 py-3 hover:bg-red-50 w-full text-left text-destructive hover:text-red-700 transition-colors font-medium">
+                    <button 
+                      onClick={handleSignOut}
+                      className="flex items-center gap-3 px-5 py-3 hover:bg-red-50 w-full text-left text-destructive hover:text-red-700 transition-colors font-medium"
+                    >
                       <LogOut className="h-5 w-5" />
                       <span>Sign Out</span>
                     </button>

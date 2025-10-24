@@ -12,7 +12,7 @@ export default async function NotificationsPage() {
   const user = await getCurrentUser()
 
   if (!user) {
-    redirect('/api/auth/signin?callbackUrl=/notifications')
+    redirect('/handler/signin')
   }
 
   return <NotificationCenter />
