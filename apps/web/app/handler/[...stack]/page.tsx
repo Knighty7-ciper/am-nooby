@@ -1,13 +1,13 @@
 'use client'
 
-import { StackHandler, StackServerApp } from "@stackframe/stack";
+import { StackHandler, StackClientApp } from "@stackframe/stack";
 import Image from "next/image";
 import { Sparkles } from "lucide-react";
 
-// Create StackServerApp inline for client component
-const stackServerApp = new StackServerApp({
+// Create StackClientApp for client-side handler
+const stackClientApp = new StackClientApp({
   projectId: process.env.NEXT_PUBLIC_STACK_PROJECT_ID!,
-  secretServerKey: process.env.STACK_SECRET_SERVER_KEY!,
+  publishableClientKey: process.env.NEXT_PUBLIC_STACK_PUBLISHABLE_CLIENT_KEY!,
   tokenStore: 'nextjs-cookie',
   urls: {
     home: '/',
@@ -54,7 +54,7 @@ export default function Handler(props: any) {
         {/* Auth Form Card */}
         <div className="bg-white/80 backdrop-blur-xl rounded-3xl shadow-2xl border border-neutral-200/50 p-8 sm:p-10">
           <div className="stack-auth-custom">
-            <StackHandler fullPage={false} app={stackServerApp} routeProps={props} />
+            <StackHandler fullPage={false} app={stackClientApp} routeProps={props} />
           </div>
         </div>
 
