@@ -1,22 +1,7 @@
-'use client'
-
-import { StackHandler, StackClientApp } from "@stackframe/stack";
+import { StackHandler } from "@stackframe/stack";
 import Image from "next/image";
 import { Sparkles } from "lucide-react";
-
-// Create StackClientApp for client-side handler
-const stackClientApp = new StackClientApp({
-  projectId: process.env.NEXT_PUBLIC_STACK_PROJECT_ID!,
-  publishableClientKey: process.env.NEXT_PUBLIC_STACK_PUBLISHABLE_CLIENT_KEY!,
-  tokenStore: 'nextjs-cookie',
-  urls: {
-    home: '/',
-    signIn: '/handler/sign-in',
-    signUp: '/handler/sign-up',
-    afterSignIn: '/',
-    afterSignUp: '/',
-  },
-})
+import { stackServerApp } from "@/lib/stack-server";
 
 export default function Handler(props: any) {
   return (
@@ -53,8 +38,13 @@ export default function Handler(props: any) {
 
         {/* Auth Form Card */}
         <div className="bg-white/80 backdrop-blur-xl rounded-3xl shadow-2xl border border-neutral-200/50 p-8 sm:p-10">
-          <div className="stack-auth-custom">
-            <StackHandler fullPage={false} app={stackClientApp} routeProps={props} />
+          <div className="stack-auth-handler">
+            <StackHandler 
+              fullPage={false} 
+              app={stackServerApp} 
+              routeProps={props}
+              className="space-y-6"
+            />
           </div>
         </div>
 
@@ -70,41 +60,6 @@ export default function Handler(props: any) {
           </a>
         </p>
       </div>
-
-      <style jsx global>{`
-        .stack-auth-custom {
-          /* Custom styling for Stack Auth components */
-        }
-        
-        .stack-auth-custom button[type="submit"] {
-          background: linear-gradient(135deg, var(--primary) 0%, var(--primary-700) 100%);
-          border: none;
-          border-radius: 0.75rem;
-          padding: 0.875rem 1.5rem;
-          font-weight: 600;
-          font-size: 1rem;
-          transition: all 0.3s ease;
-          box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-        }
-        
-        .stack-auth-custom button[type="submit"]:hover {
-          transform: translateY(-2px);
-          box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-        }
-        
-        .stack-auth-custom input {
-          border-radius: 0.75rem;
-          border: 2px solid #e5e7eb;
-          padding: 0.75rem 1rem;
-          transition: all 0.2s ease;
-        }
-        
-        .stack-auth-custom input:focus {
-          border-color: var(--primary);
-          outline: none;
-          box-shadow: 0 0 0 3px rgba(var(--primary-rgb), 0.1);
-        }
-      `}</style>
     </div>
   );
 }
