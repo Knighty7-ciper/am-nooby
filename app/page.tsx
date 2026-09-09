@@ -1,4 +1,7 @@
 import { prisma } from '@noobblog/database'
+import Link from 'next/link'
+import { ArrowRight } from 'lucide-react'
+import { Button } from '@/components/ui/button'
 import { Header } from '@/components/header'
 import { Footer } from '@/components/footer'
 import { PostCard } from '@/components/post-card'
@@ -82,7 +85,7 @@ export default async function Home() {
               <div className="flex items-center justify-between mb-8">
                 <h2 className="text-3xl font-bold">Featured Posts</h2>
                 <Button variant="ghost" asChild>
-                  <Link href="/featured">
+                  <Link href="/explore?featured=true">
                     View All <ArrowRight className="ml-2 w-4 h-4" />
                   </Link>
                 </Button>
@@ -110,7 +113,7 @@ export default async function Home() {
             <div className="flex items-center justify-between mb-8">
               <h2 className="text-3xl font-bold">Recent Posts</h2>
               <Button variant="ghost" asChild>
-                <Link href="/posts">
+                <Link href="/explore">
                   View All <ArrowRight className="ml-2 w-4 h-4" />
                 </Link>
               </Button>

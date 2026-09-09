@@ -199,10 +199,10 @@ export function Header() {
           ) : (
             <>
               <Button variant="ghost" asChild>
-                <Link href="/handler/signin">Sign In</Link>
+                <Link href="/handler/sign-in">Sign In</Link>
               </Button>
               <Button asChild>
-                <Link href="/handler/signup">Get Started</Link>
+                <Link href="/handler/sign-up">Get Started</Link>
               </Button>
             </>
           )}

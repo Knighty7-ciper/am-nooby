@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "pnpm exec prisma generate --schema=../../packages/database/prisma/schema.prisma && pnpm exec prisma db push --skip-generate --accept-data-loss --schema=../../packages/database/prisma/schema.prisma && next build",
+    "build": "pnpm exec prisma generate --schema=../../packages/database/prisma/schema.prisma && next build",
     "start": "next start",
     "lint": "next lint",
     "type-check": "tsc --noEmit"

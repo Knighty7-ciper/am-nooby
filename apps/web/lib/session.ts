@@ -45,7 +45,7 @@ export async function getCurrentUser() {
           username: user.primaryEmail?.split('@')[0] || `user_${user.id.substring(0, 8)}`,
           name: user.displayName || 'User',
           avatar: user.profileImageUrl || null,
-          role: isAdmin ? 'ADMIN' : 'READER',
+          role: isAdmin ? 'ADMIN' : 'AUTHOR',
           status: 'ACTIVE',
           followerCount: 0,
           followingCount: 0,
@@ -71,7 +71,7 @@ export async function getCurrentUser() {
         },
       })
 
-      console.log(`Created ${isAdmin ? 'ADMIN' : 'READER'} user: ${dbUser.email}`)
+      console.log(`Created ${isAdmin ? 'ADMIN' : 'AUTHOR'} user: ${dbUser.email}`)
     }
 
     // Check if user should be admin but isn't yet

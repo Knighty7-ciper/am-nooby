@@ -40,7 +40,7 @@ export default function SettingsPage() {
     try {
       const response = await fetch('/api/auth/user')
       if (!response.ok) {
-        router.push('/handler/signin')
+        router.push('/handler/sign-in')
         return
       }
       const data = await response.json()

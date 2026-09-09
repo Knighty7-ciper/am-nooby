@@ -5,7 +5,6 @@ import { PostCard } from '@/components/post-card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Loader2, TrendingUp, Clock, Sparkles, Users } from 'lucide-react'
-import { useInfiniteScroll } from '@/hooks/use-infinite-scroll'
 
 type FilterType = 'latest' | 'trending' | 'featured' | 'following'
 

@@ -91,7 +91,7 @@ export function PostEditor({ postId }: PostEditorProps) {
     void loadEditorData()
   }, [postId])
 
-  const handleSave = async (status: string) => {
+  const handleSave = async (status: PostForm['status']) => {
     setIsSaving(true)
     try {
       const response = await fetch(postId ? `/api/posts/${postId}` : '/api/posts', {
