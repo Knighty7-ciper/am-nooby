@@ -24,7 +24,7 @@ export default function BookmarksPage() {
         const data = await response.json()
         setBookmarks(data.bookmarks || [])
       } else if (response.status === 401) {
-        router.push('/handler/signin')
+        router.push('/handler/sign-in')
       }
     } catch (error) {
       console.error('Failed to fetch bookmarks:', error)

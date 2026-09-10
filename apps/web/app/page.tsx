@@ -7,6 +7,7 @@ import { TrendingAuthors } from '@/components/trending-authors'
 import { Newsletter } from '@/components/newsletter'
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
+import { Suspense } from 'react'
 import { ArrowRight, Sparkles, TrendingUp, Users } from 'lucide-react'
 
 export const revalidate = 60 // Revalidate every 60 seconds
@@ -94,7 +95,9 @@ export default async function Home() {
 
   return (
     <>
-      <Header />
+      <Suspense fallback={<header className="h-20 border-b-2 border-neutral-200 bg-white" />}>
+        <Header />
+      </Suspense>
       <main className="min-h-screen">
         {/* Hero Section */}
         <section className="relative py-24 md:py-32 px-4 overflow-hidden">
@@ -124,7 +127,7 @@ export default async function Home() {
                 className="px-8 py-6 text-lg font-semibold shadow-orange-md hover:shadow-orange-lg hover:-translate-y-1 transition-all duration-300" 
                 asChild
               >
-                <Link href="/handler/signup">
+                <Link href="/handler/sign-up">
                   Start Writing
                   <ArrowRight className="ml-2 w-5 h-5" />
                 </Link>

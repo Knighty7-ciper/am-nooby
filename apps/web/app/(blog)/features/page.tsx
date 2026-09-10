@@ -134,7 +134,7 @@ export default function FeaturesPage() {
         </p>
         <div className="flex gap-4 justify-center">
           <Button size="lg" asChild>
-            <Link href="/handler/signup">Get Started Free</Link>
+            <Link href="/handler/sign-up">Get Started Free</Link>
           </Button>
           <Button size="lg" variant="outline" asChild>
             <Link href="/pricing">View Pricing</Link>
@@ -177,7 +177,7 @@ export default function FeaturesPage() {
           Join thousands of writers already creating amazing content on NoobBlog.
         </p>
         <Button size="lg" asChild>
-          <Link href="/handler/signup">
+          <Link href="/handler/sign-up">
             <Rocket className="w-4 h-4 mr-2" />
             Get Started Now
           </Link>

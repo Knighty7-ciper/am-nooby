@@ -127,10 +127,10 @@ export async function GET(request: NextRequest) {
     }
 
     const orderBy = sort === 'trending'
-      ? [{ viewCount: 'desc' }, { likeCount: 'desc' }, { publishedAt: 'desc' }]
+      ? [{ viewCount: 'desc' as const }, { likeCount: 'desc' as const }, { publishedAt: 'desc' as const }]
       : isOwnPosts
-        ? { updatedAt: 'desc' }
-        : { publishedAt: 'desc' }
+        ? { updatedAt: 'desc' as const }
+        : { publishedAt: 'desc' as const }
 
     const [posts, total] = await Promise.all([
       prisma.post.findMany({

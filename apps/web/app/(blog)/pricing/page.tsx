@@ -74,7 +74,7 @@ export default function PricingPage() {
         'Basic profile customization',
       ],
       cta: 'Get Started Free',
-      href: '/handler/signup',
+      href: '/handler/sign-up',
     },
     {
       name: 'Pro',
@@ -99,7 +99,7 @@ export default function PricingPage() {
         'Advanced SEO tools',
       ],
       cta: 'Upgrade to Pro',
-      href: '/handler/signup?plan=pro',
+      href: '/handler/sign-up?plan=pro',
     },
   ]
 
