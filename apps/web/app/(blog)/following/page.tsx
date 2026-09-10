@@ -12,7 +12,7 @@ export default async function FollowingPage() {
   const user = await getCurrentUser()
 
   if (!user) {
-    redirect('/handler/signin')
+    redirect('/handler/sign-in')
   }
 
   return <FollowingList userId={user.id} />

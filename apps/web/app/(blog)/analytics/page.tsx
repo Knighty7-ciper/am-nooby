@@ -12,7 +12,7 @@ export default async function AnalyticsPage() {
   const user = await getCurrentUser()
 
   if (!user) {
-    redirect('/handler/signin')
+    redirect('/handler/sign-in')
   }
 
   // Only authors, editors, and admins can view analytics

@@ -7,10 +7,8 @@ import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { RichTextEditor } from '@/components/rich-text-editor'
 import { 
-  Save, 
-  Eye, 
+  Save,
   Send, 
-  Clock, 
   Image as ImageIcon,
   Settings,
   X,
@@ -23,67 +21,94 @@ interface PostEditorProps {
   postId?: string
 }
 
+type PostForm = {
+  title: string
+  excerpt: string
+  content: string
+  coverImage: string
+  status: 'DRAFT' | 'PUBLISHED' | 'SCHEDULED'
+  categoryId: string
+  tags: string[]
+  seriesId: string
+  featured: boolean
+  allowComments: boolean
+  isPremium: boolean
+  metaTitle: string
+  metaDescription: string
+  keywords: string[]
+}
+
+const initialPost: PostForm = {
+  title: '',
+  excerpt: '',
+  content: '',
+  coverImage: '',
+  status: 'DRAFT',
+  categoryId: '',
+  tags: [],
+  seriesId: '',
+  featured: false,
+  allowComments: true,
+  isPremium: false,
+  metaTitle: '',
+  metaDescription: '',
+  keywords: [],
+}
+
 export function PostEditor({ postId }: PostEditorProps) {
   const router = useRouter()
   const [isSaving, setIsSaving] = useState(false)
   const [showSettings, setShowSettings] = useState(false)
-  const [post, setPost] = useState({
-    title: '',
-    excerpt: '',
-    content: '',
-    coverImage: '',
-    status: 'DRAFT',
-    categoryId: '',
-    tags: [] as string[],
-    seriesId: '',
-    featured: false,
-    allowComments: true,
-    isPremium: false,
-    metaTitle: '',
-    metaDescription: '',
-    keywords: [] as string[],
-  })
-
+  const [post, setPost] = useState<PostForm>(initialPost)
   const [categories, setCategories] = useState<any[]>([])
-  const [allTags, setAllTags] = useState<any[]>([])
   const [series, setSeries] = useState<any[]>([])
 
   useEffect(() => {
-    // Load existing post if editing
-    if (postId) {
-      fetch(`/api/posts/${postId}`)
-        .then(res => res.json())
-        .then(data => setPost(data))
+    const loadEditorData = async () => {
+      try {
+        const [categoriesResponse, seriesResponse, postResponse] = await Promise.all([
+          fetch('/api/categories'),
+          fetch('/api/series'),
+          postId ? fetch(`/api/posts/${postId}`) : Promise.resolve(null),
+        ])
+        const [categoriesData, seriesData] = await Promise.all([
+          categoriesResponse.json(),
+          seriesResponse.json(),
+        ])
+
+        setCategories(categoriesData.categories || [])
+        setSeries(seriesData || [])
+
+        if (postResponse?.ok) {
+          const { post: existingPost } = await postResponse.json()
+          setPost({ ...initialPost, ...existingPost, tags: existingPost.tags || [] })
+        }
+      } catch (error) {
+        console.error('Failed to load editor data:', error)
+      }
     }
 
-    // Load categories, tags, series
-    Promise.all([
-      fetch('/api/categories').then(r => r.json()),
-      fetch('/api/tags').then(r => r.json()),
-      fetch('/api/series').then(r => r.json()),
-    ]).then(([cats, tags, ser]) => {
-      setCategories(cats)
-      setAllTags(tags)
-      setSeries(ser)
-    })
+    void loadEditorData()
   }, [postId])
 
-  const handleSave = async (status: string) => {
+  const handleSave = async (status: PostForm['status']) => {
     setIsSaving(true)
     try {
-      const response = await fetch('/api/posts', {
+      const response = await fetch(postId ? `/api/posts/${postId}` : '/api/posts', {
         method: postId ? 'PUT' : 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...post, status, id: postId }),
+        body: JSON.stringify({ ...post, status }),
       })
 
-      if (response.ok) {
-        const data = await response.json()
-        if (status === 'PUBLISHED') {
-          router.push(`/post/${data.slug}`)
-        } else {
-          router.push('/dashboard?tab=posts')
-        }
+      if (!response.ok) {
+        throw new Error('Failed to save post')
+      }
+
+      const { post: savedPost } = await response.json()
+      if (status === 'PUBLISHED') {
+        router.push(`/post/${savedPost.slug}`)
+      } else {
+        router.push('/dashboard')
       }
     } catch (error) {
       console.error('Failed to save post:', error)
@@ -116,11 +141,6 @@ export function PostEditor({ postId }: PostEditorProps) {
     const words = text.trim().split(/\s+/).length
     return Math.ceil(words / wordsPerMinute)
   }
-
-  useEffect(() => {
-    const readingTime = calculateReadingTime(post.content)
-    setPost(prev => ({ ...prev, readingTime }))
-  }, [post.content])
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-8">

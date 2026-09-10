@@ -32,7 +32,7 @@ export default function DashboardPage() {
     try {
       const response = await fetch('/api/auth/user')
       if (!response.ok) {
-        router.push('/handler/signin')
+        router.push('/handler/sign-in')
         return
       }
 
@@ -87,7 +87,7 @@ export default function DashboardPage() {
           <p className="text-muted-foreground">Welcome back! Here's your writing overview</p>
         </div>
         <Button asChild size="lg">
-          <Link href="/dashboard/new-post">
+          <Link href="/write">
             <PenSquare className="w-4 h-4 mr-2" />
             Write New Post
           </Link>
@@ -148,7 +148,7 @@ export default function DashboardPage() {
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-2xl font-bold">Recent Posts</h2>
               <Button variant="ghost" asChild>
-                <Link href="/dashboard/posts">View All</Link>
+                <Link href="/dashboard">View All</Link>
               </Button>
             </div>
 
@@ -176,7 +176,7 @@ export default function DashboardPage() {
                       </div>
                     </div>
                     <Button variant="outline" size="sm" asChild>
-                      <Link href={`/dashboard/edit/${post.id}`}>Edit</Link>
+                      <Link href={`/write?id=${post.id}`}>Edit</Link>
                     </Button>
                   </div>
                 ))}
@@ -186,7 +186,7 @@ export default function DashboardPage() {
                 <FileText className="w-16 h-16 text-muted-foreground/50 mx-auto mb-4" />
                 <p className="text-muted-foreground mb-4">No posts yet</p>
                 <Button asChild>
-                  <Link href="/dashboard/new-post">Create Your First Post</Link>
+                  <Link href="/write">Create Your First Post</Link>
                 </Button>
               </div>
             )}
@@ -199,13 +199,13 @@ export default function DashboardPage() {
             <h3 className="font-bold mb-4">Quick Actions</h3>
             <div className="space-y-2">
               <Button className="w-full justify-start" asChild>
-                <Link href="/dashboard/new-post">
+                <Link href="/write">
                   <PenSquare className="w-4 h-4 mr-2" />
                   Write New Post
                 </Link>
               </Button>
               <Button variant="outline" className="w-full justify-start" asChild>
-                <Link href="/dashboard/posts">
+                <Link href="/dashboard">
                   <FileText className="w-4 h-4 mr-2" />
                   Manage Posts
                 </Link>
@@ -217,7 +217,7 @@ export default function DashboardPage() {
                 </Link>
               </Button>
               <Button variant="outline" className="w-full justify-start" asChild>
-                <Link href="/dashboard/analytics">
+                <Link href="/analytics">
                   <BarChart3 className="w-4 h-4 mr-2" />
                   Analytics
                 </Link>

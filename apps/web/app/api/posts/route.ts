@@ -1,98 +1,110 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@noobblog/database'
-import { z } from 'zod'
-import { stackServerApp } from '@/lib/stack-server'
+import { canCreatePost } from '@/lib/features'
+import { getCurrentUser } from '@/lib/session'
+import { createUniqueSlug, postInputSchema, prepareTags } from '@/lib/post-input'
 
 export const dynamic = 'force-dynamic'
 
-const postSchema = z.object({
-  title: z.string().min(1).max(255),
-  slug: z.string().min(1).max(255),
-  excerpt: z.string().optional(),
-  content: z.string().min(1),
-  coverImage: z.string().url().optional(),
-  categoryId: z.string().optional(),
-  tags: z.array(z.string()).optional(),
-  status: z.enum(['DRAFT', 'PUBLISHED', 'SCHEDULED']).default('DRAFT'),
-  metaTitle: z.string().optional(),
-  metaDescription: z.string().optional(),
-  keywords: z.array(z.string()).optional(),
-})
-
 export async function POST(request: NextRequest) {
   try {
-    const user = await stackServerApp.getUser()
-    
+    const user = await getCurrentUser()
+
     if (!user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    const body = await request.json()
-    const data = postSchema.parse(body)
+    if (!['AUTHOR', 'EDITOR', 'ADMIN'].includes(user.role)) {
+      return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
+    }
 
-    // Calculate reading time
-    const wordsPerMinute = 200
-    const words = data.content.split(/\s+/).length
-    const readingTime = Math.ceil(words / wordsPerMinute)
+    const access = await canCreatePost(user.id, user.subscriptionPlan)
 
-    // Extract tags from data (many-to-many relation handled separately)
-    const { tags, ...postData } = data
+    if (!access.allowed) {
+      return NextResponse.json({ error: access.reason }, { status: 403 })
+    }
 
-    // Create post
-    const post = await prisma.post.create({
-      data: {
-        ...postData,
-        authorId: user.id,
-        readingTime,
-        publishedAt: data.status === 'PUBLISHED' ? new Date() : null,
-      },
-    })
+    const data = postInputSchema.parse(await request.json())
+    const { tags, slug: requestedSlug, ...postData } = data
+    const slug = await createUniqueSlug(requestedSlug || data.title)
+    const tagData = prepareTags(tags)
+    const readingTime = Math.max(1, Math.ceil(data.content.trim().split(/\s+/).length / 200))
 
-    // Add tags if provided
-    if (tags && tags.length > 0) {
-      for (const tagName of tags) {
-        // Find or create tag
-        const tag = await prisma.tag.upsert({
-          where: { slug: tagName.toLowerCase().replace(/\s+/g, '-') },
-          create: {
-            name: tagName,
-            slug: tagName.toLowerCase().replace(/\s+/g, '-'),
+    const post = await prisma.$transaction(async (tx) => {
+      const createdPost = await tx.post.create({
+        data: {
+          ...postData,
+          slug,
+          authorId: user.id,
+          readingTime,
+          publishedAt: data.status === 'PUBLISHED' ? new Date() : null,
+          tags: {
+            create: tagData.map((tag) => ({
+              tag: {
+                connectOrCreate: {
+                  where: { slug: tag.slug },
+                  create: tag,
+                },
+              },
+            })),
           },
-          update: {},
-        })
+        },
+      })
 
-        // Link tag to post
-        await prisma.postTag.create({
-          data: {
-            postId: post.id,
-            tagId: tag.id,
-          },
+      await tx.user.update({
+        where: { id: user.id },
+        data: { postCount: { increment: 1 } },
+      })
+
+      if (data.categoryId) {
+        await tx.category.update({
+          where: { id: data.categoryId },
+          data: { postCount: { increment: 1 } },
         })
       }
-    }
+
+      if (data.seriesId) {
+        await tx.series.update({
+          where: { id: data.seriesId },
+          data: { postCount: { increment: 1 } },
+        })
+      }
+
+      for (const tag of tagData) {
+        await tx.tag.update({
+          where: { slug: tag.slug },
+          data: { postCount: { increment: 1 } },
+        })
+      }
+
+      return createdPost
+    })
 
     return NextResponse.json({ post }, { status: 201 })
   } catch (error) {
     console.error('Post creation error:', error)
-    return NextResponse.json(
-      { error: 'Failed to create post' },
-      { status: 500 }
-    )
+
+    if (error instanceof Error && 'issues' in error) {
+      return NextResponse.json({ error: 'Invalid post data' }, { status: 400 })
+    }
+
+    return NextResponse.json({ error: 'Failed to create post' }, { status: 500 })
   }
 }
 
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url)
-    const page = parseInt(searchParams.get('page') || '1')
-    const limit = parseInt(searchParams.get('limit') || '20')
+    const page = Math.max(1, Number.parseInt(searchParams.get('page') || '1', 10) || 1)
+    const limit = Math.min(50, Math.max(1, Number.parseInt(searchParams.get('limit') || '20', 10) || 20))
     const category = searchParams.get('category')
     const tag = searchParams.get('tag')
     const author = searchParams.get('author')
-
-    const where: any = {
-      status: 'PUBLISHED',
-    }
+    const featured = searchParams.get('featured') === 'true'
+    const sort = searchParams.get('sort')
+    const currentUser = author ? await getCurrentUser() : null
+    const isOwnPosts = Boolean(author && currentUser?.username === author)
+    const where: any = isOwnPosts ? { author: { username: author } } : { status: 'PUBLISHED' }
 
     if (category) {
       where.category = { slug: category }
@@ -110,6 +122,16 @@ export async function GET(request: NextRequest) {
       where.author = { username: author }
     }
 
+    if (featured) {
+      where.featured = true
+    }
+
+    const orderBy = sort === 'trending'
+      ? [{ viewCount: 'desc' as const }, { likeCount: 'desc' as const }, { publishedAt: 'desc' as const }]
+      : isOwnPosts
+        ? { updatedAt: 'desc' as const }
+        : { publishedAt: 'desc' as const }
+
     const [posts, total] = await Promise.all([
       prisma.post.findMany({
         where,
@@ -122,9 +144,7 @@ export async function GET(request: NextRequest) {
             },
           },
         },
-        orderBy: {
-          publishedAt: 'desc',
-        },
+        orderBy,
         skip: (page - 1) * limit,
         take: limit,
       }),
@@ -142,9 +162,6 @@ export async function GET(request: NextRequest) {
     })
   } catch (error) {
     console.error('Posts fetch error:', error)
-    return NextResponse.json(
-      { error: 'Failed to fetch posts' },
-      { status: 500 }
-    )
+    return NextResponse.json({ error: 'Failed to fetch posts' }, { status: 500 })
   }
 }

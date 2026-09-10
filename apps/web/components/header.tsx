@@ -25,8 +25,9 @@ import { useUser } from '@stackframe/stack'
 export function Header() {
   const [mounted, setMounted] = useState(false)
   const [searchOpen, setSearchOpen] = useState(false)
+  const [searchQuery, setSearchQuery] = useState('')
   const router = useRouter()
-  const { user, isLoading } = useUser()
+  const user = useUser()
 
   useEffect(() => {
     setMounted(true)
@@ -96,6 +97,14 @@ export function Header() {
                   placeholder="Search posts..."
                   className="w-72 h-11 border-2 border-neutral-300 focus:border-primary rounded-xl"
                   autoFocus
+                  value={searchQuery}
+                  onChange={(event) => setSearchQuery(event.target.value)}
+                  onKeyDown={(event) => {
+                    if (event.key === 'Enter' && searchQuery.trim()) {
+                      router.push(`/search?q=${encodeURIComponent(searchQuery.trim())}`)
+                      setSearchOpen(false)
+                    }
+                  }}
                   onBlur={() => setSearchOpen(false)}
                 />
               </div>
@@ -111,13 +120,7 @@ export function Header() {
             )}
           </div>
 
-          {isLoading ? (
-            // Loading state
-            <div className="flex items-center gap-4">
-              <div className="w-8 h-8 bg-neutral-200 animate-pulse rounded-full" />
-              <div className="w-20 h-8 bg-neutral-200 animate-pulse rounded" />
-            </div>
-          ) : user ? (
+          {user ? (
             <>
               {/* Write button */}
               <Button asChild className="hidden sm:flex">
@@ -138,7 +141,7 @@ export function Header() {
               {/* User menu */}
               <div className="relative group">
                 <Avatar className="cursor-pointer ring-2 ring-primary-100 hover:ring-primary transition-all duration-300">
-                  <AvatarImage src={user?.imageUrl || 'https://github.com/shadcn.png'} />
+                  <AvatarImage src={user?.profileImageUrl || 'https://github.com/shadcn.png'} />
                   <AvatarFallback className="bg-primary-50 text-primary font-bold">
                     {user?.displayName?.charAt(0) || 'U'}
                   </AvatarFallback>
@@ -149,7 +152,7 @@ export function Header() {
                   <div className="bg-white border-2 border-neutral-200 rounded-2xl shadow-orange-lg py-2">
                     <div className="px-5 py-2 border-b border-neutral-100 mb-2">
                       <p className="font-semibold text-sm">{user?.displayName || 'User'}</p>
-                      <p className="text-xs text-neutral-500">{user?.primaryEmail || user?.email}</p>
+                      <p className="text-xs text-neutral-500">{user?.primaryEmail || ''}</p>
                     </div>
                     <Link href="/dashboard" className="flex items-center gap-3 px-5 py-3 hover:bg-primary-50 hover:text-primary transition-colors font-medium">
                       <BarChart3 className="h-5 w-5" />
@@ -199,10 +202,10 @@ export function Header() {
           ) : (
             <>
               <Button variant="ghost" asChild>
-                <Link href="/handler/signin">Sign In</Link>
+                <Link href="/handler/sign-in">Sign In</Link>
               </Button>
               <Button asChild>
-                <Link href="/handler/signup">Get Started</Link>
+                <Link href="/handler/sign-up">Get Started</Link>
               </Button>
             </>
           )}

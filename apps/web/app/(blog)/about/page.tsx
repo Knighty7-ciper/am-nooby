@@ -187,7 +187,7 @@ export default async function AboutPage() {
           Whether you're a seasoned writer or just starting out, NoobBlog is here to help you succeed.
         </p>
         <Button size="lg" asChild>
-          <Link href="/handler/signup">Get Started Free</Link>
+          <Link href="/handler/sign-up">Get Started Free</Link>
         </Button>
       </Card>
     </div>
